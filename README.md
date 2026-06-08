@@ -1,6 +1,6 @@
 # Continuous Optimization
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Max_paraboloid.svg/400px-Max_paraboloid.svg.png" alt="optimization" width="400">
+<img src="Max_paraboloid.svg.png" alt="optimization" width="400">
 
 ## Description
 
