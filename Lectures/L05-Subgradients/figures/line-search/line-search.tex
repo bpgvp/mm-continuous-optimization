@@ -1,0 +1,46 @@
+\documentclass[border=0.5mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \begin{axis}[
+    ticks=none,
+    axis lines=left,
+    y=0.7cm,            % y unit vector
+    x=4cm,            % x unit vector
+    xmin=0,
+    ymin=3.2,
+    ymax=11,
+    xlabel={$t$},
+    ylabel={$g(t)$},
+    x label style={at={(axis description cs:0.95,0.15)},anchor=west},
+    y label style={at={(axis description cs:0.15,0.9)},rotate=-90,anchor=south west},
+    ]
+
+    \addplot[mark=none, black, samples=100, domain=0:2] {2 +1/(0.2+x) + 1.5*cos(360*x) + exp(x) };
+
+    \node[circle, draw=red, inner sep=0.5, fill=red] (opt) at (axis cs:0.505, 3.576) {};
+    \draw[red, densely dotted] (axis cs:0.505, 3.2) -- (opt);
+    \node[above] at (axis cs:0.505, 3.576) {\red{$t^\star$}};
+
+    
+    
+  \end{axis}  
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

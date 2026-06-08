@@ -1,0 +1,717 @@
+\documentclass[9pt]{beamer}
+% \documentclass[notes, handout, 9pt]{beamer}
+% \documentclass[handout, 9pt]{beamer}
+
+\usepackage{import}
+\subimport{../}{preamble.tex}
+\subimport{../}{beamer-theme.tex}
+
+% Location for all figures / pictures
+\graphicspath{{pictures/}{figures/}}
+
+% % Figures inline
+% \usepackage{tikz}
+% \usepackage{pgfplots}
+% \usetikzlibrary{calc}
+% \usetikzlibrary{shapes.multipart}
+% \usetikzlibrary{decorations.pathreplacing}
+% \usetikzlibrary{arrows.meta}
+% \usepgfplotslibrary{fillbetween}
+
+%--------------------------------------------------
+% Presentation Information
+%--------------------------------------------------
+\title[Continuous Optimization]{Gradient Methods}
+\author[]{\textbf{Bart Van Parys}}
+\date[]{Fall 2026}
+%--------------------------------------------------
+
+\begin{document}
+
+\begin{frame}  
+
+  \maketitle
+
+  \vspace{-2em}
+  
+    \begin{center}
+    \begin{tabular}{lll}
+      Instructor : & \textbf{Bart Van Parys} & \textbf{(\href{mailto:mastermath@vanparys.xyz}{mastermath@vanparys.xyz})} \\
+    \end{tabular}
+  \end{center}
+  
+\end{frame}
+
+\section{Simple method in High Dimensions}
+
+\begin{frame}{Gradient Method for Unconstrained Convex Problems}
+
+  Unconstrained optimization problems
+  \begin{equation*}
+    \begin{array}{rl}
+      \minimize & f(x) \\[1em]
+      \st & x \in \Re^n
+    \end{array}
+  \end{equation*}
+  where $f$ is a convex function.
+
+\end{frame}
+
+\begin{frame}{Gradient Method for Convex Problems}
+
+  
+  \begin{algorithm}[H]
+    \SetKwInput{Initialization}{Initialisation}
+    \Initialization{$x_0$ feasible}
+    \For{$k\geq 0$}{
+      $x_{k+1} \defn x_k - h_k f'(x_k)$\;
+    }
+    \caption{Gradient descent}
+  \end{algorithm}
+
+  \vfill
+  
+  \emph{Gradient method} proceeds in the steepest descent direction.
+  \begin{itemize}
+  \item How to choose step sizes $(h_k)_{k\geq 0}>0$?
+  \item We only analyzed several step sizes.
+  \end{itemize}
+
+  \vfill
+  
+  \textbf{Questions}
+  \begin{itemize}
+  \item Convergence to a minimizer?
+  \item Convergence speed? 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Differentiable Convex Optimization}
+  
+  \begin{center}
+    \begin{tabular}{r|l}
+      \hline
+      Optimization Problem & Example \\[0.5em]
+      \hline
+      Model $\Sigma$ & $\min_{x\in  \Re^n} f(x)$ \\[0.5em]
+                           & $f$ is convex and $L$-Lipschitz\\[0.5em]
+                           & $f$ is differentiable \\[0.5em]
+      Oracle $\mc O$ & first-order oracle $x\mapsto (f(x), f'(x))$\\[0.5em]
+      Accuracy $\mc T_\epsilon$ & Find $\hat x$ such that $f(\hat x)-f(x^\star)\leq\epsilon$\\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Fact:}
+  Let $f$ Lipschitz continuous, i.e.,
+  \[
+    \forall x, y : \quad \abs{f(x)-f(y)}\leq \red{L} \norm{x-y}_2.
+  \]
+  and differentiable. Then, $\norm{f'(x)}_2\leq \red{L}$.
+  }
+
+  \vfill
+
+  \uncover<3->{
+  \textbf{Relaxable assumptions:}
+  \begin{itemize}
+  \item $f$ is differentiable
+  \item Feasible set $Q=\Re^n$
+  \end{itemize}
+  }
+\end{frame}
+
+\begin{frame}{Gradient Method Converges}
+
+  \textbf{Proof :}
+  \begin{itemize}
+  \item Let $x^\star$ be a minimizer. \emph{We take \blue{$x\to V(x)\defn \norm{x-x^\star}^2_2$} as a potential function.}
+  \item<2-> We have
+    \[
+      \blue{\norm{x_{k+1}-x^\star}^2_2} = \blue{\norm{x_k-x^\star}^2_2} - 2 h_k \iprod{f'(x_k) }{ x_k -x^\star} + \red{h_k^2 \norm{f'(x_k)}_2^2}.
+    \]
+  \item<3-> The gradient inequality of $f$ ensures $\iprod{f'(x_k)}{x^\star-x_k}\leq f(x^\star)-f(x_k)$. Thus
+    \[
+      2 h_k (f(x_k)-f(x^\star)) \leq \blue{\norm{x_k-x^\star}^2_2} - \blue{\norm{x_{k+1}-x^\star}_2^2} + \red{h_k^2 \norm{f'(x_k)}_2^2}.
+    \]
+  \item<4-> Summing up all inequalities for $k\in [0, \dots, N]$ gives
+    \[
+      \sum_{k=0}^N 2 h_k (f(x_k)-f(x^\star)) \leq \blue{\norm{x_0-x^\star}_2^2} - \blue{\norm{x_{N+1}-x^\star}_2^2} + \red{\sum_{k=0}^N h_k^2 \norm{f'(x_k)}_2^2}.
+    \]
+  \item<5-> If $\red{\norm{f'(x)}_2\leq L}$, $\blue{D\defn \norm{x_0-x^\star}_2}$ and $\tilde x_N = \arg\min_{k\in[0, N]}f(x_k)$, then
+    \[
+      f(\tilde x_N) - f(x^\star)\leq \frac{\blue{D^2}+\red{L^2 \sum_{k=0}^N h_k^2}}{2 \sum_{k=0}^N h_k}.
+    \]
+  \item<6-> If $\sum_{k=0}^N h_k\to\infty$ and $\sum_{k=0}^N h^2_k\leq c$ as $N\to\infty$, then gradient method converges.    
+  \end{itemize}
+
+  
+\end{frame}
+
+\begin{frame}{How Fast Can It Converge?}
+
+  \begin{center}
+    \begin{tcolorbox}[width=0.5\textwidth]
+      \[
+        f(\tilde x_N) - f(x^\star)\leq \frac{\blue{D^2}+\red{L^2 \sum_{k=0}^N h_k^2}}{2 \sum_{k=0}^N h_k}.
+      \]
+    \end{tcolorbox}
+  \end{center}
+
+  \begin{itemize}
+
+  \item Fix $N$ and find step lengths $h_k$ that minimize the rhs. This is a convex optimization problem! 
+    \[
+      h_k^\star \defn \frac{D}{L \sqrt{N}}
+    \]
+    for all $k$. Then, $f(\tilde x_N) - f(x^\star)\leq L D /\sqrt{N}$.
+  \item<2-> More sophisticated analysis is required for other step sizes used in practice.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Nondifferentiable Convex Optimization}
+
+  \begin{center}
+    \begin{tabular}{r|l}
+      \hline
+      Optimization Problem & Example \\[0.5em]
+      \hline
+      Model $\Sigma$ & $\min_{x\in  \Re^n} f(x)$ \\[0.5em]
+                           & $f$ is convex and $L$-Lipschitz\\[0.5em]
+                           & \emph{$f$ is differentiable} \\[0.5em]
+      Oracle $\mc O$ & first-order oracle $x\mapsto (f(x), f'(x))$\\[0.5em]
+      Accuracy $\mc T_\epsilon$ & Find $\hat x$ such that $f(\hat x)-f(x^\star)\leq\epsilon$\\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vfill
+
+  \textbf{Unnecessary Assumption:} $f$ is differentiable
+  \begin{itemize}
+  \item For $f$ non-differentiable, we can use $g(x_k)\in \partial f(x_k)$ instead. The analysis is completely the same. Method is denoted as \emph{subgradient algorithm}.
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Constrained Convex Optimization}
+
+  \textbf{Unnecessary Assumption:} feasible set $Q=\Re^n$
+
+  \vfill
+
+  \emph{A powerful observation: }\\
+  Observe that $x_{k+1}\defn x_k - h_k f'(x_k)$ is equivalent to
+  \[
+    x_{k+1}\defn \arg\min_{x\in\Re^n}\, f(x_k) + \iprod{f'(x_k)}{x-x_k} + \frac{1}{2 h_k} \norm{x-x_k}^2_2.
+  \]
+
+  \uncover<2->{
+    
+    When solving the constrained problem $\min_{\red{x\in Q}}\, f(x)$ with $Q$ convex and closed, we define
+    \[
+      x_{k+1} \defn \arg\min_{\red{x\in Q}}\, f(x_k) + \iprod{f'(x_k)}{x-x_k} + \frac{1}{2 h_k} \norm{x-x_k}^2_2
+    \]
+  }
+
+  \vfill
+
+  \uncover<3->{
+    \emph{Theorem:} We have $x_{k+1}\defn \pi_{Q}(x_k-h_k f'(x_k))=\arg\min_{x\in Q} \norm{x-(x_k-h_k f'(x_k))}^2$ when $\interior(Q)\neq \emptyset$.
+  }
+
+\end{frame}
+
+% \begin{frame}{Proof Sketch}
+
+%   \textbf{Proof Sketch [$\star$]:} The condition $\interior(Q)\neq \emptyset$ implies the existence of a Slater point in both problems.
+%   A sufficient optimality conditions for the first problem is
+%   \[
+%     \iprod{f'(x_k)+(x_{k+1}-x_k)/h_k}{y-x_{k+1}} \geq 0~~ \forall y \in Q.
+%   \]
+%   For the second problem $\min_{x\in Q} \, \norm{x- (x_k-h_k f'(x_k))}^2_2$ the KKT optimality conditions read the same. Both problems have unique solutions, therefore these coincide.
+
+  
+% \end{frame}
+
+\begin{frame}{Constrained Convex Optimization}
+
+  \begin{center}
+    \begin{tabular}{r|l}
+      \hline
+      Optimization Problem & Example \\[0.5em]
+      \hline
+      Model $\Sigma$ & $\min_{x\in  \emph{Q=\Re^n}} f(x)$ \\[0.5em]
+                           & $f$ is convex and $L$-Lipschitz\\[0.5em]
+      Oracle $\mc O$ & first-order oracle $x\mapsto (f(x), f'(x))$\\[0.5em]
+      & \emph{Projection oracle} $y \to \pi_Q(y)$ \\[0.5em]
+      Accuracy $\mc T_\epsilon$ & Find $\hat x$ such that $f(\hat x)-f(x^\star)\leq\epsilon$\\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+
+\end{frame}
+
+
+\begin{frame}{Convergence Analysis Constrained Problems} 
+
+  \begin{minipage}{0.4\textwidth}
+    \begin{equation*}
+      \begin{array}{rl}
+        \minimize & f(x) \\[1em]
+        \st & x \in Q
+      \end{array}
+    \end{equation*}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.55\textwidth}
+    \begin{itemize}
+    \item $f:\Re^n\to\Re$ is a convex and continuously differentiable function. $Q$ is convex and compact.
+    \item oracle : $x\mapsto (f(x), f'(x))$ and $y \to \pi_Q(y)$
+    \item $\epsilon$ is desired absolute accuracy
+    \end{itemize}
+  \end{minipage}
+
+  \vfill
+  
+  Use the same reasoning as for the unconstrained gradient method. Use the inequality
+  \[
+    \norm{x_{k+1}-x^\star}^2_2 = \norm{\pi_{Q}(x_k-h_k f'(x_k)) - x^\star}^2_2 \red{\leq} \norm{x_k-h_k f'(x_k) - x^\star}^2_2
+  \]
+  
+\end{frame}
+
+\begin{frame}{Gradient Method}
+
+  \textbf{Theorem :} (Gradient Method)
+  The \emph{gradient method} requires at most
+  \[
+    N = \ceil{(\tfrac{L D}{\epsilon})^2}
+  \]
+  function evaluations.
+
+  \vfill
+
+  \textbf{Remarks:}
+  \begin{itemize}
+  \item Dimension independent result!
+  \item Gradient method works best for low accuracy solutions.
+  \item We can not really get much better for this problem class.
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{May We Hope for Better?}
+
+
+  \begin{center}
+    \begin{tabular}{r|l}
+      \hline
+      Optimization Problem & Example \\[0.5em]
+      \hline
+      Model $\Sigma$ & $\min_{x\in  Q} f(x)$ \\[0.5em]
+                           & $f:\Re^n\to\Re$ is a convex and $L$-Lipschitz\\[0.5em]
+                           & $Q$ compact and convex with radius $D = \max_{x,y\in Q}{\norm{x-y}}$ \\[0.5em]
+      Oracle $\mc O$ & first-order oracle $x\mapsto (f(x), f'(x))$\\[0.5em]
+      & projection oracle $y\mapsto \pi_Q(y)$\\[0.5em]
+      Accuracy $T_\epsilon$ & Find $\hat x$ such that $f(\hat x)-f(x^\star)\leq\epsilon$\\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vfill
+
+  
+  \textbf{Theorem :} (Nemirovski, Yudin)
+
+  Any optimization method takes at least $\min \{n-1, \red{(LD / (4\epsilon))^2}\}$ oracle calls to solve the mentioned class of optimization problems.
+
+  \vfill
+
+  We \emph{cannot hope} beating the subgradient method for general convex problems with oracle model $x \mapsto (f(x), f'(x))$.
+  
+\end{frame}
+
+\section{Smooth convex problems}
+
+\begin{frame}{Smooth Convex Optimization}
+
+  \begin{minipage}{0.4\textwidth}
+    \begin{equation*}
+      \begin{array}{rl}
+        \minimize & f(x) \\[1em]
+        \st & x \in Q
+      \end{array}
+    \end{equation*}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.55\textwidth}
+    \begin{itemize}
+    \item $f:\Re^n\to\Re$ is a strictly convex and continuously differentiable function. $Q$ is compact and convex.
+    \item oracle : $x\mapsto (f(x), f'(x))$ and $y \to \pi_Q(y)$
+    \item $\epsilon$ is desired absolute accuracy
+    \end{itemize}
+  \end{minipage}
+
+  \vfill
+  
+  \textbf{Smoothness Assumption :} $f$ has \emph{Lipschitz continuous gradient}, or is smooth, i.e., $\exists L>0$ such that
+  \[
+    \norm{f'(x)-f'(y)}_\star \leq L\norm{y-x}\quad \forall x, y\in \dom(f)
+  \]
+
+  We call such a function $L$-smooth w.r.t.\ $\norm{\cdot}$, or $L$-smooth if the norm is clear from context.
+  
+\end{frame}
+
+
+\begin{frame}{Geometric Interpretation}
+
+  \begin{center}
+    \includegraphics[height=5cm]{smooth-function/smooth-function.pdf}
+  \end{center}
+  
+\end{frame}
+
+\begin{frame}{Geometric Interpretation}
+
+  \textbf{Theorem :} Suppose $f$ is strictly convex. Then
+  \[
+    \norm{f'(x)-f'(y)}_\star \leq L\norm{y-x}\quad \forall x, y\in \dom(f)
+  \]
+  if and only if
+  \[
+    f(y)-f(x)-\iprod{f'(x)}{y-x} \leq \frac{L}{2} \norm{y-x}^2 \quad \forall x, y\in \dom(f)
+  \]
+
+\end{frame}
+
+\begin{frame}{Proof [$\implies$]}
+
+  (see also the Subgradients lecture)
+  
+  \textbf{Proof : }
+  \emph{``$\implies$''}
+  \[
+    \begin{array}{rlr}
+      & f(y)-f(x)-\iprod{f'(x)}{y-x} & \\[1em]
+      = & \abs{f(y)-f(x)-\iprod{f'(x)}{y-x}} & \red{[\rm{Subgradient~ineq.}]}\\[1em]
+      = & \abs{\int_{0}^1 \iprod{f'(x+t(y-x))-f'(x)}{y-x} \d t} & \\[1em]
+      \leq & \int_0^1 \norm{f'(x+t(y-x))-f'(x)}_\star \d t \norm{y-x} & \red{[Cauchy-Schwarz~ineq.]}\\[1em]
+      \leq & \frac{L}{2} \norm{y-x}^2 & 
+    \end{array}
+  \]
+
+
+\end{frame}
+
+\begin{frame}{Proof [$\star$]}
+  
+  \textbf{Proof [$\star$] : }
+  \emph{``$\impliedby$''}
+
+  \begin{itemize}
+  \item
+    Fix $x, y$ in $\dom(f)$ and $s\in \Re^n$. First note that $f$ is $L$-smooth we have
+    \[
+      \begin{array}{r@{}l}
+        f(y) + f^\star(s) = &~\red{f(y)} + \sup_{z\in \Re^n} \iprod{s}{z} - \red{f(z)} \\
+        \geq &~\sup_{z\in \Re^n} \iprod{s}{z} - \iprod{f'(y)}{z-y} - \tfrac{L}{2} \norm{z-y}^2\\
+        \geq &~\iprod{s}{y}+ \sup_{z\in \Re^n} \iprod{s-f'(y)}{z-y} - \tfrac{L}{2} \norm{z-y}^2\\
+        \geq &~\iprod{s}{y} + \frac{\norm{s-f'(y)}^2_{\star}}{2L}
+      \end{array}
+    \]
+  \item<2->
+    Take now $s\defn f'(x)$. Since $f$ is strictly convex, the only maximizer of $\iprod{f'(x)}{z} - f(z)$ is $z\defn x$. Thus $f^\star(f'(x))=\iprod{f'(x)}{x}-f(x)$ and
+    \[
+      \red{f(y) \geq f(x) + \iprod{f'(x)}{y-x} + \tfrac{\norm{f'(x)-f'(y)}_\star^2}{(2L)}}.
+    \]
+  \item<3->
+    As $f(y)\leq f(x) + \iprod{f'(x)}{y-x} + \tfrac{L}{2} \norm{y-x}^2$, we get the desired result.
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Gradient Descent for Smooth Convex Optimization}
+
+  \begin{equation*}
+    \begin{array}{rl}
+      \minimize & f(x) \\[1em]
+      \st & x \in \Re^n
+    \end{array}
+  \end{equation*}
+
+  \vfill  
+  \begin{itemize}
+  \item Assume that $f$ is $L$-smooth w.r.t.\ $\norm{\cdot}_2$ and strictly convex.
+  \item Gradient method : $x_{k+1} \defn x_k - h_k f'(x_k) $. Hence,
+    \[
+      f(x_{k+1}) = f(x_k - h_k f'(x_k)) \leq f(x_k) - h_k \iprod{f'(x_k)}{f'(x_k)} + \frac{L h^2_k}{2} \norm{f'(x_k)}_2^2
+    \]
+  \item<2-> Minimizing the RHS suggests the steplength \red{$h^\star_k = 1/L$} with
+    \[
+      f(x_{k+1}) \leq f(x_k) -\tfrac{ \norm{f'(x_k)}^2_2}{(2L)}.
+    \]
+
+  \item<3-> Previously, we proved
+    \(
+    f(y) \geq f(x) + \iprod{f'(x)}{y-x} + \tfrac{\norm{f'(x)-f'(y)}_\star^2}{(2L)}.
+    \)
+    Exchanging $x$ and $y$, and adding the resulting inequalities up implies $$\red{\iprod{f'(x)-f'(y)}{x-y} \geq \tfrac{\norm{f'(x)-f'(y)}_\star^2}{L}.}$$
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{What Happens if the Step Length is not $L$}
+
+  \begin{minipage}{0.5\textwidth}
+    \center
+    \includegraphics[height=4cm]{gradient-descent/gradient-descent-L-too-small.pdf}\\[1em]
+    \emph{$h_k = \frac{1}{L}-\delta$}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \center
+    \includegraphics[height=4cm]{gradient-descent/gradient-descent-L-too-big.pdf}\\[1em]
+    \emph{$h_k = \frac{1}{L}+\delta$}
+  \end{minipage}
+  
+\end{frame}
+
+\begin{frame}{Convergence}
+
+  \begin{center}
+    \begin{tcolorbox}[width=0.3\textwidth]%
+      $x_{k+1} = x_k - \frac {f'(x_k)} {L}$
+    \end{tcolorbox}
+  \end{center}
+
+  \begin{itemize}
+  \item We use again $x\mapsto \norm{x-x^\star}_2^2$ as potential. The potential decreases:
+    \[
+      \begin{array}{r@{}l}
+        \norm{x_{k+1} -x^\star}^2_2 &=\norm{x_k-x^\star}_2^2 - \red{2 \tfrac{\iprod{f'(x_k)}{x_k-x^\star}}{L}} + \tfrac{\norm{f'(x_k)}_2^2}{L^2}\\
+                                    &=\norm{x_k-x^\star}_2^2 - \red{2 \tfrac{\iprod{f'(x_k)-f'(x^\star)}{x_k-x^\star}}{L}} + \tfrac{\norm{f'(x_k)}_2^2}{L^2}\\
+                                    &\leq \norm{x_k-x^\star}_2^2 - \red{2\tfrac{\norm{f'(x_k)}_2^2}{L^2}} + \tfrac{\norm{f'(x_k)}_2^2}{L^2}\\
+                                    &= \norm{x_k-x^\star}_2^2 - \tfrac{\norm{f'(x_k)}_2^2}{L^2}
+      \end{array}
+    \]
+  \item<2->
+    We bound the suboptimality of $x_k$ in terms of the norm of the gradient $f'(x_k)$, i.e., $\Delta_k \defn f(x_k) - f^\star \leq \iprod{f'(x_k)}{x_k-x^\star} \leq \norm{f'(x_k)}_2 \norm{x_k - x^\star}_2 \leq \norm{f'(x_k)}_2 \norm{x_0-x^\star}_2$.
+  \item<3-> We know that $f(x_{k+1}) \leq f(x_k) - \tfrac{\norm{f'(x_k)}_2^2}{(2L)}$. 
+
+  \item<4-> Then, $\Delta_{k+1}\leq \Delta_{k} - \tfrac{\Delta_k^2}{(2LD^2)}$ with $D=\norm{x_0-x^\star}_2$. Hence,
+    \[
+      \frac{1}{\Delta_{k+1}} \geq \frac{1}{\Delta_k} + \frac{\Delta_k}{\Delta_{k+1}} \frac{1}{2LD^2}\geq \frac{1}{\Delta_k} + \frac{1}{2LD^2} \geq \frac{1}{\Delta_0} + \frac{k+1}{2LD^2} \geq \frac{k+1}{2LD^2}
+    \]
+  \item<5-> Hence, $f(x_N)-f^\star\leq 2 LD^2 / N$ and the \emph{complexity} is $2 LD^2/\epsilon$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{What About Lower Bounds?}
+
+  The best lower bound Yudin and Nemirovski could find is
+  \[
+    N = \min \{(n-1)/2, ~D\sqrt{3L/2\epsilon}/4\}
+  \]
+  for a first-order oracle method.
+
+  \vfill
+
+  \textbf{Remark : } Surprisingly enough, the ``resisting function'' is quadratic.
+
+  \vfill
+
+  \begin{tcolorbox}
+    Are there better methods for $L$-smooth convex functions?
+  \end{tcolorbox}
+  
+\end{frame}
+
+\section{Smooth Strongly Convex Optimization}
+
+
+\begin{frame}{Optimal Method Exists for Strongly Convex Problems}
+
+  \textbf{Extra assumption :}  $f$ is $\mu$-strongly convex
+  \[
+    f(y) \geq f(x) + \iprod{f'(x)}{y-x} + \tfrac{\mu}{2} \norm{y-x}_2^2 ~~\forall x, y\in \dom(f)
+  \]
+
+
+  \vfill
+  
+  \begin{minipage}{1\textwidth}
+    \centering
+    \includegraphics[height=4.5cm]{strongly-convex-function/strongly-convex-function.pdf}
+  \end{minipage}
+  
+\end{frame}
+
+
+\begin{frame}{Smooth Strongly Convex Optimization}
+
+  \begin{center}
+    \begin{tabular}{r|l}
+      \hline
+      Optimization Problem & Example \\[0.5em]
+      \hline
+      Model $\Sigma$ & $\min_{x\in \Re^n} f(x)$ \\[0.5em]
+                           & $f$ is $\mu$-strongly convex\\[0.5em]
+                           & $f$ is $L$-smooth and differentiable\\[0.5em]
+      Oracle $\mc O$ & first-order oracle $x\mapsto (f(x), f'(x))$\\[0.5em]
+      Accuracy $\mc T_\epsilon$ & Find $\hat x$ such that $f(\hat x)-f(x^\star)\leq\epsilon$\\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vfill
+
+  \textbf{Theorem:} (Nesterov) For $\mu>0$ and $L>\mu$ we have that any first-order method needs at least
+  $$N \geq \frac{1}{2} \log(D^2\mu/(2\epsilon))/\log(\tfrac{(\sqrt{L}+\sqrt{\mu})}{(\sqrt{L}-\sqrt{\mu})})$$
+  queries.
+  
+\end{frame}
+
+\begin{frame}{Nesterov Acceleration $\mu>0$}
+
+
+  \begin{minipage}{0.5\textwidth}
+    \begin{itemize}
+    \item $f$ is $\mu$-strongly convex with $\mu>0$.
+    \item $f$ is differentable and $L$-smooth.
+    \item Oracle : $x\mapsto (f(x), f'(x))$.
+    \end{itemize}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \begin{center}
+      \includegraphics[height=3cm]{YuriiNesterov.jpg}\\
+      Nesterov
+    \end{center}
+  \end{minipage}
+  
+
+  
+  \vfill
+  
+  \begin{algorithm}[H]
+    \SetKwInput{Initialization}{Initialisation}
+    \Initialization{$y_0\defn x_0$, $\beta\defn \tfrac {(\sqrt{L}-\sqrt{\mu})}{(\sqrt{L}+\sqrt{\mu})}$}
+    \For{$k\geq 0$}{
+      $x_{k+1} \defn y_k - \tfrac{f'(y_k)}{L}$\;
+      $y_{k+1} \defn x_{k+1} + \beta \left(x_{k+1}-x_k\right)$\;
+    }
+  \caption{Accelerated gradient descent $\mu>0$}
+  \end{algorithm}
+     
+ \end{frame}
+
+ \begin{frame}{Nesterov's General Method $\mu\geq 0$ [$\star$]}
+
+   \begin{algorithm}[H]
+     \SetKwInput{Initialization}{Initialisation}
+     \Initialization{$x_0$, $\gamma_0=L$. Set $v_0=x_0$.}
+     \For{$k\geq 0$}{
+       ~\,Determine $\alpha_k\in (0, 1)$ by solving
+       \[
+         L \alpha_k^2 = (1-\alpha_k) \gamma_k + \alpha_k \mu.
+       \]%
+       Set $\gamma_{k+1}=(1-\alpha_k)\gamma_k + \alpha_k\mu$.
+       Choose
+       \[
+         y_k = (\alpha_k\gamma_kv_k+\gamma_{k+1}x_k)/(\gamma_k+\alpha_k\mu).
+       \]
+       Finally set $x_{k+1}=y_k-f'(y_k)/L$ and
+       \[
+         v_{k+1}=[(1-\alpha_k)\gamma_k v_k+\alpha_k\mu y_k-\alpha_kf'(y_k)]/\gamma_{k+1}
+       \]
+     }
+     \caption{Generalized Accelerated method $\mu\geq 0$.}
+   \end{algorithm}
+
+   \vfill
+
+   \textbf{Theorem} (Nesterov) : The generalized accelerated gradient method for $\mu\geq 0$ achieves 
+
+   $$f(x_N) - f(x^\star) \leq D^2 L \min\left(\left(1-\sqrt{\tfrac{\mu}{L}}\right)^N, \tfrac{4}{(N+2)^2}\right) $$
+
+   
+ \end{frame}
+ 
+
+\begin{frame}{Black-Box Methods}
+
+  Optimization problem
+  \[
+    \begin{array}{rl}
+      \min & f(x) \\
+      \st & x\in Q\subseteq\Re^n
+    \end{array}
+  \]
+
+  \vfill
+  
+  \begin{center}
+    \begin{tabular}{rccc}
+      \hline
+      Optimization Problem & Lower Bound & Method & Complexity \\[0.5em]
+      \hline
+      $f$ nonconvex $L$-Lipschitz \\
+      $Q=[0, 1]^n$ & $\mc O( (\frac{L}{2\epsilon})^n)$ & Gridding & $\mc O( (\frac{L}{2\epsilon})^n)$ \\[0.5em]
+      \hline
+      $f$ convex \\
+      $V=\max_{x,y\in Q}\abs{f(x)-f(y)}$\\
+      $D = \max_{x,y\in Q} \norm{x-y}_2$
+                                      & $\mc O(n \log(DV/(8\epsilon)))$ & Bisection & $\mc O(n \log(DV/\epsilon))$ \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}{Black-Box Methods II}
+
+  Optimization problem
+  \[
+    \begin{array}{rl}
+      \min & f(x) \\
+      \st & x\in Q
+    \end{array}
+  \]
+
+  \vfill
+  
+  \begin{center}
+    \begin{tabular}{rccc}
+      \hline
+      Optimization Problem & Lower Bound & Method & Complexity \\[0.5em]
+      \hline
+      $f$ convex $L_0$-Lipschitz \\
+      $D=\norm{x_0-x^\star}$ & $\mc O((L_0D/4\epsilon)^2)$ & GM & $\mc O((L_0D/\epsilon)^2)$ \\[0.5em]
+      \hline
+      $f$ convex\\
+      $f$ is $L$-smooth\\
+      $D=\norm{x_0-x^\star}$ & $\mc O(D\sqrt{3L/2\epsilon}/4)$ & AGM & $\mc O(2D\sqrt{L/\epsilon})$ \\[0.5em]
+      \hline
+      $f$ $\mu$-strongly convex  \\
+      $f$ is $L$-smooth\\
+      $D=\norm{x_0-x^\star}$ & $\mc O(\frac{\log(D^2\mu/(2\epsilon))}{\log(\tfrac{(\sqrt{L}+\sqrt{\mu})}{(\sqrt{L}-\sqrt{\mu})})})$ & AGM & $\mc O(\frac{\log(D^2L/\epsilon)}{\log(\tfrac{(\sqrt{L}+\sqrt{\mu})}{(\sqrt{L}-\sqrt{\mu})})})$ \\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+
+\end{frame}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

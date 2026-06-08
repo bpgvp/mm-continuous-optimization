@@ -1,0 +1,31 @@
+\documentclass[border=0.5mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{axis}
+    [
+    title={Contour plot, view from top},
+    view={0}{90},
+    xlabel={$x_1$},
+    ylabel={$x_2$}
+    ]
+    \addplot3[
+    contour gnuplot={levels={0.8, 0.4, 0.2, 0, -0.2}}, samples=500
+    ]
+    {x^2/2+y^4/4-y^2/2};
+  \end{axis}
+\end{tikzpicture}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

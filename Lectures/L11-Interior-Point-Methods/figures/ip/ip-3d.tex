@@ -1,0 +1,54 @@
+\documentclass[border=3pt]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{pgfplots}
+\usepackage{import}
+\usetikzlibrary{calc}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{axis}[
+    axis on top=false,
+  view={60}{40},
+  axis lines=center,
+  xmin=-0.1,
+  ymin=-0.1,
+  zmin=-0.1,
+  xmax=1.4, 
+  ymax=1.2,
+  zmax=1.2,
+  ytick={0},
+  ztick={0},
+  xtick={0},
+  area style,
+]
+
+    \addplot3[forget plot, fill=blue!10, opacity=1, draw=blue] 
+    coordinates 
+    {
+      (1,0,0) 
+      (0,1,0) 
+      (0,0,1)
+    }--cycle;
+    
+    \addplot3  [draw=black] table [x=p1,y=p2, z=p3, col sep=comma] {cp.csv}; 
+
+    \addplot3  [draw=orange, mark options={fill=orange!20}, mark=*,
+    mark size=0.5, only marks] table [x=p1,y=p2, z=p3, col sep=comma] {ip_nc.csv};
+
+    \addplot3  [draw=red, mark options={fill=red!20}, mark=*,
+    mark size=0.5, only marks] table [x=p1,y=p2, z=p3, col sep=comma] {ip_c.csv};
+
+    \addplot3  [draw=gray] table [x=p1,y=p2, z=p3, col sep=comma] {ip.csv};
+    
+    \node[fill=red,inner sep=0.7pt,circle] (xstar) at (axis cs:1,0,0) {};
+    \node[right] at (xstar) {$x^\star$};
+
+\end{axis}
+\end{tikzpicture}
+
+\end{document}

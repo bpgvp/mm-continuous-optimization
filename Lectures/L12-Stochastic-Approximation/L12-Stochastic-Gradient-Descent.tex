@@ -1,0 +1,562 @@
+\documentclass[9pt]{beamer}
+% \documentclass[notes, handout, 9pt]{beamer}
+% \documentclass[handout, 9pt]{beamer}
+
+\usepackage{import}
+\subimport{../}{preamble.tex}
+\subimport{../}{beamer-theme.tex}
+\usepackage{svg}
+
+% Location for all figures / pictures
+\graphicspath{{pictures/}{figures/}}
+
+% % Figures inline
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{arrows.meta}
+\usepgfplotslibrary{fillbetween}
+
+% \usepackage{pgfmath}
+% \newcommand\randmin{}
+% \newcommand\randmax{}
+% \newcommand\randmultof{}
+% \newcommand\setrand[4]%
+% {\def\randmin{#1}%
+%   \def\randmax{#2}%
+%   \def\randmultof{#3}%
+%   \pgfmathsetseed{#4}%
+% }
+% \newcommand\nextrand
+% {\pgfmathparse{int(int((rnd*(\randmax-\randmin+1)+\randmin)/\randmultof)*\randmultof)}%
+%   \xdef\thisrand{\pgfmathresult}%
+% }
+
+\usepackage{pgf}
+\usepackage{pgffor}
+\pgfmathsetseed{\number\pdfrandomseed}
+
+\newcommand*{\RandomMinimum}{-2}
+\newcommand*{\RandomMaximum}{2}
+
+\newcommand*{\InitVariables}{%
+  \pgfmathsetmacro{\a}{%
+     \RandomMinimum + random(0, int(\RandomMaximum - int(\RandomMinimum)))
+  }%
+  \pgfmathtruncatemacro{\a}{ifthenelse(\a<0, \a, \a + 1}%
+}
+
+
+%--------------------------------------------------
+% Presentation Information
+%--------------------------------------------------
+\title[Continuous Optimization]{Stochastic Gradient Descent}
+\author[]{\textbf{Bart Van Parys}}
+\date[]{Fall 2026}
+%--------------------------------------------------
+
+\begin{document}
+
+\begin{frame}  
+
+  \maketitle
+
+  \vspace{-2em}
+  
+    \begin{center}
+    \begin{tabular}{lll}
+      Instructor : & \textbf{Bart Van Parys} & \textbf{(\href{mailto:mastermath@vanparys.xyz}{mastermath@vanparys.xyz})}
+    \end{tabular}
+  \end{center}
+  
+\end{frame}
+
+\section{Stochastic Gradients}
+
+\begin{frame}{Motivation}
+
+  \textbf{Machine Learning:}
+  Empirical risk minimization problems are of the form
+  \[
+    \min_{x\in\Re^n} ~f(x) \defn \frac{1}{T} \sum_{i=1}^T \ell(x, \omega_i)
+  \]
+  where $\omega_i$ are data points and $T$ is huge. 
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Stochastic Optimization:}
+  Problem of interest often of the form
+  \[
+    \min_{x\in\Re^n} ~f(x) \defn \E{}{\ell(x, \omega)}
+  \]
+  where $\omega$ is a random variable with known distribution.
+  }
+\end{frame}
+
+\begin{frame}{Huge Scale Problems}
+
+  \begin{algorithm}[H]
+    \SetKwInput{Initialization}{Initialisation}
+    \Initialization{$x_0$ feasible}
+    \For{$k\geq 0$}{
+      $x_{k+1} \defn x_k - h_k  f'(x_k)$
+    }
+    \caption{Gradient Descent}
+  \end{algorithm}
+
+  \vfill
+
+  Gradient methods are appropriate when
+  \begin{itemize}
+    \setlength\itemsep{1em}
+  \item A solution of modest accuracy often suffices.
+  \item Computing the gradient is already very challenging.
+  \end{itemize}
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{What if even computing the gradient is too expensive?}
+  }
+\end{frame}
+
+\begin{frame}{Gradient Computation}
+
+  \textbf{Machine Learning:}
+  Full gradients in empirical risk minimization problems 
+  \[
+    f'(x) =  \frac{1}{T} \sum_{i=1}^T \ell'(x, \omega_i)
+  \]
+  requires $\mc O(T)$ work.
+  
+  \vfill
+
+  \uncover<2->{
+  \textbf{Stochastic Optimization:}
+  Full gradients in empirical risk minimization problems satisfy
+  \[
+    f'(x) =  \E{}{\ell(x, \omega)}' = \E{}{\ell'(x, \omega)}
+  \]
+  \gray{assuming that for all $x$ we have $\norm{\ell'(x, \omega_i)}\leq Z$ for some $Z$ with $\E{}{\abs{Z}}<\infty$.}\\
+  Full gradient requires the resolution of an integral.
+  }
+\end{frame}
+
+
+\begin{frame}{Stochastic Gradients}
+
+  Consider
+  \[
+    \min_{x\in\Re^n} ~f(x) \defn \frac{1}{T} \sum_{i=1}^T \ell(x, \omega_i)
+  \]
+  where $\omega_i$ are data points and $T$ so huge that gradients are off limits.
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Simple Idea:} we can try to use a random estimator for the gradient instead. For instance,
+  \[
+    \hat f '(x) = \ell'(x, \omega_i)
+  \]
+  where $i\sim {\rm{unif}}(1, \dots, T)$.
+  }
+
+\end{frame}
+
+\begin{frame}{Stochastic Gradients}
+
+  \textbf{Definition:}
+  A random variable $\hat f'(x)$ is a \emph{stochastic gradient} if it is unbiased
+  \begin{align*}
+    & \E{}{\hat f '(x)}=f'(x)\\
+    \intertext{with finite variance}
+    &  \E{}{\norm{\hat f '(x)-f'(x)}_2^2} \leq \sigma_g^2 < \infty.
+  \end{align*}
+
+  \vfill
+
+  \textbf{Remarks:}
+  \begin{itemize}
+  \item Noisy gradient model
+    \[
+      \hat f '(x) = f'(x) + z
+    \]
+    with $\E{}{z}=0$ and $\E{}{\norm{z}^2_2}\leq\sigma_g^2$.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Examples}
+
+  \begin{itemize}
+    \setlength\itemsep{0.5em}
+  \item \textbf{Sample Approach}: Take    
+    \[
+      \hat f_s'(x) = \ell'(x, \omega_i)
+    \]
+    where $i\sim {\rm{unif}}(1, \dots, T)$.
+    Let $\sigma_s^2(x)\defn \E{}{\|\hat f_s '(x)-f'(x)\|_2^2}<\infty$.
+
+  \item<2-> \textbf{Bootstrap Approach}: Take
+    \[
+      \hat f_{bo} '(x) = \frac{1}{K} \sum_{i\in S}\ell'(x, \omega_i)
+    \]
+    where $S$ a batch of size $K$ containing samples drawn uniformly at random with replacement.
+    Then, $\sigma_{bo}^2(x)\defn \E{}{\|\hat f_{bo} '(x)-f'(x)\|_2^2} =\frac{\sigma_s^2(x)}{K} $.
+
+  \item<3-> \textbf{Batch Approach}: Take
+    \[
+      \hat f_{ba} '(x) = \frac{1}{K}\sum_{i\in S'}\ell'(x, \omega_i)
+    \]
+    where $S'$ a batch of data of size $K$ samples drawn uniformly at random without replacement.
+    Then, $\sigma_{ba}^2(x)\defn \E{}{\|\hat f_{ba} '(x)-f'(x)\|_2^2} =\frac{\sigma_s^2(x)}{K} (1-\frac{K-1}{T-1})$.
+
+  \item<4-> \textbf{Variance Reduction}:
+    \[
+      \hat f_v '(x) = \ell'(x, \omega_i)/p_i
+    \]
+    where $P(i)=p_i$ for all $i\in [1,\dots, T]$.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Stochastic Gradient Descent}
+
+  \begin{algorithm}[H]
+    \SetKwInput{Initialization}{Initialisation}
+    \Initialization{$x_0$ feasible}
+    \For{$k\geq 0$}{
+      $x_{k+1} \defn x_k - h_k \hat f_k'(x_k)$
+    }
+    \caption{Stochastic Gradient Descent}
+  \end{algorithm}
+
+
+  \vfill
+
+  
+  \textbf{Remarks:}
+  \begin{itemize}
+  \item We assume that the stochastic gradients $\hat f_k'$ are independent and define the filtration
+    \(
+    \mc T_k \defn \{\hat f'_0, \dots, \hat f'_{k-1}\}.
+    \)
+  \item We have that 
+    \(
+      \E{}{x_{k+1}|\mc T_k} = x_k-h_kf'(x_k).
+    \)
+  \item<2-> Cost per iteration is independent of the data size $T$
+  \item<3-> Convergence is typically much faster initially but slower asymptotically than full gradient descent
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{A Success Story in ML}
+
+  \centering
+  \includesvg[height=6cm]{convergence-bottou.svg}
+
+\end{frame}
+
+\begin{frame}{Intuition}
+
+  \textbf{Example:}
+  \[
+    \min_{x\in\Re} ~ \sum^T_{i=1} (x-\omega_i)^2/(2T)
+  \]
+  with $x^\star=\sum_{i=1}^T\omega_i/T$.
+
+  \vfill
+  
+  Full gradient: $f'(x) = \sum_{i=1}^T(x-\omega_i)/T$. Requires $\mc O(T)$ work.\\
+  Stochastic gradient: $\hat f'(x) = (x-\omega_i)$ where $i\sim {\rm{unif}}(1, \dots, T)$. Requires $\mc O(1)$ work.
+
+  \vfill
+  
+  \begin{center}
+    \includegraphics[height=3cm]{intuition/intuition.pdf}
+  \end{center}
+  
+\end{frame}
+
+\section{Strongly Convex and Smooth Optimization}
+
+\begin{frame}{Fixed Step-Size}
+
+  \begin{center}
+    \begin{tabular}{r|l}
+      \hline
+      Optimization Problem & Example \\[0.5em]
+      \hline
+      Model $\Sigma$ & $\min_{x\in \Re^n} f(x)$ \\[0.5em]
+                           & $f$ is $\mu$-strongly convex\\[0.5em]
+                           & $f$ is $L$-smooth and differentiable\\[0.5em]
+      Oracle $\mc O$ & first-order oracle $x\mapsto \hat f'(x)$\\[0.5em]
+      Accuracy $\mc T_\epsilon$ & Find random $\hat x$ such that $\E{}{f(\hat x)}-f(x^\star)\leq\epsilon$\\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+  
+  \vfill
+  
+  \textbf{Theorem:}
+  With fixed step size $0<h_k=\eta\leq\frac{1}{L}$ we have that SGD satisfies
+  \begin{align*}
+    \E{}{f(x_N)}-f(x^\star)\leq & \frac{\eta L \sigma_g^2}{2\mu} + (1-\eta \mu)^N(f(x_0)-f^\star-\frac{\eta L \sigma_g^2}{2\mu})\\[0.5em]
+                              \xrightarrow{N\to\infty} & \frac{\eta L \sigma_g^2}{2\mu} > 0
+  \end{align*}
+  
+\end{frame}
+
+\begin{frame}{Picture}
+  
+  \begin{center}
+    \def\x{0}
+    \def\i{1}
+    \def\eta{0.2}
+    \begin{tikzpicture}
+
+      \begin{axis}[
+        ticks=none,
+        axis lines=center,
+        y=1cm,            % y unit vector
+        x=1.4cm,            % x unit vector
+        clip=true,
+        ymax=4,
+        ymin=-0.7,
+        xlabel={ $x$},
+        label={},
+        x label style={at={(axis description cs:0.9,0.05)},anchor=west},
+        y label style={at={(axis description cs:0.22,0.85)},rotate=-90,anchor=south west},
+        ]
+        
+        \foreach \a in {-2, ..., 2}{
+          \addplot[mark=none, blue, samples=100, domain=-6:6] { (x-\a)^2 };
+        }
+
+        % \draw[red, thick] (axis cs:-2,0) -- (axis cs:2,0);
+        % \draw[red, thick] (axis cs:-2,-0.2) -- (axis cs:-2,0.2);
+        % \draw[red, thick] (axis cs:2,-0.2) -- (axis cs:2,0.2);
+
+        % \node[above right] at (axis cs:0,-0.7) {{\color{red}$\Delta$}};
+        \i = 1;
+        \addplot[mark=none, red, thick, samples=100, domain=-6:6] { (x-\i)^2 };
+        \draw[->, thick] (axis cs: \x, 0) -- (axis cs:{\x-\eta*(\x-\i)},0);
+
+       
+      \end{axis}
+      
+    \end{tikzpicture}
+  \end{center}
+ 
+\end{frame}
+
+\begin{frame}{Proof I [$\star$]}
+
+  \textbf{Lemma:} The SGD iterates satisfy for all $k$
+  \begin{equation}
+    \label{eq:proof:1}
+    \E{}{f(x_{k+1})|\mc T_k}-f(x_k) \leq -h_k \norm{f'(x_k)}^2_2+ \frac 12 h_k^2 L \E{}{\norm{\hat f_k'(x_k)}^2_2|\mc T_k}.
+  \end{equation}
+  
+  \textbf{Proof:} As the function $f$ is $L$ smooth we know that
+  \begin{align*}
+    f(x_{k+1})-f(x_k) \leq &  \iprod{f'(x_{k})}{x_{k+1}-x_{k}}+\frac 12 L \norm{x_{k+1}-x_k}^2_2\\
+                      \leq & - h_ k \iprod{f'(x_{k})}{\hat f'_k(x_k)}+\frac {h_k^2 L}{2} \norm{\hat f_k'(x_k)}^2_2.
+  \end{align*}
+  Taking expectations on both sides with $\E{}{\cdot | \mc T_k}$ gives the desired result.
+  
+\end{frame}
+
+\begin{frame}{Proof II [$\star$]}
+
+  \textbf{Lemma:} The SGD iterates satisfy for all $k$
+  \begin{equation}
+    \label{eq:proof:2}
+    \E{}{f(x_{k+1})|\mc T_k}-f(x_k) \leq -h_k(1-\frac 12 h_k L) \norm{f'(x_k)}^2_2+ \frac 12 h_k^2 L \sigma_g^2.
+  \end{equation}
+  
+  \textbf{Proof:} As $\hat f_k'(x_k)$ are stochastic gradients we have that
+  \begin{align*}
+    \E{}{\norm{\hat f_k'(x_k)}^2_2|\mc T_k} \leq & \,\E{}{\norm{\hat f_k'(x_k)-f'(x_k)}^2_2|\mc T_k} + \E{}{\norm{f'(x_k)}^2_2|\mc T_k}\\
+    \leq & \, \sigma_g^2 + \norm{f'(x_k)}^2_2.
+  \end{align*}
+  The result now follows by direct substitution in the inequality \eqref{eq:proof:1}. 
+  
+\end{frame}
+
+\begin{frame}{Proof III [$\star$]}
+  
+  \textbf{Proof:} From inequality \eqref{eq:proof:2} and $h_k<\frac 1L$ it follows that
+  \begin{align*}
+    \E{}{f(x_{k+1})|\mc T_k}-f(x_k) & \leq -\frac 12 h_k \norm{f'(x_k)}^2_2+ \frac 12 h_k^2 L \sigma_g^2\\
+                                    & \leq  - h_k \mu (f(x_k)-f^\star)+ \frac 12 h_k^2 L \sigma_g^2
+  \end{align*}
+  where we used that $f$ is $\mu$-strongly convex which implies $2\mu(f(x_k)-f^\star)\leq \norm{f'(x_k)}^2_2$.
+  Adding $f(x_k)-f^\star$ to both sides and taking an expectation gives
+  \begin{align}
+    \label{eq:proof:3}
+    \E{}{f(x_{k+1})-f^\star} \leq (1- h_k\mu)\E{}{f(x_k)-f^\star}+ \frac 12 h_k^2 L \sigma_g^2
+  \end{align}
+  The remainder of the result follows by simple induction for $h_k=\eta<\frac 1L$. (Nice Exercise).
+\end{frame}
+
+
+\begin{frame}{Discussion}
+
+  \textbf{Remarks:}
+  \begin{itemize}
+    \setlength\itemsep{1em}
+  \item Fast convergence when far away from optimal solution
+  \item Does not converge to minimum
+  \item When $\sigma^2_g=0$ gradient descent converges linearly
+  \item Step-size $\eta$ balances between initial speed and asymptotic guarantee.
+  \item<2-> Why not take large steps initially and small steps asymptotically?
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Diminishing Step-Size}
+
+  \textbf{Theorem:}
+  With diminishing step size $h_k= \frac{\theta}{k+\gamma}$ for some $\theta>\frac{1}{\mu}$ and $\gamma>0$ such that $h_0\leq \frac 1L$, SGD converges with
+  \[
+    \E{}{f(x_k)} - f^\star \leq \frac{\nu}{k+\gamma} \quad \forall k\geq 0
+  \]
+  where $\nu=\max \{ \tfrac{L \theta^2\sigma^2_g}{2(\mu\theta-1)}, (1+\gamma)( f(x_0)-f^\star)\}$.
+
+  \vfill
+
+\textbf{Remarks:}
+\begin{itemize}
+\item Convergence with rate $\mc O(1/N)$ with diminishing stepsize with $h_k=\mc O(1/k)$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Proof I [$\star$]}
+
+  \textbf{Proof:}
+  By construction of the step sizes we have $h_k\leq h_0 \leq \frac{1}{L}$. Recall again Inequality \eqref{eq:proof:3} which states that
+  \[
+    \E{}{f(x_{k+1})-f^\star} \leq (1-h_k\mu)\E{}{f(x_k)-f^\star}+ \frac 12 h_k^2 L \sigma_g^2.
+  \]
+  We shall now show that the claimed result holds by simple induction. Clearly, the result holds for $k=0$ as indeed
+  \[
+    \E{}{f(x_{0})-f^\star} = \frac{(1+\gamma)(f(x_0)-f^\star)}{1+\gamma}\leq \frac{\nu}{1+\gamma}.
+  \]
+  
+\end{frame}
+
+\begin{frame}{Proof II[$\star$]}
+
+  \textbf{Proof:}
+  Assume now that the result holds for $k$. We have that
+  \begin{align*}
+    \E{}{f(x_{k+1})-f^\star} \leq & \left(1-\frac{\theta\mu}{k+\gamma}\right) \frac{\nu}{k+\gamma}+\frac {L \sigma_g^2\theta^2}{2(k+\gamma)^2}\\
+    \leq & \frac{(k+\gamma)-\theta\mu}{(k+\gamma)^2}\cdot \nu+\frac {L \sigma_g^2\theta^2}{2(k+\gamma)^2}\\
+    \leq & \frac{(k+\gamma)-1}{(k+\gamma)^2}\cdot \nu-\frac{\theta\mu-1}{(k+\gamma)^2}\cdot \nu+\frac {L \sigma_g^2\theta^2}{2(k+\gamma)^2}\\
+    \leq & \frac{\nu}{k+\gamma+1}.
+  \end{align*}
+  The penultimate inequality follows from $-\frac{\theta\mu-1}{(k+\gamma)^2}\cdot \nu+\frac {L \sigma_g^2\theta^2}{2(k+\gamma)^2}\leq 0$ by construction of $\nu$. The ultimate inequality follows from $(k+\gamma)^2\geq (k+\gamma-1)(k+\gamma+1) = (k+\gamma)^2-1$.
+\end{frame}
+
+\begin{frame}{Optimality}
+
+  \textbf{Theorem: (Nemirovski \& Yudin) } (Informal) For strongly convex and smooth functions the rate $\mc O(1/N)$ is a lower bound on the performance of any algorithm with access to stochastic gradients.
+
+  \vfill
+
+  SGD with stepsize $h_k=\mc O(1/k)$ is optimal.
+  
+\end{frame}
+
+\section{Non-Smooth Optimization}
+
+\begin{frame}{Non-Smooth Optimization}
+
+    \begin{center}
+    \begin{tabular}{r|l}
+      \hline
+      Optimization Problem & Example \\[0.5em]
+      \hline
+      Model $\Sigma$ & $\min_{x\in \Re^n} f(x)$ \\[0.5em]
+                           & $f$ is $\mc L$-Lipschitz and convex\\[0.5em]
+      Oracle $\mc O$ & first-order oracle $x \mapsto \hat f'(x)$\\[0.5em]
+      Accuracy $\mc T_\epsilon$ & Find $\hat x$ such that $\E{}{f(\hat x)}-f^\star\leq\epsilon$\\[0.5em]
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vfill
+
+  \textbf{Problem:} For this class we have shown that
+  \[
+    \bar x_k = \arg\min \{f(x_0), \dots, f(x_k)\}
+  \]
+  converges in the deterministic case.
+
+  \vfill
+  
+  \uncover<2->{
+  \textbf{Idea:} Average the iterates by weight of the steplengths, i.e.,
+  \[
+    \tilde x_k = \frac{\sum_{t=0}^k h_t x_t}{\sum_{t=0}^k h_t}
+  \]
+  }
+\end{frame}
+
+
+\begin{frame}{Complexity}
+
+  \textbf{Theorem:} The associated sequence generated by the SGD iterates satisfies
+  \[
+    \E{}{f(\tilde x_N)-f^\star}\leq \frac{\E{}{\norm{x_0-x^\star}_2^2}+(\mc L^2+\sigma_g^2) \sum_{k=0}^N h^2_k}{2\sum_{k=0}^N h_k}.
+  \]
+
+  \vfill
+  Remarks:
+  \begin{itemize}
+  \item If $h_k=h=\mc O(\frac {1}{\sqrt N})$ then
+    \[
+      \E{}{f(\tilde x_N)-f^\star}\leq \mc O\left(\frac{1}{\sqrt{N}}\right).
+    \]
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Proof [$\star$]}
+
+
+  \textbf{Proof :}
+  \begin{itemize}
+  \item Let $x^\star$ be a minimizer. We take $x\to V(x)\defn \norm{x-x^\star}^2_2$ as a potential function.
+  \item<2-> We have in expectation
+    \[
+      \E{}{\norm{x_{k+1}-x^\star}^2_2|\mc T_k} = \norm{x_k-x^\star}^2_2 - 2 h_k \iprod{f'(x_k) }{ x_k -x^\star} + h_k^2 \E{}{\norm{\hat f_k'(x_k)}_2^2|\mc T_k}.
+    \]
+  \item<3-> The gradient inequality of $f$ ensures $\iprod{f'(x_k)}{x^\star-x_k}\leq f(x^\star)-f(x_k)$. Taking total expectation
+    \[
+      2 h_k \E{}{f(x_k)-f^\star} \leq \E{}{\norm{x_k-x^\star}^2_2} - \E{}{\norm{x_{k+1}-x^\star}_2^2} + h_k^2 (\mc L^2+\sigma^2_g)
+    \]
+    as $\E{}{\norm{\hat f_k'(x_k)}_2^2|\mc T_k}\leq \mc L^2+\sigma^2_g$.
+  \item<4-> Summing up all inequalities for $k\in [0, \dots, N]$ and taking an expecation gives
+    \[
+      \sum_{k=0}^N 2 h_k \E{}{f(x_k)-f^\star} \leq \E{}{\norm{x_0-x^\star}_2^2} - \E{}{\norm{x_{N+1}-x^\star}_2^2} + \sum_{k=0}^N h_k^2 (\mc L^2+\sigma^2_g).
+    \]
+  \item<5-> The secant inequality $f(\tilde x_N) \leq \tfrac{\sum_{k=0}^N h_k f(x_k)}{(\sum_{k=0}^N h_k)} $ yields
+    \[
+      \E{}{f(\tilde x_N) - f^\star}\leq \frac{\E{}{\norm{x_0-x^\star}_2^2}+(\mc L^2+\sigma^2_g) \cdot \sum_{k=0}^N h_k^2 }{2 \sum_{k=0}^N h_k}.
+    \]    
+  \end{itemize}
+
+
+\end{frame}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,46 @@
+\documentclass[border=0.5mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+\newcommand{\radiusa}{0.7}
+\newcommand{\radiusb}{1.4}
+\newcommand{\radiusc}{2.236}
+
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \begin{axis}[
+    ticks=none,
+    axis lines=left,
+    y=3.5cm,            % y unit vector
+    x=1cm,            % x unit vector
+    xmin=-2,
+    xmax=2,
+    ymin=0,
+    ymax=1,
+    clip=false,
+    xlabel={E},
+    ylabel={f},
+    x label style={at={(axis description cs:1.025,0.18)},anchor=west},
+    y label style={at={(axis description cs:0.3,1.025)},rotate=-90,anchor=south},
+    ]
+    
+    \addplot[mark=none, blue, samples=1000, domain=-2:2] {max(x, -x, 0.5+0.4*x)/2.5};    
+  \end{axis}
+  
+\end{tikzpicture}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

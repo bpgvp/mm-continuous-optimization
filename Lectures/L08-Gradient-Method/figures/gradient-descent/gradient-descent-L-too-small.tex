@@ -1,0 +1,40 @@
+\documentclass[border=0.5mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \begin{axis}[
+    ticks=none,
+    axis lines=left,
+    y=0.8cm,            % y unit vector
+    x=1.5cm,            % x unit vector
+    clip=true,
+    ymax=4,
+    ymin=-0.2,
+    ylabel={$f$},
+    y label style={at={(axis description cs:0.2,0.8)},rotate=-90,anchor=south west},
+    ]
+    
+    \addplot[mark=none, black, samples=100, domain=-1.5:1.5] {3*x^2};
+
+    \addplot+[mark size=0.75] table [x="X", y="F", col sep=comma] {path-L-too-small.csv};    
+  \end{axis}
+  
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,1414 @@
+\documentclass[9pt]{beamer}
+% \documentclass[handout, 9pt]{beamer}
+
+\usepackage{import}
+\subimport{../}{preamble.tex}
+\subimport{../}{beamer-theme.tex}
+\usepackage{svg}
+
+% Location for all figures / pictures
+\graphicspath{{pictures/}{figures/}}
+
+% Figures inline
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{arrows.meta}
+\usepgfplotslibrary{fillbetween}
+
+\newcommand{\xbar}{1}
+
+%--------------------------------------------------
+% Presentation Information
+%--------------------------------------------------
+\title[Continuous Optimization]{Convex Sets \& Functions}
+\date[]{Fall 2026}
+%--------------------------------------------------
+
+\begin{document}
+
+\begin{frame}  
+
+  \maketitle
+
+  \vspace{-2em}
+  
+    \begin{center}
+    \begin{tabular}{lll}
+      Instructor : & \textbf{Bart Van Parys} & \textbf{(\href{mailto:mastermath@vanparys.xyz}{mastermath@vanparys.xyz})} \\
+    \end{tabular}
+  \end{center}
+  
+\end{frame}
+
+\section{Convex Sets}
+
+\begin{frame}{Linear Sets}
+
+  A set $L \subseteq E$ is \emph{linear} if $x, y \in L$ implies
+  \[
+    a x + b y \in L,
+  \]
+  for any $a, b \in \Re$.
+
+  \vfill
+  \begin{center}
+    \includesvg[height=3cm]{linear-subspace.svg}
+  \end{center}
+  \vfill
+
+  \textbf{Examples :}
+  \begin{itemize}
+  \item Linear spaces such as $\Re^n$, $\Re^{n\times m}$
+  \item Symmetric matrices $S^n\defn \set{X\in\Re^{n\times n}}{X=X\tpose}$
+  \item<2-> Null space $\set{x\in\Re^m}{Ax=0}$ of a matrix $A\in\Re^{n\times m}$ 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Linear Hull}
+
+  The \emph{linear hull} $span (S) \defn \cap_{L~\rm{linear},\, S\subseteq L} ~L$ of a set $S$ is the unique smallest linear set that contains $S$, i.e.\
+  $$ L~\mathrm{linear~set}, ~S \subseteq L \implies span(S) \subseteq L$$  
+
+  \vfill
+
+  The \emph{dimension} $\dim(L)=k$ of a linear space $L$ is the smallest number of vectors $v_i\in L$ such that $$span(\{v_1, \dots, v_k\}) = L.$$
+
+  \vfill
+  
+  Example:
+  \begin{itemize}
+  \item Symmetric matrices: $\dim(S^n) = (n+1)n/2$
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Affine Sets}
+
+    
+  A set $H \subseteq E$ is \emph{affine} if $x, y \in H$, $\theta \in \Re$ implies
+  \[
+    \theta x + (1-\theta) y \in H.
+  \]    
+
+  \vfill
+  \begin{center}
+    \includegraphics[height=1.5cm]{affine-set/affine-set.pdf}
+  \end{center}
+  \vfill
+
+  
+  \textbf{Examples :}
+
+  \begin{itemize}
+  \item Linear spaces are affine
+  \item Solution set of linear system $\set{x\in\Re^m}{Ax = b}$ with $A\in \Re^{m\times n}$
+  \end{itemize}
+
+  \vfill
+
+  \uncover<2->{
+  If $H$ is an affine set, then $\set{x-x_0}{x\in H}$ with $x_0\in H$ is a \emph{linear subspace}.\\[0.5em]
+  The \emph{dimension} $\dim(H)$ of an affine set is the dimension of its associated subspace.
+  }
+\end{frame}
+
+\begin{frame}{Affine Hull}
+
+  The \emph{affine hull} $\aff (S) \defn \cap_{H~\rm{affine},\, S\subseteq H} ~H$ of a set $S$ is the unique smallest affine set that contains $S$, i.e.\
+  $$ H~\mathrm{affine~set}, ~S \subseteq H \implies \aff(S) \subseteq H$$  
+
+  \vfill
+  \begin{minipage}{1\textwidth}
+    \begin{center}
+      \includegraphics[height=4cm]{affine-hull/affine-hull.pdf}
+    \end{center}
+  \end{minipage}
+  \vfill
+  
+  \uncover<2->{The \emph{affine dimension} $\dim(S)$ of a set $S$ is the dimension of $\aff(S)$ (nonstandard)}
+
+\end{frame}
+
+\begin{frame}{Quiz}
+
+\end{frame}
+
+\begin{frame}{Affine Combinations}
+
+  Consider a finite set of points $x_i$ for $i$ in $I=[1, \dots, k]$. An \emph{affine combination} is any point of the form
+  \[
+    \sum_{i\in I} p_i \cdot x_i
+  \]
+  where $p_i\in\Re$ and $\sum_{i\in I} p_i=1$.
+
+  \vfill
+  
+  \textbf{Theorem : } An affine set $H \subseteq E$ is closed under affine combinations.
+
+  \vfill
+  
+  \textbf{Theorem : } The affine hull of a set $S$ can be found as
+  \[
+    \aff (S) = \set{\sum_{i\in I} p_i\cdot x_i}{\forall k\in \N, ~\forall i\in I=[1, \dots, k], ~x_i \in S, ~\sum_{i\in I} p_i=1}.
+  \]
+  
+\end{frame}
+
+\begin{frame}{Relative Interior}
+
+
+  Define the \emph{interior} of a set $S$ as
+  \[
+    \interior(S) \defn \set{x\in S}{\exists \epsilon>0:~B(x, \epsilon) \subseteq S}
+  \]
+  with $B(x, \epsilon)$ an open norm ball centered at $x$ with radius $\epsilon>0$.
+
+  \vfill
+  
+  \begin{minipage}{1\textwidth}
+    \begin{center}
+      \includegraphics[height=5cm]{affine-hull-2/affine-hull.pdf}
+    \end{center}
+  \end{minipage}
+
+  \vfill
+  \uncover<2->{
+  If the set $S$ is a \emph{lower dimensional subset} ($\dim(S) < \dim(E)$) of a space $E$, then $\interior S=\emptyset.$
+  }
+\end{frame}
+
+
+\begin{frame}{Relative Interior}
+
+  
+
+  \vfill
+
+  Define the \emph{relative interior} of a set $S$ as
+  \[
+    \relint(S) \defn \set{x\in S}{\exists \epsilon>0:~B(x, \epsilon) \cap \aff(S) \subseteq S}.
+  \]
+
+  \vfill
+  
+  \begin{minipage}{1\textwidth}
+    \begin{center}
+      \includegraphics[height=3.5cm]{affine-hull/affine-hull.pdf}
+    \end{center}
+  \end{minipage}
+
+\end{frame}
+
+\begin{frame}{Convex Sets}
+  
+  A set $C \subseteq E$ is \emph{convex} if $x, y \in C$ implies
+  \[
+    \theta x + (1-\theta) y \in C
+  \]
+  for all $\theta\in[0,1]$.
+  \vfill
+  
+  \begin{minipage}{0.5\textwidth}
+    \textbf{Example:}\\
+    \vspace{-6mm}
+    \begin{center}
+      \includegraphics[height=3cm]{convex-sets/convex-sets-I.pdf}
+    \end{center}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \textbf{Counter Example:}\\
+    \vspace{-6mm}
+    \begin{center}
+      \includegraphics[height=3cm]{convex-sets/convex-sets-III.pdf}
+    \end{center}
+  \end{minipage}
+
+\end{frame}
+
+\begin{frame}{Convex Hull}
+
+  The \emph{convex hull} $\conv (S) = \cap_{C~{\rm{convex}},\, S\subseteq C} ~C$ of a set $S$ is the unique smallest convex set that contains $S$, i.e.\
+  $$ C~\mathrm{convex~set}, ~S \subseteq C \implies \conv(S) \subseteq C$$  
+
+
+  \vfill
+  \textbf{Example:}
+  The convex hull of 15 arbitrary points
+  \vfill
+  \begin{center}
+    \includegraphics[height=3cm]{convex-hull/convex-hull.pdf}
+  \end{center}
+  \vfill
+  
+\end{frame}
+
+\begin{frame}{Convex Combinations}
+
+  Consider a finite set of points $x_i$ for $i$ in $I=[1, \dots, k]$. A \emph{convex combination} of points $x_i$ with $i\in I$ is any point of the form
+  \[
+    \sum_{i\in I} p_i \cdot x_i,
+  \]
+  where $p_i \geq 0$ for all $i\in I$ and $\sum_{i\in I} p_i=1$.
+
+  \vfill
+  
+  \textbf{Theorem : } A convex set $C \subseteq E$ is closed under convex combinations.
+
+  \vfill
+  
+  \textbf{Theorem : } The convex hull of a set $S$ can be found as
+  \[
+    \conv (S) = \set{\sum_{i\in I} p_i\cdot x_i}{\forall k\in \N, ~\forall i\in I=[1, \dots, k], ~x_i \in S, ~p_i\geq 0, ~\sum_{i\in I} p_i=1}.
+  \]
+\end{frame}
+
+\begin{frame}{Extreme Points}
+
+  A point $x$ is called an \emph{extreme point} of a convex set $C$ if it can not be written as a strict convex combination of two distinct points in that set, i.e.\
+  \[
+    x \in \ex(C) \iff \,!\exists y\neq z \in C: ~~x = \theta y + (1-\theta) z
+  \]
+  with $\theta \in (0, 1)$.
+
+  \vfill
+
+  \textbf{Examples: }
+
+  \vfill
+
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[height=2.5cm]{extreme-points/extreme-points.pdf}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[height=2.5cm]{extreme-points/extreme-points-2.pdf}
+  \end{minipage}
+  
+\end{frame}
+
+\begin{frame}{Extreme Points}
+
+  \textbf{Minkowski-Carath\'eodory} Let $A$ be a compact (closed and bounded) convex set. Then,
+  \[
+    A = \conv(\ex(A)).
+  \]
+
+  \vfill
+
+  \textbf{Graphically:}
+  \begin{center}
+    \includesvg[height=2.5cm]{minkowski-caratheodory.svg}\\
+    {\tiny (Source: Wikipedia)}
+  \end{center}
+  a compact convex set can be recovered from its extreme points.
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Remarks:}
+  \begin{itemize}
+  \item It is important that the set is closed and bounded!
+  \end{itemize}
+  }
+  
+\end{frame}
+
+\begin{frame}{Vertices}
+
+  A point $x\in E$ is called a \emph{vertex} of a convex set $C$ if it can be written as the {unique} minimizer of
+  \[
+    \begin{array}{rl}
+      \min & {c}\tpose {x} \\[0.5em]
+      \st  &  x\in C
+    \end{array}
+  \]
+  for some cost vector $c$.
+
+  \vfill
+
+  \textbf{Theorem:} A vertex is always an extreme point.
+
+  \uncover<2->{
+  \textbf{Proof [$\star$]:}
+
+  Consider a vertex $v\in C$ with $\{v\} = \arg\min_{x\in C} c\tpose x$ for some cost vector $c$. Assume, for contradiction that $v$ is not an extreme point. That is, there exists $x_1\neq x_2\in C$ and $\theta\in (0, 1)$ so that
+  \(
+  v = \theta x_1+(1-\theta) x_2.
+  \)
+  and hence $c\tpose v = \theta c\tpose x_1 + (1-\theta) c\tpose x_2$. This implies that $\min \{c\tpose x_1, c\tpose x_2\}\leq c\tpose v$.
+  However, this is a direct contradiction with $\{v\} = \arg\min_{x\in C} c\tpose x$ (unique minimizer) as $v\neq x_1$ and $v\neq x_2$. 
+  }
+
+  \vfill
+
+  \uncover<3->{
+    \textbf{Warning:} the reverse is not always true!
+    (It is true for polyhedra)
+    }
+\end{frame}
+
+\begin{frame}{Vertices $\subset$ Extreme Points}
+
+  \textbf{Counter Example:} (Norman window)
+  \[
+    \set{(x_1, x_2)}{-1\leq x_1\leq 1, ~-2 \leq x_2 \leq 0} \cup \tset{(x_1, x_2)}{x_1^2+x_2^2\leq 1}
+  \]
+
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{exposed-extreme-points/exposed.pdf}
+  \end{center}
+
+  \uncover<2->{
+  The points $(-1, 0)$ and  $(1, 0)$ are extreme points but not vertices!
+  }
+\end{frame}
+
+
+\begin{frame}{Convex Cones}
+
+  A set $K \subseteq E$ is \emph{conic} if $x \in K$ implies
+  \[
+    \theta x \in K
+  \]
+  for all $\theta\in\Re_+$. Cones are \textbf{not} necessarily convex sets.
+
+  \vfill
+  
+  \begin{minipage}{0.5\textwidth}
+    \begin{center}
+      \centering
+      \includegraphics[height=3cm]{convex-sets/convex-sets-II.pdf}
+    \end{center}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \begin{center}
+      \centering
+      \includegraphics[height=3cm]{convex-sets/convex-sets-IV.pdf}
+    \end{center}
+  \end{minipage}
+
+  \vfill
+
+  A set $K$ is a \emph{convex cone} if it is a cone and a convex set.
+\end{frame}
+
+\begin{frame}{Conic Hull}
+
+  The \emph{conic hull} $\cone(S) \defn \cap_{K~\mathrm{convex~cone},\, S\subseteq K} K$ of a set $S$ is the unique smallest \textbf{convex} conic set that contains $S$, i.e.\
+  $$ K~\mathrm{convex~cone}, ~S \subseteq K \implies \cone(S) \subseteq K$$  
+  
+  \vfill
+
+  \textbf{Example:}
+  The conic hull of 15 arbitrary points
+  \begin{center}
+    \includegraphics[height=3cm]{conic-hull/conic-hull.pdf}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}{Conic Combinations}
+
+  Consider a finite set of points $x_i$ for $i$ in $I=[1, \dots, k]$. A \emph{conic combination} of points $x_i$ with $i\in I$ is any point of the form
+  \[
+    \sum_{i\in I} p_i \cdot x_i,
+  \]
+  where $p_i \geq 0$ for all $i\in I$.
+
+  \vfill
+  
+  \textbf{Theorem : } A cone $K \subseteq E$ is closed under conic combinations.
+
+  \vfill
+  
+  \textbf{Theorem : } The conic hull of a finite dimensional set $S$ can be found as
+  \[
+    \cone (S) = \set{\sum_{i\in I} p_i\cdot x_i}{\forall k\in \N, ~\forall i\in I=[1, \dots, k], ~x_i \in S, ~p_i\geq 0}.
+  \]
+
+
+\end{frame}
+
+\section{Standard Convex Sets}
+
+\begin{frame}{Elementary Sets}
+
+  Examples
+  \begin{itemize}
+  \item $\emptyset$ the empty set is affine (and thus convex)
+  \item Singleton $\{x_0\}$ is affine
+  \item A line is affine 
+  \item Any open and closed norm ball,  $B(x, \epsilon)$ or $B[x, \epsilon]$, is convex
+  \item Positive orthant $\Re^n_+ = \set{x\in \Re^n}{x_1\geq 0, \dots, x_n\geq 0}$ is a convex cone
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Halfspace}
+
+  \emph{Hyperplane} $\set{x\in E}{a\tpose x = b}$ with \emph{normal vector} $a\neq 0$
+
+ 
+  \vfill
+  \emph{Halfspace} $\set{x\in E}{a\tpose x \leq b}$ with normal vector $a\neq 0$
+
+  \vfill
+
+  \textbf{Some Properties :}
+  \begin{itemize}
+  \item Hyperplane is affine
+  \item Halfspace is convex
+  \item Halfspace with $b=0$ is a convex cone
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Polyhedra}
+
+  \begin{minipage}{0.5\textwidth}
+    A \emph{polyhedral} set
+    \[
+      C = \set{x} {a_i\tpose x \leq b_i, \quad i \in [1, \dots, k]}
+    \]
+    is convex.
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[height=3.5cm]{polyhedron/polyhedron.pdf}
+  \end{minipage}
+
+  \textbf{Special Cases:}
+  \begin{itemize}
+  \item The nonnegative orthant $\Re^n_+$
+  \item The probability simplex
+    \[
+      \mc P_k = \set{p\in \Re^k}{\sum_{i=1}^k p_i=1, ~p_i\geq 0 ~~\forall i\in [1, \dots,k] }
+    \]
+  \item The convex hull of a finite set $\{x_1, \dots, x_k\}$
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Ellipsoid}
+
+  \emph{Euclidean ball} with center $x_c$ and radius $r$:
+  \begin{align*}
+    & \set{x}{\norm{x-x_c}_2^2 = (x-x_c)\tpose \frac{1}{r^2} (x-x_c) \leq 1} \\
+    = & \set{x_c + r u}{\norm{u}_2 \leq 1}
+  \end{align*}
+  \vfill
+  \emph{Ellipsoid} :
+  \begin{align*}
+    & \set{x}{\norm{x-x_c}_P^2 = (x-x_c)\tpose P^{-1} (x-x_c) \leq 1} \\
+      = & \set{x_c + L u}{\norm{u}_2 \leq 1}
+  \end{align*}
+  where $P = L L\tpose \in S^n_{++}$ is a symmetric positive definite matrix.
+  
+\end{frame}
+
+\begin{frame}{Norm Balls and Cones}
+
+  \emph{Norm :}  a function $\norm{\cdot}$ that satisfies
+  \begin{enumerate}
+  \item $\norm{x}\geq 0$ and $\norm{x}=0 \iff x=0$
+  \item $\norm{t x} = \abs{t} \cdot \norm{x}$ for $t\in\Re$
+  \item $\norm{x+y} \leq \norm{x} + \norm{y}$
+  \end{enumerate}
+
+  \vfill
+  \emph{Norm ball} with center $x_c$ and radius $r$ : $\set{x}{\norm{x-x_c}\leq r}$
+
+  \vfill
+  \begin{minipage}{0.6\textwidth}
+    \emph{Norm cone} $\set{(x, t) \in E\times \Re}{\norm{x}\leq t}$
+
+    \vspace{1em}
+    Using $\norm{\cdot}_2:$
+    \begin{itemize}
+    \item Second-order cone
+    \item Lorentz cone
+    \item Ice-cream cone
+    \end{itemize}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.4\textwidth}
+    \includegraphics[height=4cm]{norm-cone/norm-cone.pdf}
+  \end{minipage}%
+  
+\end{frame}
+
+\begin{frame}{Euclidean Ball}
+
+  \textbf{Theorem :} Norm ball $B[x_c, r]$ is a convex set.
+
+  \vfill
+
+  \textbf{Proof [$\star$] : } Take any two points $x$ and $y$ in $B[x_c, r]$. Then for $\theta\in[0, 1]$, we have
+  \begin{align*}
+    \norm{\theta x + (1-\theta) y - x_c}  & =  \norm{\theta (x-x_c) + (1-\theta) (y-x_c) } \\
+                                            & \leq \theta \norm{x-x_c} + (1-\theta) \norm{(y-x_c)}\\
+                                            & \leq r
+  \end{align*}
+  where the first inequality follows from the triangle inequality and positive homogeneity of the norm.
+\end{frame}
+
+
+\begin{frame}{Positive Semidefinite Cone}
+
+  $S^n$ is the space of \emph{symmetric} $n\times n$ \emph{matrices}
+
+  \vfill
+
+  $S^n_{+}=\set{X\in S^n}{X\succeq 0}$ : \emph{positive semidefinite} $n\times n$ \emph{matrices}
+  \[
+    X \in S^n_{+} \iff y\tpose X y \geq 0, ~\forall y\in\Re^n.
+  \]
+
+  \vfill
+  
+  \begin{minipage}{0.5\textwidth}
+    \textbf{Example:}
+    \[
+      \begin{pmatrix}
+        x & y\\
+        y & z
+      \end{pmatrix}
+      \in S^2_+
+    \]
+    or
+    \[
+      x\geq 0, ~ z x \geq y^2.
+    \]
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \includegraphics[height=4cm]{sdo-cone/sdo-cone.pdf}
+  \end{minipage}
+  
+  
+\end{frame}
+
+\section{Operations Preserving Convexity (Sets)}
+
+\begin{frame}{Establishing Convexity}
+
+  How can we establish that a set $C$ is convex ?
+
+  \vfill
+
+  \textbf{Approaches :}
+  \begin{enumerate}
+  \item Check definition\\[1em]
+  \item Reduction to basic convex sets using convex set algebra
+  \end{enumerate}
+  
+\end{frame}
+
+\begin{frame}{Intersection}
+
+  \textbf{Theorem :} If $S_1$ and $S_2$ are convex sets then so is their \emph{intersection} $S_1\cap S_2$.
+
+  \vspace{1em}
+  
+  \textbf{Theorem :} If $S_i$ are convex sets for $i$ in $I$ then so is their \emph{intersection} $\cap_{i\in I} S_i$.
+
+  \vfill
+
+  \textbf{Examples}:\\[0.5em]
+  Consider the space of symmetric square matrices $S^{n}$.
+  \begin{itemize}
+  \item The cone $S_+^n$ of positive semidefinite matrices is defined as
+    \[
+      \cap_{z\in\Re^n} \set{X\in S^n}{z\tpose X z\geq 0}.
+    \]
+  \item The cone $P_+^n$ of copositive matrices is defined as
+    \[
+      \cap_{z\in\Re_+^n} \set{X\in S^n}{z\tpose X z\geq 0}.
+    \]
+  \end{itemize}
+
+      
+\end{frame}
+
+\begin{frame}{Affine Transformations}
+  
+
+  A function $f:E_1\to E_2$ is \emph{affine} if it holds that
+  \[
+    f(p_1 x_1 + p_2 x_2) = p_1 f(x_1) + p_2 f(x_2)
+  \]
+  for all $p_1, p_2 \in \Re$ with $p_1+p_2=1$ and $x_1, x_2 \in E_1$.
+
+  \vspace{1em}
+  \textbf{Example:} 
+  The function $f(x) = Ax - b$ with $A\in\Re^{m\times n}$ and $b\in\Re^m$ is affine.
+  
+  
+  \vfill
+
+  \uncover<2->{
+  \textbf{Theorem :} The \emph{image} of a set $S \subseteq E_1$ through $f:E_1\to E_2$ is the set
+  \[
+    f(S) \defn \set{f(x) \in E_2}{x\in S}
+  \]
+  If $S$ is a convex set and $f$ is affine, then so is its image $f(S)$.
+  }
+
+  \vfill
+
+  \uncover<3->{
+  \textbf{Theorem : } The \emph{preimage} of a set $S \subseteq E_2$ through a function $f:E_1\to E_2$ is the set
+  \[
+    f^{-1}(S) \defn \set{x\in E_1}{f(x)\in S}
+  \]
+  If $S$ is a convex set and $f$ is affine, then so is its preimage $f^{-1}(S)$.
+  }
+
+\end{frame}
+
+\begin{frame}{Ellipsoidal Sets are Convex}
+
+  
+  \begin{minipage}{0.5\textwidth}
+    An ellipsoidal set
+    \[
+      C = \set{x_c + L u}{\norm{u}_2 \leq 1}
+    \]
+    is convex.
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[height=3.5cm]{ellipsoid/ellipsoid.pdf}
+  \end{minipage}
+
+  \vfill
+
+  \textbf{Proof [$\star$]:}
+  Define the affine function $f(x) = x_c + L x$ with $L\in\Re^{n\times m}$ and $x_c\in\Re^{n}$. The image set
+  \[
+    C = \set{f(x)}{x\in B[0, 1]} = f(B[0, 1])
+  \]
+  is convex.
+\end{frame}
+
+\begin{frame}{Polyhedral Sets are Convex}
+
+  
+  \begin{minipage}{0.5\textwidth}
+    A \emph{polyhedral} set
+    \[
+      C = \set{x} {a_i\tpose x \leq b_i, \quad i \in [1, \dots, k]}
+    \]
+    is convex.
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[height=3.5cm]{polyhedron/polyhedron.pdf}
+  \end{minipage}
+
+  \vfill
+
+  \textbf{Proof [$\star$] :}
+  Define the affine function $f(x) = b - Ax$ with $A\in\Re^{k\times n}$ and $b\in\Re^{k}$. The preimage set
+  \[
+    C = \set{x}{f(x)\in\Re^k_+} = f^{-1}(\Re_+^k)
+  \]
+  is convex.
+\end{frame}
+
+
+
+\section{Conic Inequalities}
+
+\begin{frame}{Proper Cones}
+
+  A cone $K$ in $E$ is called a \emph{proper cone} if it satisfies the following
+  \begin{enumerate}
+  \item $K$ is convex
+  \item $K$ is closed
+  \item $K$ is solid, i.e., $\interior K \neq \emptyset$
+  \item $K$ is pointed, i.e., $K$ contains no line, equivalently $x\in K, ~-x \in K \implies x=0$.
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Generalized Inequalities}
+
+  \begin{center}
+    \centering
+    \includegraphics[height=3cm]{generalized-inequalities/gen.pdf}
+  \end{center}
+
+  
+  A proper cone can be used to define a \emph{partial order}
+  \[
+    x \preceq_{K} y \iff y-x \in K
+  \]
+  Similarly, we can define a \emph{strict partial order}
+  \[
+    x \prec_{K} y \iff y-x \in \interior K
+  \]
+
+  \vfill
+  
+  \textbf{Examples:}\\[0.5em]
+  \begin{itemize}
+  \item Let $E=\Re^n$ and $K=\Re^n_+$ the positive orthant. The order $x\preceq_{\Re^n_+} y$ means that $x_i\leq y_i$ for all $i$ in $[1, \dots, n]$.
+  % \item<2-> Let $E=\S^n$ and $K=\S^n_+$ the cone of positive semidefinite matrices. The order $X\preceq_{\S^n_+} Y$ means that $Y-X$ has positive eigenvalues.
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Properties of Generalized Inequalities}
+
+  The partial order $\preceq_{K}$ satisfies the properties
+  \begin{itemize}
+  \item $\preceq_{K}$ is preserved under addition : if $x \preceq_{K} y$ and $u \preceq_{K} v$, then
+    $x+u\preceq_K y+v$
+  \item $\preceq_{K}$ is preserved under nonnegative scaling : if $x \preceq_{K} y$ and $\alpha>0$, then $\alpha x \preceq_{K} \alpha y$
+  \item $\preceq_{K}$ is transitive : if $x\preceq_{K} y$ and $y\preceq_{K}z$, then $x \preceq_{K} z$
+  \item $\preceq_{K}$ is reflexive : $x\preceq_{K} x$
+  \item $\preceq_{K}$ is anti-symmetric : $x\preceq_{K}y$ and $y \preceq_{K} x$ implies $x=y$
+  \item $\preceq_{K}$ is preserved under limits : $x_i\preceq_{K} y_i$ for $i\in \N$, $x_i\to x$ and $y_i\to y$, then $x\preceq_{K} y$.
+  \end{itemize}
+
+  \vfill
+  
+  The strict partial order $\prec_K$ satisfies the properties
+  \begin{itemize}
+  \item $x \prec_K y \implies x\preceq_K y$
+  \item $\prec_{K}$ is preserved under addition : if $x \prec_{K} y$ and $u \prec_{K} v$, then
+    $x+u\prec_K y+v$
+  \item $\prec_{K}$ is preserved under nonnegative scaling : if $x \prec_{K} y$ and $\alpha>0$, then $\alpha x \prec_{K} \alpha y$
+  \item $x \not\prec_K x$
+  \item $x\prec_K y$, then for $u$ and $v$ small enough, $x+u\prec_K y+v$
+  \end{itemize}
+
+
+  % \vfill
+  
+  % \textbf{Partial Order} : Not all points are comparable
+
+\end{frame}
+
+\begin{frame}{Minimum and Minimal Elements}
+
+  The standard inequality $\leq$ on $\Re$ implies a \emph{linear ordering}. Either $x\geq y$ or $x\leq y$.\\
+  A generalized inequality $x\preceq_K y$ on $E$ is only a \emph{partial ordering}!
+
+  \vfill
+  
+  A minimum $x_1$ in a set $C\subseteq \Re$ can be defined equivalently as
+  \begin{itemize}
+  \item $x_1\leq y~~\forall y \in C$, or
+  \item $y\leq x_1 \implies y\not\in C\setminus{x_1}$.
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Minimum and Minimal Elements}
+
+  The standard inequality $\leq$ on $\Re$ implies a \emph{linear ordering}. Either $x\geq y$ or $x\leq y$. A generalized inequality $x\preceq_K y$ on $E$ is only a \emph{partial ordering}.
+
+  \vfill
+
+  \begin{minipage}{0.5\textwidth}
+    \begin{center}    \includegraphics[height=4cm]{minimum-element/minimum-element.pdf}
+    \end{center}
+    A point $x_1$ is \emph{the minimum element} if
+    \[
+      x_1\preceq_K y~~\forall y \in C.
+    \]
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.5\textwidth}
+    \begin{center}    \includegraphics[height=4cm]{minimal-element/minimal-element.pdf}
+    \end{center}
+    A point $x_1$ is \emph{a minimal element} if
+    \[
+      y\preceq_K x_1 \implies y\not\in C\setminus{x_1}.
+    \]
+  \end{minipage}%
+
+  
+\end{frame}
+
+\begin{frame}{Multiobjective Optimization}
+
+  \textbf{Example:}
+  \begin{equation*}
+    \minimize_{y\in\Re^n} ~ (f_1(y), f_2(y))
+  \end{equation*}
+
+  \vfill
+  
+  We write any multiobjective optimization problem as
+  \[
+    \begin{array}{rl}
+      \minimize_{\preceq_K} & x \\[0.5em]
+      \st & x \in C.
+    \end{array}
+  \]
+  \gray{\textit{Hint:} $K=\Re_+^2$, $x\in \Re^2$ and $C=\set{(f_1(y), f_2(y))}{y\in\Re^n}$.}
+
+  \vfill
+
+  Solution types:
+  
+  \begin{itemize}
+  \item \emph{Weak solutions} correspond to the set of all minimal elements.
+  \item The \emph{strong solution} corresponds to the minimum element. 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Minimum Element -- Example: Bounding Box}
+
+  \begin{itemize}
+    \setlength{\itemsep}{1.5em}
+  \item Consider the set $R$ of all rectangles $\mc R = [a, b]\times [c, d]$ in the plane.
+
+  \item Define a partial order $\mc R_1 \preceq \mc R_2 \iff \mc R_1\subseteq \mc R_2$ based on set inclusion.
+
+  \item
+
+    Find ``smallest rectangle'' containing a set $P$, i.e.,
+
+    \[
+      \begin{array}{rl}
+        \minimize_{\preceq} & \mc R \\[0.5em]
+        \st & \mc R \in S= \set{\mc R\in R}{P \subseteq \mc R}.
+      \end{array}
+    \]
+
+
+  \item<2-> There is a strong solution. \emph{Minimum element} : bounding box $\mc R^\star = \cap_{\mc R\in S} \mc R$.
+    
+  \end{itemize}  
+\end{frame}
+
+\begin{frame}{Minimal Elements -- Example: Minimal Ellipsoids}
+
+  \begin{itemize}
+    \setlength{\itemsep}{1.5em}
+  \item Consider the set $E$ of all centered ellipsoids $\mc E = \set{x}{x\tpose A x\leq 1}$ in the plane.
+
+  \item Define a partial order $\mc E_1 \preceq \mc E_2 \iff \mc E_1\subseteq \mc E_2$ based on set inclusion.
+
+  \item
+
+  Find ``smallest ellipsoid'' containing a set $P$, i.e.,
+
+  \[
+    \begin{array}{rl}
+      \minimize_{\preceq} & \mc E \\[0.5em]
+      \st & \mc E \in S= \set{\mc E\in E}{P \subseteq \mc E}.
+    \end{array}
+  \]
+
+\item<2->There is no strong solution. 
+    
+    \begin{minipage}{0.5\textwidth}
+
+      \begin{center}
+        \includesvg[width=3cm]{smallest-ellipsoid.svg}
+      \end{center}
+      
+    \end{minipage}
+  \end{itemize}
+  
+\end{frame}
+
+
+\section{Convex Functions}
+
+\begin{frame}{Convex Functions}
+
+  Let $f:C\to\Re$.
+  \begin{itemize}
+  \item A function $f$ is \emph{convex} if its domain $\dom(f)=C$ is a convex set and
+     \[
+      \forall x, y\in C, ~\forall \theta \in [0, 1] : \quad f(\theta\cdot x+(1-\theta)\cdot y) \leq \theta \cdot f(x) + (1-\theta) \cdot f(y)
+    \]
+  \end{itemize}
+
+  \vfill
+  \includegraphics[height=5cm]{convex-function/convex-function.pdf}
+  
+\end{frame}
+
+
+\begin{frame}{Extended Value Functions}
+
+  Consider a function $f$ with domain $\dom(f) \subset E$. It is often convenient to extend the function to the entirety of $E$. Denote
+  \[
+    \tilde f(x)\defn
+    \begin{cases}
+      f(x) & {\rm{if~}} x\in\dom(f),\\[0.5em]
+      +\infty & {\rm{otherwise.}}
+    \end{cases}
+  \]
+  The function $\tilde f:E\to\Re\cup\{+\infty\}$ is an \emph{extended value function}. 
+
+  \vfill
+  
+  \textbf{Properties:}
+  \begin{itemize}
+  \item Extended arithmetic: $x<\infty$, $x+\infty=\infty$ for all $x\in \Re$; also $0\cdot\infty=0$.
+  \item<2-> The \emph{domain} of the function $\tilde f$ is $\dom(\tilde f)=\tset{x\in E}{\tilde f(x) < \infty} = \dom(f)$.
+  \item<3-> A function $f$ is \emph{convex} if 
+    \[
+      \forall x, y\in E, ~\forall \theta \in [0, 1] : \quad f(\theta x+(1-\theta) y) \leq \theta f(x) + (1-\theta) f(y)
+    \]
+
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Epigraph and Sublevel set}
+
+  \emph{Sublevel set} of a function $f:E\to\Re$:
+  \[
+    \set{x \in E}{f(x)\leq \alpha}
+  \]
+  Sublevel sets of convex functions are convex sets (converse is false).
+
+  \vfill
+
+  \uncover<2->{
+  \emph{Epigraph} of a function $f:E\to\Re$:
+  \[
+    \epi(f) \defn \set{(x, t)\in E\times\Re}{f(x)\leq t}
+  \]
+
+  \begin{center}
+    \includegraphics[height=3cm]{epigraph/epigraph.pdf}
+  \end{center}
+  }
+
+  \uncover<3->{
+    \textbf{Theorem :} A function $f$ is convex $\iff$ its epigraph $\epi(f)$ is a convex set.
+    }
+\end{frame}
+
+
+% \begin{frame}{Jensen's Inequality}
+
+%   \begin{minipage}{0.5\textwidth}
+%     \includegraphics[height=3cm]{jensen.jpg}\\
+%     Jensen
+%   \end{minipage}
+
+%   \vfill
+  
+%   \textbf{Theorem : }Let $x_i\in E$ be a finite collection $i\in I$ of points. Then for $f:E\to\nRe$ a convex function
+%   \[
+%     f\left(\textstyle\sum_{i\in I} p_i \cdot x_i\right)\leq \textstyle\sum_{i\in I} p_i \cdot f(x_i) 
+%   \]
+%   with $p_i\geq 0$ for all $i\in I$ and $\sum_{i\in I} p_i=1$.
+
+%   \vfill
+  
+%   \textbf{Remark :} Holds much more general as $f(\E{\mb P}{X}) \leq \E{\mb P}{f(X)}$.
+% \end{frame}
+
+% \begin{frame}{Strictly Convex Functions}
+  
+%   \begin{itemize}
+%   \item A \emph{strictly convex} function $f : E\to\nRe$ satisfies
+%     \[
+%       \forall x, y\in E,~ \forall \theta \in (0, 1) : \quad f(\theta\cdot x+(1-\theta)\cdot y) < \theta f(x) + (1-\theta) f(y)
+%     \]
+%   \item A function $f$ is \emph{(strictly) concave} if $-f$ is (strictly) convex
+%   \end{itemize}
+
+%   \vfill
+%   \textbf{Non-strictly convex function:}\\[0.5em]
+%   \begin{minipage}{0.5\textwidth}
+%     \centering
+%     \includegraphics[height=3.5cm]{convex-function/strictly-convex-function.pdf}
+%   \end{minipage}%
+
+  
+% \end{frame}
+
+\section{Common Convex Functions}
+
+
+\begin{frame}{Elementary Convex Functions}
+
+  \textbf{Convex Functions}
+  \begin{itemize}
+  \item Affine functions, e.g.\
+    \[
+      f(x) = A x - b.
+    \]
+    Convex on $\Re^n$ for any $A\in\Re^{m\times n}$ and $b\in\Re^m$.
+  \item<2-> Exponential functions
+    \[
+      f(x) = \exp(a x).
+    \]
+    Convex on $\Re$ for any $a\in\Re$.
+  \item<3-> Power functions
+    \[
+      f(x) = x^a.
+    \]
+    convex on $\Re_{++}$ when $a\in (-\infty, 0]\cup [1, \infty)$.
+  \item<4-> Log-sum-exp functions
+    \[
+      f(x) = \log\left(\sum_{i=1}^k \exp(a_i\tpose x)\right).
+    \]
+    Convex on $\Re^n$ for $a_i\in\Re^n$.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Elementary Concave Functions}
+
+  \textbf{Concave Functions}
+  \begin{itemize}
+  \item Affine functions, e.g.\
+    \[
+      f(x) = A x - b.
+    \]
+    Concave on $\Re^n$ for any $A\in\Re^{m\times n}$ and $b\in\Re^m$.
+  \item<2-> Geometric mean
+    \[
+      f(x) = \left(\prod_{i=1}^n x_i\right)^{1/n}
+    \]
+    Concave on $\Re^n_{+}$.
+  \item<3-> Entropy
+    \[
+      f(x) = \sum_{i=1}^n x_i \log(1/x_i)
+    \]
+    Concave on $\Re_+^n$.
+  \item<4-> Log-determinant
+    \[
+      f(X) = \log(\det(X)).
+    \]
+    Concave on $S^{n}_{++}$.
+  \end{itemize}
+
+  
+\end{frame}
+
+
+\begin{frame}{Characteristic and Minkowski Functions}
+
+  Let the set $C$ be a convex set. The following functions are convex.
+
+  \begin{itemize}
+  \item The \emph{characteristic function} of a set $C$ is defined as
+    \[
+      \chi_{C}(x) \defn \begin{cases} 0 & \mathrm{if}~x\in C, \\ +\infty & \mathrm{otherwise}. \end{cases}
+    \]
+    \vspace{2em}
+  \item The \emph{Minkowski (gauge) function} of a set $C$ is defined as
+    \[
+      \mu_{C}(x) \defn \inf\set{t>0}{x/t\in C}
+    \]
+  \end{itemize}
+
+  %TODO: Proof that Minkowski function is convex.
+  
+  \vfill
+  
+  \textbf{Theorem :} The Minkowski function satisfies
+  \begin{itemize}
+  \item $\mu_C(x) \leq 1$ for all $x\in C$ and $\mu_C(x) < 1$ for all $x \in \interior C$.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Minkowski Function and its Epigraph $\epi(\mu_C)=\set{(x, z)}{\mu_C(x)\leq z}$}
+
+  \centering
+  \includesvg[height=8cm]{minkowski-function.svg}
+
+\end{frame}
+
+
+\section{Operations Preserving Convexity (Functions)}
+
+\begin{frame}{Operations that Preserve Convexity}
+
+  How to establish whether a function is convex?
+
+  \vfill
+
+  \textbf{General Approaches :}
+  \begin{enumerate}
+  \item Verify definition
+  \item Reduction to elementary convex functions using convex function algebra
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Positive weighted sum}
+
+  \textbf{Theorem :} The function $f_1 + f_2$ is convex if $f_1$, $f_2$ are convex\\[1em]
+
+  \vfill
+
+  \textbf{Proof :} we have
+  \begin{align*}
+    (f_1+f_2)(\theta x + (1-\theta) y) &= f_1(\theta x + (1-\theta) y) + f_2(\theta x + (1-\theta) y)\\
+                                       &\leq \theta f_1( x )+ (1-\theta) f_1(y) + \theta f_2( x )+ (1-\theta) f_2(y) \\
+    & \leq \theta (f_1(x) + f_2(x)) + (1-\theta)(f_1(y) + f_2(y)) 
+  \end{align*}
+  for all $x, y$ and $\theta \in [0, 1]$.
+  
+  \vfill
+
+  \textbf{Examples :}
+  \begin{itemize}
+  \item $f(x) = x^2 +\abs{x}$ is convex as both $x^2$ and $\abs{x}$ are convex functions
+  \item $f(x) = a \exp(-x)$ is convex when $a\geq 0$ and concave when $a\leq 0$ 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Composition with Affine Functions}
+
+  Let $f:E_1\to E_2$ be an affine function. Suppose $g:E_2\to\nRe$ is a convex function.\\[1em]
+
+  \textbf{Theorem : } Define the composition $h:E_2\to\nRe$ as
+  \[
+    h(x) = (g \circ f)(x) = g(f(x)).
+  \]
+  Then, $h$ is a convex function as well.
+
+  \vfill
+  
+  \textbf{Examples :}
+  \begin{itemize}
+  \item $h(x) = -\log(a\tpose x + b)$ is convex with domain $a\tpose x + b > 0$
+  \end{itemize}
+
+  
+\end{frame}
+
+\begin{frame}{Point-Wise Maximum}
+
+  \textbf{Theorem :} If $f_i$ are convex for all $i$ in $I$, then the \emph{point-wise supremum} $$f(x) \defn \sup_{i\in I} \, f_i(x)$$ is convex as well.
+
+  \vfill
+  
+  \textbf{Examples :}
+  \begin{itemize}
+  \item Sum of $k$ largest components
+    \begin{align*}
+      f(x) &= x_{[1]} + x_{[2]} + \dots+ x_{[k]} \\
+      \intertext{where $x_{[i]}$ is $i$-th largest component of $x$}
+      f(x) &= \max \set{x_{i_1} + x_{i_2} + \dots +  x_{i_k}}{\rm{distinct}~ i_1, \dots, i_k \in [1, \dots, n]}
+    \end{align*}
+  \item<2-> Let $f(\cdot, y)$ be convex for all $y$. Then,
+    \[
+      g(x) \defn \sup_{y \in S} \, f(x, y)
+    \]
+    is convex for any arbitrary $S$.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Partial Minimization}
+
+  \textbf{Theorem :} If $f(x, y):E_1\times E_2\to\nRe$ is jointly convex in $(x, y)$ and $C \subseteq E_1$ a convex set, then
+  \[
+    g(y) \defn \inf_{x\in C} f(x, y)
+  \]
+  is convex.
+
+  \vfill
+  \uncover<2->{
+  \textbf{Proof [$\star$]:} The proof follows from
+  \begin{align*}
+    \epi(g) \defn & \set{(y, t)\in E_1\times \Re}{g(y)\leq t} \\
+            = & \cap_{\epsilon>0}\set{(y, t)\in E_1\times \Re}{\exists x\in C ~:~ f(x, y)\leq t+\epsilon} \\
+            = & p(\cap_{\epsilon>0} \set{(x, y, t)\in E_1\times C\times \Re}{f(x, y)\leq t+\epsilon})\\
+            = & p(\set{(x, y, t)\in E_1\times C\times \Re}{f(x, y)\leq t})\\
+            = & p(\set{(x, y, t)\in E_1\times C\times \Re}{(x, y, t)\in\epi(f)})
+  \end{align*}
+  where $p:(x, y, t) \mapsto (y, t)$ is a linear projection function.
+  }
+\end{frame}
+
+\begin{frame}{Example}
+
+  \textbf{Set distance :} The distance to a convex set $C$ defined as
+  \[
+    g(y) \defn \inf_{x\in C} \, \norm{x-y}
+  \]
+  is a convex function.
+
+\end{frame}
+
+\begin{frame}{Perspective}
+
+  The \emph{perspective} of a function $f : E \to \Re$ is the function $g:E\times\Re \to\Re$
+  \[
+    g(x, t) \defn t \cdot f(x/t),
+  \]
+  with $t>0$.
+
+  \vfill
+
+  \textbf{Theorem : } If $f$ is a convex function, then so is its perspective.
+
+  \vfill
+
+  \textbf{Kullback-Leibler divergence} The Kullback-Leibler divergence between $p\in\Re^n_{++}$ and $q\in\Re^n_{++}$ defined as
+  \begin{align*}
+    D_{\rm{kl}}(p, q)   & = \sum_{i=1}^n p_i \log\left(\frac{p_i}{q_i}\right) - p_i + q_i \\[0.5em]
+                      & = \sum_{i=1}^n p_i [-\log]\left(\frac{q_i}{p_i}\right) - p_i + q_i
+  \end{align*}
+  is convex.
+  
+\end{frame}
+
+% \begin{frame}{Example}
+% \end{frame}
+
+\section{Continuity \& Differentiability of Convex Functions}
+
+\begin{frame}{Convex Functions are not Continuous}
+
+  Consider the convex function
+  \[
+    f(x) \defn\left\{
+      \begin{array}{rl}
+        0 & {\rm{if~}} x_1^2+x_2^2 < 1 \\
+        1 & {\rm{if~}} x_1^2+x_2^2 = 1 ~\&~ x_1\neq -1 \\
+        2 & {\rm{if~}} x_1=-1, x_2=0 \\
+        +\infty & {\rm{otherwise}}
+      \end{array}\right.
+  \]
+
+  \vfill
+  
+  Properties:
+  \begin{itemize}
+  \item $f$ is a convex function with domain $\dom(f) = \set{x\in\Re^2}{x^2_1+x^2_2 \leq 1}$
+  \item $f$ is continuous on $\interior(\dom (f))$
+  \item $f$ is discontinuous at $x=(-1, 0)$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Convex Functions are Irregular at Extreme Points}
+
+  \begin{center}
+    \includegraphics[height=4cm]{convex-discontinuity/convex-discontinuity.pdf}
+  \end{center}
+  
+\end{frame}
+
+\begin{frame}{Convex Functions are Almost Continuous}
+
+  \textbf{Theorem :} A convex function $f:\Re^n\to\nRe$ is continuous on $\interior(\dom(f))$.\\[1em]
+
+  \uncover<2->{
+    \textbf{Proof [$\star$] :}
+
+    \begin{enumerate}
+    \item \emph{$f$ is locally bounded on $\interior(\dom(f))$}. Let $x \in \interior(\dom(f))$, $P\defn \{x_0, \dots, x_n\}$ points such that $x \in \Delta\defn \conv(P)$, $M \defn \max_{0\leq i\leq n} f(x_i)$. Then $f(y)\leq M$ for all $y \in \Delta$ by convexity of $f$. Let $y \in B\defn B(x, \epsilon)\subseteq \Delta$, then $2 x -y \in B$ and $f(x) \leq [f(2x -y) + f(y)]/2 \leq [M + f(y)]/2$. Hence $m\defn 2 f(x) - M \leq f(y) \leq M$ for any $y\in B$.
+    \item \emph{$f$ is locally Lipschitz continuous on $\interior(\dom(f))$}, i.e., $\forall x \in\interior(\dom(f))$, $\exists U \ni x$ an open set, $\exists L>0$ : $\forall y, z \in U$ such that $\abs{f(y)-f(z)}\leq L \norm{y-z}$. Let $U\defn B(x, \epsilon/2)$, $y\neq z \in U$, $y'\defn y+\epsilon (y-z)/2 \norm{y-z}\in B$ so that $y = (1-\lambda) z + \lambda y'$ for some $\lambda \leq 2 \norm{y-z}/\epsilon$. Define $\Gamma = \max \{m, M\}$. Then, $\abs{f(y)-f(z)}\leq \abs{\lambda f(y') + (1-\lambda) f(z) -f(z)} = \lambda \abs{f(y')-f(z)}\leq 4 \Gamma \norm{y-z}/\epsilon$.
+    \item \emph{Locally Lipschitz continuous functions are continuous}. Let $(x_i)_{i\geq 0} \in U$ converge to $x\in U$. As $\abs{f(x_i) - f(x)} \leq L \norm{x_i-x} \to 0$, $f(x_i) \to f(x)$ and $f$ is continuous at $x$.
+    \end{enumerate}
+  }
+  
+\end{frame}
+
+\begin{frame}{Convex Functions are Directionally Differentiable}
+
+  \textbf{Theorem : } Let $f:\Re^n\to\nRe$ be convex, $x\in \interior(\dom(f))$ and $d\in\Re^n$. Then, all directional derivatives
+  \[
+    \nabla f(x)[d] \defn \lim_{t\downarrow 0} \frac{f(x+td)-f(x)}{t} \rm{~exist}.
+  \]
+
+
+  \vfill
+
+  \textbf{Remark :} $\nabla f(x)[d]$ might not be linear in $d$. For instance, $f(x)=\abs{x}\in\Re$ with $\nabla f(0)[d]=\abs{d}$.
+
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Proof [$\star$] : }
+  Let $\mu(t)\defn {(f(x+td)-f(x))/}{t}$ for all $t>0$. The function $\mu$ is increasing as $f$ is convex. Furthermore, the function $f$ is locally Lipschitz on $\interior(\dom(f))$ (shown earlier). Therefore, $\mu(t)$ is bounded from below by $-L(x) \norm{d}$ for $t>0$. Since $\mu(t)$ decreases when $t\downarrow 0$ but is bounded from below, a finite limit $\lim_{t\downarrow 0}\mu(t)$ must exist.}
+\end{frame}
+
+\begin{frame}{Differentiable Convex Functions}
+
+  Let $f:\Re^n\to\nRe$ be a differentiable convex function. For any two points $x, y\in\dom(f)$ we have
+  \begin{align*}
+    \iprod{f'(x)}{y-x} & = \lim_{t\to 0} \frac{f(x + t(y-x))-f(x)}{t} \\
+                       & \leq \lim_{t\to 0} \frac{(1-t)f(x) + t f(y)-f(x)}{t} = f(y) - f(x).
+  \end{align*}
+  
+  \vfill
+  \textbf{Gradient Property :}
+  \[
+    f(y) \geq f(x) + \iprod{f'(x)}{y-x} \quad \forall x, y\in\dom(f).
+  \]
+
+  \vfill
+
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[draw=blue, thick] plot[id=ex1,domain=-4:4,samples=1000] function {cosh(0.4*x)};
+      % \fill[blue!5] plot[id=ex2,domain=-4:4,samples=1000] function {cosh(0.4*x)} -- (4, 3) -- (-4, 3) -- cycle;
+
+      \node[above] at ($(4, {cosh(0.4*4)})+(-0.4, -0.1)$) {\color{blue} $f$};
+      
+      \draw[->] (-4, 0) -- (4, 0);
+      \node[right] at (4, 0) {$\Re^n$};
+      % \node[above] at (-4, 3) {$\Re_+$};
+      \draw[->] (-4, 0) -- (-4, 3);
+
+      % Lazy constraint 1
+      \def\sa{-2}
+      \fill[red] (\sa, 0) circle [radius=2pt];
+      \draw[densely dotted, <->] (\sa, 0) -- ($(\sa, {cosh(0.4*\sa)})$);
+      \draw[draw=red,line width=0.2mm] plot[id=lc1,domain=-4:1.5,samples=1000] function {0.4*sinh(0.4*\sa)*(x-\sa)+cosh(0.4*\sa)};
+      \node[below] at (\sa, -.1) {\red{$x$}};
+    \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}{First-order Optimality for Convex Functions}
+
+  \textbf{Theorem : } Let $f:\Re^n\to\nRe$ be a continuously differentiable convex function with $\dom(f)=\interior(\dom (f))$. Then,
+  \[
+    x^\star \in \arg\min_{x\in \Re^n} f(x) \iff  f'(x^\star) =0.
+  \]
+
+  \textbf{Proof :} We have 
+  \[
+    f(y) \geq f(x^\star) + \iprod{0}{y-x^\star} =f(x^\star)
+  \]
+  for any $y \in \Re^n$ if $f'(x^\star)=0$. The other directions was proven for continuously differentiable functions in general.
+
+\end{frame}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

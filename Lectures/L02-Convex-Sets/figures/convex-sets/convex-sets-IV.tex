@@ -1,0 +1,46 @@
+\documentclass[border=1mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+\begin{document}
+
+\tdplotsetmaincoords{70}{25}
+\begin{tikzpicture}[tdplot_main_coords]
+\def\RI{0}
+\def\RII{1.5}
+
+\draw[dashed, thick] (\RI,0)
+  \foreach \x in {0, 90, 180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {} };
+\draw[thick] (R1-0.center)
+  \foreach \x in {270, 180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {} };
+
+\begin{scope}[yshift=2cm]
+\draw[fill=blue!20] (\RII,0)
+ \foreach \x in {0, 90, 180, 270} { --  (\x:\RII) node at (\x:\RII) (R2-\x) {} } --cycle;
+\end{scope}
+
+\foreach \x in {0,180, 270} { \draw (R1-\x.center)--(R2-\x.center); };
+\foreach \x in {90} { \draw[dashed] (R1-\x.center)--(R2-\x.center); };
+
+\draw[ ->] (-2,-2,0) -- (2,-2,0) node[below] {$x_1$};
+\draw[->] (2,-2,0) -- (2,2,0) node[right] {$x_2$};
+\draw[->] (-2,-2,0) -- (-2,-2,3) node[above] {$x_3$};
+
+\draw[gray, densely dotted] (0, 0, 0) --(0,-2,0) node[below] {0};
+\draw[gray, densely dotted] (0, 0, 0) --(2,0,0) node[below] {0};
+
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

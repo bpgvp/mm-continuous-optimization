@@ -1,0 +1,54 @@
+\documentclass[border=0.5mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \begin{axis}[
+    ticks=none,
+    axis lines=center,
+    y=2cm,            % y unit vector
+    x=2cm,            % x unit vector
+    xmin=-2,
+    xmax=2,
+    ymin=-2,
+    ymax=2,
+    clip=false,
+    xlabel=$x_1$,
+    ylabel=$x_2$,
+    % x label style={at={(axis description cs:1.0,0.15)},anchor=west},
+    % y label style={at={(axis description cs:0.23,1.0)},rotate=-90,anchor=south west},
+    ]
+    
+    \addplot[thick, black, samples=100, domain=0:360] ({sqrt(2)*sin(x)}, {sqrt(2)*cos(x)});
+
+    \node[circle, inner sep=1, draw=black, fill=black] (xstar) at (axis cs:0, 1.4142135623730951) {};
+    \node[below left] at (xstar) {$x^\star$};
+
+    \draw[red, thick, ->] (xstar) -- + (50, 50);
+    \node [below right] at ($(xstar) + (50, 50)$) {$f'(x^\star)$};
+
+    \draw[red, thick, ->] (xstar) -- + (0, -50);
+    \node [above right] at ($(xstar) + (0, -50)$) {$g_1'(x^\star)$};
+
+    \draw[red, thick, ->] (xstar) -- + (0, 50);
+    \node [below left] at ($(xstar) + (0, 50)$) {$g_2'(x^\star)$};
+  \end{axis}
+  
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

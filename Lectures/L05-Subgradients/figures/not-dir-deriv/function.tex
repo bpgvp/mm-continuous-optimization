@@ -1,0 +1,43 @@
+\documentclass[border=0.5mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \begin{axis}[
+    ticks=none,
+    axis lines=left,
+    y=3cm,            % y unit vector
+    x=4cm,            % x unit vector
+    xmin=-1,
+    xmax=1,
+    ymin=0,
+    ymax=1,
+    clip=false,
+    xlabel={$\Re$},
+    ylabel={$f(x) = \sqrt{\abs{x}}$},
+    x label style={at={(axis description cs:1.0,0.175)},anchor=west},
+    y label style={at={(axis description cs:0.27,1.0)},rotate=-90,anchor=south west},
+    ]
+    
+    \addplot[ mark=none, black, samples=10000, domain=-1:1] {sqrt(abs(x))};    
+  \end{axis}
+
+  
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

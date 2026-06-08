@@ -1,0 +1,51 @@
+\documentclass[border=1mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+\usepackage{pgfplots}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{axis}[
+    view={60}{40},
+    axis lines=center,
+    xmax=1.4, 
+    ymax=1.2,
+    zmax=1.2,
+    ytick={0},
+    ztick={0},
+    xtick={0},
+    % area style,
+    legend style={at={(0.2,0.75)},anchor=west},
+    clip=false
+    ]
+
+    \addplot3[fill=red!20, opacity=1, draw=red, forget plot] 
+    coordinates 
+    {
+      (1,0,0) 
+      (0,1,0) 
+      (0,0,1)
+    }--cycle;
+
+    \subimport{}{contour_0.01.tex}
+    \subimport{}{contour_0.04.tex}
+    \subimport{}{contour_0.2.tex}
+    \subimport{}{contour_0.1.tex}
+    \subimport{}{contour_0.4.tex}
+    \subimport{}{contour_0.8.tex}
+    \subimport{}{contour_1.6.tex}
+    
+    \node[fill=red,inner sep=0.5pt,circle] (P)
+    at (axis cs:1.5/8,2/8,4.5/8) {};
+    \node[above] at (P) {$\red{p}$};
+
+  \end{axis}
+\end{tikzpicture}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

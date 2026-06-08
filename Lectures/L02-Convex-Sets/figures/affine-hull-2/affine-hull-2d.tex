@@ -1,0 +1,34 @@
+\documentclass[border=3pt]{standalone}
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{ternary}
+
+
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{ternaryaxis}[
+    ticks=none,
+    grid=none
+    ]
+    
+    \subimport{}{contour_0.4_swap.tex}
+    
+    \node at (axis cs:1/2,1/4,1/4) {$\red{C}$};
+    \node[above] at (axis cs:0.55,-0.1,0.55) {$\blue{\aff(C)}$};
+
+    
+  \end{ternaryaxis}
+\end{tikzpicture}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

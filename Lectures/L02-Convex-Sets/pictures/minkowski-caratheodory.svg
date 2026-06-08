@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="172.091339" height="158.711823" viewBox="0 0 172.091339 158.711823">
+<defs>
+<clipPath id="clip-0">
+<path clip-rule="nonzero" d="M 0 0 L 172.089844 0 L 172.089844 158.710938 L 0 158.710938 Z M 0 0 "/>
+</clipPath>
+<clipPath id="clip-1">
+<path clip-rule="nonzero" d="M 135 104 L 172.089844 104 L 172.089844 158.710938 L 135 158.710938 Z M 135 104 "/>
+</clipPath>
+<clipPath id="clip-2">
+<path clip-rule="nonzero" d="M 0 104 L 38 104 L 38 158.710938 L 0 158.710938 Z M 0 104 "/>
+</clipPath>
+</defs>
+<path fill-rule="evenodd" fill="rgb(52.940369%, 80.783081%, 92.155457%)" fill-opacity="1" d="M 36 122.570312 L 86.003906 35.972656 L 136.007812 122.570312 Z M 36 122.570312 "/>
+<g clip-path="url(#clip-0)">
+<path fill="none" stroke-width="71.999999" stroke-linecap="butt" stroke-linejoin="round" stroke="rgb(52.940369%, 80.783081%, 92.155457%)" stroke-opacity="1" stroke-miterlimit="4" d="M 36 122.570312 L 86.003906 35.972656 L 136.007812 122.570312 Z M 36 122.570312 "/>
+</g>
+<g clip-path="url(#clip-1)">
+<path fill="none" stroke-width="2.012598" stroke-linecap="butt" stroke-linejoin="round" stroke="rgb(100%, 0%, 0%)" stroke-opacity="1" stroke-miterlimit="4" d="M 166.335938 105.109375 C 169.570312 110.691406 171.042969 116.191406 171.042969 122.625 C 171.042969 129.0625 169.570312 134.5625 166.367188 140.117188 C 163.132812 145.699219 159.109375 149.726562 153.523438 152.957031 C 147.96875 156.160156 142.46875 157.632812 136.035156 157.632812 "/>
+</g>
+<g clip-path="url(#clip-2)">
+<path fill="none" stroke-width="2.012598" stroke-linecap="butt" stroke-linejoin="round" stroke="rgb(100%, 0%, 0%)" stroke-opacity="1" stroke-miterlimit="4" d="M 36.027344 157.632812 C 29.59375 157.632812 24.09375 156.160156 18.539062 152.957031 C 12.953125 149.726562 8.929688 145.699219 5.699219 140.144531 C 2.496094 134.5625 1.019531 129.0625 1.019531 122.625 C 1.019531 116.191406 2.496094 110.691406 5.699219 105.136719 "/>
+</g>
+<path fill="none" stroke-width="2.012598" stroke-linecap="butt" stroke-linejoin="round" stroke="rgb(100%, 0%, 0%)" stroke-opacity="1" stroke-miterlimit="4" d="M 55.757812 18.566406 C 58.960938 12.984375 62.984375 8.957031 68.570312 5.753906 C 74.125 2.523438 79.625 1.046875 86.058594 1.046875 C 92.496094 1.046875 97.992188 2.523438 103.578125 5.726562 C 109.132812 8.957031 113.160156 12.984375 116.390625 18.566406 "/>
+</svg>

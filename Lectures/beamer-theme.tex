@@ -1,0 +1,89 @@
+\usetheme{CambridgeUS}
+
+% No headline or navigation bar
+\setbeamertemplate{headline}{}
+\setbeamertemplate{navigation symbols}{}
+
+% Itemize
+\setbeamertemplate{itemize item}{\scriptsize\raise1.25pt\hbox{\donotcoloroutermaths$\blacktriangleright$}}
+\setbeamercolor{itemize item}{fg=black}
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamercolor{enumerate item}{fg=black}
+
+% Section Frames
+
+\setbeamertemplate{section in toc}{%
+  {\color{black}\inserttocsectionnumber.}~\inserttocsection}
+  
+\AtBeginSection[]{
+        \begin{frame}<beamer>{Table of Contents}
+        \tableofcontents[currentsection,currentsubsection, 
+        hideothersubsections, 
+        sectionstyle=show/shaded]       
+        \end{frame}
+}
+
+% Highlight
+\renewcommand{\emph}[1]{{\bf \blue{#1}}}
+
+\mode<handout>
+{
+  \usepackage{pgf}
+  \usepackage{pgfpages}
+
+\pgfpagesdeclarelayout{4 on 1 boxed}
+{
+  \edef\pgfpageoptionheight{\the\paperheight} 
+  \edef\pgfpageoptionwidth{\the\paperwidth}
+  \edef\pgfpageoptionborder{0pt}
+}
+{
+  \pgfpagesphysicalpageoptions
+  {%
+    logical pages=4,%
+    physical height=\pgfpageoptionheight,%
+    physical width=\pgfpageoptionwidth%
+  }
+  \pgfpageslogicalpageoptions{1}
+  {%
+    border code=\pgfsetlinewidth{2pt}\pgfstroke,%
+    border shrink=\pgfpageoptionborder,%
+    resized width=.5\pgfphysicalwidth,%
+    resized height=.5\pgfphysicalheight,%
+    center=\pgfpoint{.25\pgfphysicalwidth}{.75\pgfphysicalheight}%
+  }%
+  \pgfpageslogicalpageoptions{2}
+  {%
+    border code=\pgfsetlinewidth{2pt}\pgfstroke,%
+    border shrink=\pgfpageoptionborder,%
+    resized width=.5\pgfphysicalwidth,%
+    resized height=.5\pgfphysicalheight,%
+    center=\pgfpoint{.75\pgfphysicalwidth}{.75\pgfphysicalheight}%
+  }%
+  \pgfpageslogicalpageoptions{3}
+  {%
+    border code=\pgfsetlinewidth{2pt}\pgfstroke,%
+    border shrink=\pgfpageoptionborder,%
+    resized width=.5\pgfphysicalwidth,%
+    resized height=.5\pgfphysicalheight,%
+    center=\pgfpoint{.25\pgfphysicalwidth}{.25\pgfphysicalheight}%
+  }%
+  \pgfpageslogicalpageoptions{4}
+  {%
+    border code=\pgfsetlinewidth{2pt}\pgfstroke,%
+    border shrink=\pgfpageoptionborder,%
+    resized width=.5\pgfphysicalwidth,%
+    resized height=.5\pgfphysicalheight,%
+    center=\pgfpoint{.75\pgfphysicalwidth}{.25\pgfphysicalheight}%
+  }%
+}
+
+
+  \pgfpagesuselayout{4 on 1 boxed}[a4paper, border shrink=5mm, landscape]
+  \nofiles
+}
+
+%%% Local Variables:
+%%% mode: plain-tex
+%%% TeX-master: t
+%%% End:

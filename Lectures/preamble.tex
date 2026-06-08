@@ -1,0 +1,92 @@
+%%%%%%%%%%%%%%%%
+%%% Packages %%%
+%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath, amsthm, amssymb, bbold, mathtools}
+\usepackage[ruled, vlined]{algorithm2e}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tcolorbox}
+\usepackage[]{hyperref}
+\usepackage{bbding}
+
+\usepackage{listings}
+
+%%%%%%%%%%%%%%
+%% ACRONYMS %%
+%%%%%%%%%%%%%%
+
+\usepackage{acronym}
+\acrodef{wlog}[WLOG]{without loss of generality}
+\acrodef{lsc}[lsc]{lower semi-continuous}
+
+%%%%%%%%%%%%%%
+%%% Colors %%%
+%%%%%%%%%%%%%%
+
+\definecolor{red}{RGB}{163, 31, 52}
+\definecolor{gray}{RGB}{194, 192, 191}
+\definecolor{blue}{RGB}{59, 89, 152}
+\definecolor{green}{RGB}{0, 179, 0}
+
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\gray}[1]{{\color{gray} #1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\newcommand{\green}[1]{{\color{green} #1}}
+
+%%%%%%%%%%%%%%%%
+%%% Commands %%%
+%%%%%%%%%%%%%%%%
+
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\iprod}[2]{\left<#1, #2\right>}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\E}[2]{\mathbf{E}_{#1} \left[ #2 \right]}
+\newcommand{\one}[1]{\mathbb{1}\left\{#1\right\}}
+\renewcommand{\tfrac}[2]{{#1}/{#2}}
+
+\newcommand{\set}[2]{\left\{ #1\ : \ #2 \right\}}
+\newcommand{\tset}[2]{\{ #1\ : \ #2 \}}
+\newcommand{\tpose}{^\top}
+\newcommand{\defn}[0]{:=}
+\newcommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+%\renewcommand{\span}[0]{\operatorname{span}}
+
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\mf}{\mathtt}
+\newcommand{\ms}{\mf}
+\newcommand{\mr}{\mathrm}
+
+\renewcommand{\d}{{\mathrm{d}}}
+\newcommand{\N}{\mathrm{N}}
+\newcommand{\Cx}{\mathrm{C}}
+\renewcommand{\Re}{\mathrm{R}}
+\newcommand{\nRe}{\Re\cup\{+\infty\}}
+\renewcommand{\S}{\mathrm{S}}
+\newcommand{\C}{\mathrm{C}}
+\newcommand{\st}{\mr{s.t.}}
+
+
+\renewcommand{\emph}{\textbf}
+
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\relint}{relint}
+\DeclareMathOperator{\bnd}{bnd}
+\DeclareMathOperator{\ex}{ex}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\prox}{prox}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\aff}{aff}
+%\DeclareMathOperator{\span}{span}
+\DeclareMathOperator{\minimize}{minimize}
+\DeclareMathOperator{\maximize}{maximize}
