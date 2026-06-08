@@ -1,4 +1,4 @@
-all: convex-sets-I.pdf convex-sets-II.pdf convex-sets-III.pdf convex-sets-IV.pdf
+all: convex-sets-I.pdf convex-sets-II.pdf convex-sets-III.pdf
 
 %.svg: %.pdf
 	pdf2svg $< $@
@@ -7,4 +7,5 @@ all: convex-sets-I.pdf convex-sets-II.pdf convex-sets-III.pdf convex-sets-IV.pdf
 	pdflatex $<
 
 clean:
-	rm -rf *.aux *.csv *.log *.pdf *.svg *.out
+	rm -rf auto
+	rm -f *.aux *.log *.nav *.out *.snm *.toc *.vrb *.rip *.fls *.fdb_latexmk *.synctex.gz *.gnuplot *.table *.bbl *.blg *.pdf *.svg *~

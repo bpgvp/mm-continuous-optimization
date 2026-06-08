@@ -719,560 +719,298 @@
 \end{frame}
 
 
+\section{Continuous Functions}
 
-% ===== Convex-set recap (imported from Lecture 2) =====
-\section{Convex Sets}
+\begin{frame}{A Brief Recall of Continuity}  
 
-\begin{frame}{Linear Sets}
-
-  A set $L \subseteq E$ is \emph{linear} if $x, y \in L$ implies
-  \[
-    a x + b y \in L,
-  \]
-  for any $a, b \in \Re$.
-
-  \vfill
-  \begin{center}
-    \includesvg[height=3cm]{linear-subspace.svg}
-  \end{center}
-  \vfill
-
-  \textbf{Examples :}
+  Let $f:\Re^n\to\nRe$.
   \begin{itemize}
-  \item Linear spaces such as $\Re^n$, $\Re^{n\times m}$
-  \item Symmetric matrices $S^n\defn \set{X\in\Re^{n\times n}}{X=X\tpose}$
-  \item<2-> Null space $\set{x\in\Re^m}{Ax=0}$ of a matrix $A\in\Re^{n\times m}$ 
-  \end{itemize}
-  
-\end{frame}
+  \item A function $f$ is called \emph{continuous at a point} $x$ in $\dom(f)$ if for every sequence
+    $\{x_i\}_{i\geq 0} \subset \Re^n$ converging to $x$, we have $\lim_{i\to\infty} f(x_i) = f(x)$\\[2em]
 
-\begin{frame}{Linear Hull}
-
-  The \emph{linear hull} $span (S) \defn \cap_{L~\rm{linear},\, S\subseteq L} ~L$ of a set $S$ is the unique smallest linear set that contains $S$, i.e.\
-  $$ L~\mathrm{linear~set}, ~S \subseteq L \implies span(S) \subseteq L$$  
-
-  \vfill
-
-  The \emph{dimension} $\dim(L)=k$ of a linear space $L$ is the smallest number of vectors $v_i\in L$ such that $$span(\{v_1, \dots, v_k\}) = L.$$
-
-  \vfill
-  
-  Example:
-  \begin{itemize}
-  \item Symmetric matrices: $\dim(S^n) = (n+1)n/2$
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Affine Sets}
-
-    
-  A set $H \subseteq E$ is \emph{affine} if $x, y \in H$, $\theta \in \Re$ implies
-  \[
-    \theta x + (1-\theta) y \in H.
-  \]    
-
-  \vfill
-  \begin{center}
-    \includegraphics[height=1.5cm]{affine-set/affine-set.pdf}
-  \end{center}
-  \vfill
-
-  
-  \textbf{Examples :}
-
-  \begin{itemize}
-  \item Linear spaces are affine
-  \item Solution set of linear system $\set{x\in\Re^m}{Ax = b}$ with $A\in \Re^{m\times n}$
+  \item A function $f$ is called \emph{continuous} if it is continuous at all points of its domain.
   \end{itemize}
 
   \vfill
-
-  \uncover<2->{
-  If $H$ is an affine set, then $\set{x-x_0}{x\in H}$ with $x_0\in H$ is a \emph{linear subspace}.\\[0.5em]
-  The \emph{dimension} $\dim(H)$ of an affine set is the dimension of its associated subspace.
-  }
-\end{frame}
-
-\begin{frame}{Affine Hull}
-
-  The \emph{affine hull} $\aff (S) \defn \cap_{H~\rm{affine},\, S\subseteq H} ~H$ of a set $S$ is the unique smallest affine set that contains $S$, i.e.\
-  $$ H~\mathrm{affine~set}, ~S \subseteq H \implies \aff(S) \subseteq H$$  
-
-  \vfill
-  \begin{minipage}{1\textwidth}
-    \begin{center}
-      \includegraphics[height=4cm]{affine-hull/affine-hull.pdf}
-    \end{center}
-  \end{minipage}
-  \vfill
   
-  \uncover<2->{The \emph{affine dimension} $\dim(S)$ of a set $S$ is the dimension of $\aff(S)$ (nonstandard)}
-
-\end{frame}
-
-\begin{frame}{Quiz}
-
-\end{frame}
-
-\begin{frame}{Affine Combinations}
-
-  Consider a finite set of points $x_i$ for $i$ in $I=[1, \dots, k]$. An \emph{affine combination} is any point of the form
-  \[
-    \sum_{i\in I} p_i \cdot x_i
-  \]
-  where $p_i\in\Re$ and $\sum_{i\in I} p_i=1$.
-
-  \vfill
-  
-  \textbf{Theorem : } An affine set $H \subseteq E$ is closed under affine combinations.
-
-  \vfill
-  
-  \textbf{Theorem : } The affine hull of a set $S$ can be found as
-  \[
-    \aff (S) = \set{\sum_{i\in I} p_i\cdot x_i}{\forall k\in \N, ~\forall i\in I=[1, \dots, k], ~x_i \in S, ~\sum_{i\in I} p_i=1}.
-  \]
-  
-\end{frame}
-
-\begin{frame}{Relative Interior}
-
-
-  Define the \emph{interior} of a set $S$ as
-  \[
-    \interior(S) \defn \set{x\in S}{\exists \epsilon>0:~B(x, \epsilon) \subseteq S}
-  \]
-  with $B(x, \epsilon)$ an open norm ball centered at $x$ with radius $\epsilon>0$.
-
-  \vfill
-  
-  \begin{minipage}{1\textwidth}
-    \begin{center}
-      \includegraphics[height=5cm]{affine-hull-2/affine-hull.pdf}
-    \end{center}
-  \end{minipage}
-
-  \vfill
-  \uncover<2->{
-  If the set $S$ is a \emph{lower dimensional subset} ($\dim(S) < \dim(E)$) of a space $E$, then $\interior S=\emptyset.$
-  }
-\end{frame}
-
-
-\begin{frame}{Relative Interior}
-
-  
+  \textbf{Counter example:}
 
   \vfill
 
-  Define the \emph{relative interior} of a set $S$ as
-  \[
-    \relint(S) \defn \set{x\in S}{\exists \epsilon>0:~B(x, \epsilon) \cap \aff(S) \subseteq S}.
-  \]
+  \includesvg[height=3cm]{Left-continuous.svg}
 
-  \vfill
-  
-  \begin{minipage}{1\textwidth}
-    \begin{center}
-      \includegraphics[height=3.5cm]{affine-hull/affine-hull.pdf}
-    \end{center}
-  \end{minipage}
-
-\end{frame}
-
-\begin{frame}{Convex Sets}
-  
-  A set $C \subseteq E$ is \emph{convex} if $x, y \in C$ implies
-  \[
-    \theta x + (1-\theta) y \in C
-  \]
-  for all $\theta\in[0,1]$.
-  \vfill
-  
-  \begin{minipage}{0.5\textwidth}
-    \textbf{Example:}\\
-    \vspace{-6mm}
-    \begin{center}
-      \includegraphics[height=3cm]{convex-sets/convex-sets-I.pdf}
-    \end{center}
-  \end{minipage}%
   \hfill
-  \begin{minipage}{0.5\textwidth}
-    \textbf{Counter Example:}\\
-    \vspace{-6mm}
-    \begin{center}
-      \includegraphics[height=3cm]{convex-sets/convex-sets-III.pdf}
-    \end{center}
-  \end{minipage}
-
-\end{frame}
-
-\begin{frame}{Convex Hull}
-
-  The \emph{convex hull} $\conv (S) = \cap_{C~{\rm{convex}},\, S\subseteq C} ~C$ of a set $S$ is the unique smallest convex set that contains $S$, i.e.\
-  $$ C~\mathrm{convex~set}, ~S \subseteq C \implies \conv(S) \subseteq C$$  
-
-
-  \vfill
-  \textbf{Example:}
-  The convex hull of 15 arbitrary points
-  \vfill
-  \begin{center}
-    \includegraphics[height=3cm]{convex-hull/convex-hull.pdf}
-  \end{center}
-  \vfill
+  {\tiny Figure from Wikipedia}
   
 \end{frame}
 
-\begin{frame}{Convex Combinations}
+\begin{frame}{Extreme-Value Theorem (1830s)}
 
-  Consider a finite set of points $x_i$ for $i$ in $I=[1, \dots, k]$. A \emph{convex combination} of points $x_i$ with $i\in I$ is any point of the form
-  \[
-    \sum_{i\in I} p_i \cdot x_i,
-  \]
-  where $p_i \geq 0$ for all $i\in I$ and $\sum_{i\in I} p_i=1$.
-
-  \vfill
-  
-  \textbf{Theorem : } A convex set $C \subseteq E$ is closed under convex combinations.
-
-  \vfill
-  
-  \textbf{Theorem : } The convex hull of a set $S$ can be found as
-  \[
-    \conv (S) = \set{\sum_{i\in I} p_i\cdot x_i}{\forall k\in \N, ~\forall i\in I=[1, \dots, k], ~x_i \in S, ~p_i\geq 0, ~\sum_{i\in I} p_i=1}.
-  \]
-\end{frame}
-
-\begin{frame}{Extreme Points}
-
-  A point $x$ is called an \emph{extreme point} of a convex set $C$ if it can not be written as a strict convex combination of two distinct points in that set, i.e.\
-  \[
-    x \in \ex(C) \iff \,!\exists y\neq z \in C: ~~x = \theta y + (1-\theta) z
-  \]
-  with $\theta \in (0, 1)$.
+  \textbf{Theorem (Bolzano-Weierstra\ss) :} If $K \subset \Re^n$ is a compact (bounded and closed) set and $f : K \to \Re$ is a continuous function, then $f$ is bounded and there exist $c$, $d \in K$ such that $f ( c ) = \sup_{x\in K} f ( x )$ and $f ( d ) = \inf_{x \in K} f ( x )$.
 
   \vfill
 
-  \textbf{Examples: }
-
-  \vfill
-
-  \begin{minipage}{0.5\textwidth}
-    \centering
-    \includegraphics[height=2.5cm]{extreme-points/extreme-points.pdf}
-  \end{minipage}%
-  \hfill
-  \begin{minipage}{0.5\textwidth}
-    \centering
-    \includegraphics[height=2.5cm]{extreme-points/extreme-points-2.pdf}
-  \end{minipage}
-  
-\end{frame}
-
-\begin{frame}{Extreme Points}
-
-  \textbf{Minkowski-Carath\'eodory} Let $A$ be a compact (closed and bounded) convex set. Then,
-  \[
-    A = \conv(\ex(A)).
-  \]
-
-  \vfill
-
-  \textbf{Graphically:}
-  \begin{center}
-    \includesvg[height=2.5cm]{minkowski-caratheodory.svg}\\
-    {\tiny (Source: Wikipedia)}
-  \end{center}
-  a compact convex set can be recovered from its extreme points.
-
-  \vfill
-
-  \uncover<2->{
-  \textbf{Remarks:}
-  \begin{itemize}
-  \item It is important that the set is closed and bounded!
-  \end{itemize}
-  }
-  
-\end{frame}
-
-\begin{frame}{Vertices}
-
-  A point $x\in E$ is called a \emph{vertex} of a convex set $C$ if it can be written as the {unique} minimizer of
-  \[
-    \begin{array}{rl}
-      \min & {c}\tpose {x} \\[0.5em]
-      \st  &  x\in C
-    \end{array}
-  \]
-  for some cost vector $c$.
-
-  \vfill
-
-  \textbf{Theorem:} A vertex is always an extreme point.
-
-  \uncover<2->{
-  \textbf{Proof [$\star$]:}
-
-  Consider a vertex $v\in C$ with $\{v\} = \arg\min_{x\in C} c\tpose x$ for some cost vector $c$. Assume, for contradiction that $v$ is not an extreme point. That is, there exists $x_1\neq x_2\in C$ and $\theta\in (0, 1)$ so that
-  \(
-  v = \theta x_1+(1-\theta) x_2.
-  \)
-  and hence $c\tpose v = \theta c\tpose x_1 + (1-\theta) c\tpose x_2$. This implies that $\min \{c\tpose x_1, c\tpose x_2\}\leq c\tpose v$.
-  However, this is a direct contradiction with $\{v\} = \arg\min_{x\in C} c\tpose x$ (unique minimizer) as $v\neq x_1$ and $v\neq x_2$. 
-  }
-
-  \vfill
-
-  \uncover<3->{
-    \textbf{Warning:} the reverse is not always true!
-    (It is true for polyhedra)
-    }
-\end{frame}
-
-\begin{frame}{Vertices $\subset$ Extreme Points}
-
-  \textbf{Counter Example:} (Norman window)
-  \[
-    \set{(x_1, x_2)}{-1\leq x_1\leq 1, ~-2 \leq x_2 \leq 0} \cup \tset{(x_1, x_2)}{x_1^2+x_2^2\leq 1}
-  \]
-
-  \begin{center}
-    \includegraphics[width=0.3\textwidth]{exposed-extreme-points/exposed.pdf}
-  \end{center}
-
-  \uncover<2->{
-  The points $(-1, 0)$ and  $(1, 0)$ are extreme points but not vertices!
-  }
-\end{frame}
-
-
-\begin{frame}{Convex Cones}
-
-  A set $K \subseteq E$ is \emph{conic} if $x \in K$ implies
-  \[
-    \theta x \in K
-  \]
-  for all $\theta\in\Re_+$. Cones are \textbf{not} necessarily convex sets.
-
-  \vfill
-  
-  \begin{minipage}{0.5\textwidth}
-    \begin{center}
-      \centering
-      \includegraphics[height=3cm]{convex-sets/convex-sets-II.pdf}
-    \end{center}
-  \end{minipage}%
-  \hfill
-  \begin{minipage}{0.5\textwidth}
-    \begin{center}
-      \centering
-      \includegraphics[height=3cm]{convex-sets/convex-sets-IV.pdf}
-    \end{center}
-  \end{minipage}
-
-  \vfill
-
-  A set $K$ is a \emph{convex cone} if it is a cone and a convex set.
-\end{frame}
-
-\begin{frame}{Conic Hull}
-
-  The \emph{conic hull} $\cone(S) \defn \cap_{K~\mathrm{convex~cone},\, S\subseteq K} K$ of a set $S$ is the unique smallest \textbf{convex} conic set that contains $S$, i.e.\
-  $$ K~\mathrm{convex~cone}, ~S \subseteq K \implies \cone(S) \subseteq K$$  
-  
-  \vfill
-
-  \textbf{Example:}
-  The conic hull of 15 arbitrary points
-  \begin{center}
-    \includegraphics[height=3cm]{conic-hull/conic-hull.pdf}
-  \end{center}
-
-\end{frame}
-
-\begin{frame}{Conic Combinations}
-
-  Consider a finite set of points $x_i$ for $i$ in $I=[1, \dots, k]$. A \emph{conic combination} of points $x_i$ with $i\in I$ is any point of the form
-  \[
-    \sum_{i\in I} p_i \cdot x_i,
-  \]
-  where $p_i \geq 0$ for all $i\in I$.
-
-  \vfill
-  
-  \textbf{Theorem : } A cone $K \subseteq E$ is closed under conic combinations.
-
-  \vfill
-  
-  \textbf{Theorem : } The conic hull of a finite dimensional set $S$ can be found as
-  \[
-    \cone (S) = \set{\sum_{i\in I} p_i\cdot x_i}{\forall k\in \N, ~\forall i\in I=[1, \dots, k], ~x_i \in S, ~p_i\geq 0}.
-  \]
-
-
-\end{frame}
-
-\section{Standard Convex Sets}
-
-\begin{frame}{Elementary Sets}
-
-  Examples
-  \begin{itemize}
-  \item $\emptyset$ the empty set is affine (and thus convex)
-  \item Singleton $\{x_0\}$ is affine
-  \item A line is affine 
-  \item Any open and closed norm ball,  $B(x, \epsilon)$ or $B[x, \epsilon]$, is convex
-  \item Positive orthant $\Re^n_+ = \set{x\in \Re^n}{x_1\geq 0, \dots, x_n\geq 0}$ is a convex cone
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Halfspace}
-
-  \emph{Hyperplane} $\set{x\in E}{a\tpose x = b}$ with \emph{normal vector} $a\neq 0$
-
- 
-  \vfill
-  \emph{Halfspace} $\set{x\in E}{a\tpose x \leq b}$ with normal vector $a\neq 0$
-
-  \vfill
-
-  \textbf{Some Properties :}
-  \begin{itemize}
-  \item Hyperplane is affine
-  \item Halfspace is convex
-  \item Halfspace with $b=0$ is a convex cone
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Polyhedra}
-
-  \begin{minipage}{0.5\textwidth}
-    A \emph{polyhedral} set
-    \[
-      C = \set{x} {a_i\tpose x \leq b_i, \quad i \in [1, \dots, k]}
-    \]
-    is convex.
-  \end{minipage}%
-  \hfill
-  \begin{minipage}{0.5\textwidth}
-    \centering
-    \includegraphics[height=3.5cm]{polyhedron/polyhedron.pdf}
-  \end{minipage}
-
-  \textbf{Special Cases:}
-  \begin{itemize}
-  \item The nonnegative orthant $\Re^n_+$
-  \item The probability simplex
-    \[
-      \mc P_k = \set{p\in \Re^k}{\sum_{i=1}^k p_i=1, ~p_i\geq 0 ~~\forall i\in [1, \dots,k] }
-    \]
-  \item The convex hull of a finite set $\{x_1, \dots, x_k\}$
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Ellipsoid}
-
-  \emph{Euclidean ball} with center $x_c$ and radius $r$:
-  \begin{align*}
-    & \set{x}{\norm{x-x_c}_2^2 = (x-x_c)\tpose \frac{1}{r^2} (x-x_c) \leq 1} \\
-    = & \set{x_c + r u}{\norm{u}_2 \leq 1}
-  \end{align*}
-  \vfill
-  \emph{Ellipsoid} :
-  \begin{align*}
-    & \set{x}{\norm{x-x_c}_P^2 = (x-x_c)\tpose P^{-1} (x-x_c) \leq 1} \\
-      = & \set{x_c + L u}{\norm{u}_2 \leq 1}
-  \end{align*}
-  where $P = L L\tpose \in S^n_{++}$ is a symmetric positive definite matrix.
-  
-\end{frame}
-
-\begin{frame}{Norm Balls and Cones}
-
-  \emph{Norm :}  a function $\norm{\cdot}$ that satisfies
-  \begin{enumerate}
-  \item $\norm{x}\geq 0$ and $\norm{x}=0 \iff x=0$
-  \item $\norm{t x} = \abs{t} \cdot \norm{x}$ for $t\in\Re$
-  \item $\norm{x+y} \leq \norm{x} + \norm{y}$
-  \end{enumerate}
-
-  \vfill
-  \emph{Norm ball} with center $x_c$ and radius $r$ : $\set{x}{\norm{x-x_c}\leq r}$
-
-  \vfill
   \begin{minipage}{0.6\textwidth}
-    \emph{Norm cone} $\set{(x, t) \in E\times \Re}{\norm{x}\leq t}$
-
-    \vspace{1em}
-    Using $\norm{\cdot}_2:$
-    \begin{itemize}
-    \item Second-order cone
-    \item Lorentz cone
-    \item Ice-cream cone
-    \end{itemize}
+    \includesvg[height=5.5cm]{Extreme_Value_Theorem.svg}\\
+    {\tiny Figure from Wikipedia}
   \end{minipage}%
   \hfill
   \begin{minipage}{0.4\textwidth}
-    \includegraphics[height=4cm]{norm-cone/norm-cone.pdf}
-  \end{minipage}%
+    \centering
+    \includegraphics[height=2cm]{bolzano.jpg}\\
+    Bolzano
+    
+    \vspace{2em}
+    \includegraphics[height=2cm]{weierstrass.jpg}\\
+    Weierstra\ss
+    
+  \end{minipage}
   
 \end{frame}
 
-\begin{frame}{Euclidean Ball}
+\section{Differentiable Functions}
 
-  \textbf{Theorem :} Norm ball $B[x_c, r]$ is a convex set.
+\begin{frame}{A Brief Recall of Differentiability}
 
-  \vfill
 
-  \textbf{Proof [$\star$] : } Take any two points $x$ and $y$ in $B[x_c, r]$. Then for $\theta\in[0, 1]$, we have
-  \begin{align*}
-    \norm{\theta x + (1-\theta) y - x_c}  & =  \norm{\theta (x-x_c) + (1-\theta) (y-x_c) } \\
-                                            & \leq \theta \norm{x-x_c} + (1-\theta) \norm{(y-x_c)}\\
-                                            & \leq r
-  \end{align*}
-  where the first inequality follows from the triangle inequality and positive homogeneity of the norm.
+  Let $f:\Re^n\to\nRe$ continuous and $d\in \Re^n$.
+
+  \begin{itemize}
+    \setlength\itemsep{2em}
+  \item The function $f$ is \emph{differentiable} at $x \in \dom(f)$ \emph{in the direction} $d$ if the following limit exists:
+    \[
+      \nabla f(x)[d] = \lim_{t\to 0} \frac{f(x+t d)-f(x)}{t}.
+    \]
+  \item<2-> The function $f$ is \emph{G\^ateaux differentiable} in $x \in \dom(f)$ if differentiable in $x$ in every direction $d \in \Re^n$ and if $d\mapsto \nabla f(x)[d]$ is linear.
+
+  \item<3-> The \emph{gradient} of $f$ at $x$ is the vector $f'(x)$ satisfying $$\iprod{f'(x)}{d}=f'(x)\tpose d=\nabla f(x)[d]$$
+  \item<4-> $f$ is \emph{continuously differentiable} if $x \mapsto f'(x)$ is continuous
+  \end{itemize}
+  
+  
 \end{frame}
 
+\section{Unconstrained Optimality Conditions}
 
-\begin{frame}{Positive Semidefinite Cone}
+\begin{frame}{First-Order Optimality Conditions}
 
-  $S^n$ is the space of \emph{symmetric} $n\times n$ \emph{matrices}
+  
+  \textbf{Theorem : } Suppose that $f:E\to\nRe$ is continuously differentiable and there exists a minimizer $x^\star \in \interior(\dom(f))$. Then, $f'(x^\star) = 0$.
+
+  \vfill
+  \textbf{Remarks : }
+
+  \begin{itemize}
+  \item The condition $x^\star \in \interior(\dom(f))$ is critical. Always satisfied when $\dom(f)=E$.
+  \end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{The Mean Value Theorem}
+
+  Let $f:\Re^n\to\nRe$ be differentiable.
+
+  \vfill
+  \textbf{Theorem :} Let $x \in \dom(f)$ and $h\in \Re^n$ such that $x+h\in \dom(f)$. There is a $t\in(0, 1)$ for which
+  \[
+    f(x+h) = f(x) + \iprod{f'(x+t h)}{ h}.
+  \]
 
   \vfill
 
-  $S^n_{+}=\set{X\in S^n}{X\succeq 0}$ : \emph{positive semidefinite} $n\times n$ \emph{matrices}
+  \textbf{Geometrically:}
+  \vfill
+  
+  \includesvg[height=4cm]{mean-value-theorem.svg}
+
+  \hfill
+  {\tiny Figure from Wikipedia}
+  
+  
+\end{frame}
+
+\begin{frame}{Rolle's Theorem [$\star$]}
+
+    \textbf{Proof [$\star$] :} Follows from Rolle's Theorem. Let $g:[a, b]\to\Re$ differentiable such that $g(a)=g(b)$. Then, there is a $c\in (a, b)$ such that $g'(c)=0$. Assume without loss of generality that there is a $t\in(a, b)$ for which $g(t)>g(a)$ and take $a\neq b\neq c\defn \arg \max \set{g(t)}{t \in [a, b]}$ (use the extreme value theorem). We have
   \[
-    X \in S^n_{+} \iff y\tpose X y \geq 0, ~\forall y\in\Re^n.
+    \frac{g(c+t)-g(c)}{t} \leq 0 {\rm{~for~}} t\in(0, b-c] {\rm{~and~}} \frac{g(c+t)-g(c)}{t} \geq 0 {\rm{~for~}} t \in [a-c, 0).
+  \]
+  As $g$ is differentiable, the limit exists when $t\to 0$ and hence $g'(c)=0$. Take now $g(t) = f(x+th)+t(f(x)-f(x+h))$ and $a=0$, $b=1$.  
+  
+\end{frame}
+
+\begin{frame}{First-Order Optimality Conditions}
+
+  
+  \textbf{Theorem : } Suppose that $f$ is continuously differentiable and there exists a minimizer $x^\star \in \interior(\dom(f))$. Then, $f'(x^\star) = 0$.
+
+  \vfill
+  \textbf{Proof : }
+
+  \begin{itemize}
+  \item For contradiction, assume that $f'(x^\star)\neq 0$
+  \item<2-> Let $g(t)\defn f(x^\star-t f'(x^\star))$ with gradient $g'(t) = -\iprod{f'(x^\star-t f'(x^\star))}{f'(x^\star)}$
+  \item<3-> Then $g'(0)=-\iprod{f'(x^\star)}{f'(x^\star)}<0$
+  \item<4-> By continuity of $f'$ there exists a $T>0$ such that $g'(t)<0$ for all $t\in [0, T]$.
+  \item<5-> By the mean value theorem, there is an $t^\star\in (0, T)$ such that
+    \[
+      f(x^\star-T f'(x^\star))-f(x^\star) = -T \iprod{f'(x^\star-t^\star f'(x^\star))}{f'(x^\star)} = T g'(t^\star) <0,
+    \]
+  \item<6-> Inequality $f(x^\star-T f'(x^\star))<f(x^\star)$ contradicts minimality of $x^\star$
+  \end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{Drawing}
+
+\end{frame}
+
+\begin{frame}{Example}
+
+  \begin{itemize}
+    \setlength\itemsep{2.5em}
+  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
+  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
+  \item \emph{Stationary points}: $\bold{x}^*=(4,0)$ and $\bar{ \bold{x}}=(3,1)$
+  % \item $f''( \bold{x}) =\left[
+  %     \begin{array}{ccc}
+  %       1  & & 1   \\
+  %       1 & & 4-6 x_2
+  %     \end{array}
+  %   \right]$
+  % \item $f''(\bold{x}^*) =\left[
+  %     \begin{array}{ccc}
+  %       1  & & 1   \\
+  %       1 & & 4
+  %     \end{array}
+  %   \right]\succeq \bold{0}$
+  % \item $f''(\bar{\bold{x}}) =\left[
+  %     \begin{array}{ccc}
+  %       1  & & 1   \\
+  %       1 & & -2
+  %     \end{array}
+  %   \right]\not\succeq \bold{0}$
+  % \item $x^\star$ is the only \textbf{candidate} local minimum
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Second-Order Differentiability}
+
+  Let $f:\Re^n\to\nRe$ be differentiable.
+  \begin{itemize}
+    \setlength\itemsep{1em}
+  \item If $f_i'(x)$ are themselves differentiable at $x$ for each $i$, then their gradients at $x$ form the \emph{Hessian matrix} $f''(x) \in \Re^{n\times n}$.
+  \item If $x\mapsto f''(x)$ is continuous, \emph{Hessian matrix} $f''(x)\in S^n$ \emph{is symmetric} for each $x\in \interior(\dom(f))$. 
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Second-Order Necessary Condition}
+
+  \textbf{Theorem : } Suppose that $x^\star \in \interior(\dom(f))$ is a local minimum of $f:E\to\nRe$ twice continuously differentiable. Then, $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{+}$.
+  
+\end{frame}
+
+\begin{frame}{Taylor Expansion Theorem}
+
+  \textbf{Theorem : } Let $x\in \dom(f)$ and $h\in \Re^n$ such that $x+h\in\dom(f)$ and $f:E\to\nRe$ twice differentiable. There is a $t\in (0, 1)$ for which
+  \[
+    f(x+h) = f(x) + \iprod{f'(x)}{h} + \frac12 \iprod{f''(x+th) h}{h}.
   \]
 
   \vfill
   
-  \begin{minipage}{0.5\textwidth}
-    \textbf{Example:}
-    \[
-      \begin{pmatrix}
-        x & y\\
-        y & z
-      \end{pmatrix}
-      \in S^2_+
-    \]
-    or
-    \[
-      x\geq 0, ~ z x \geq y^2.
-    \]
-  \end{minipage}%
-  \hfill
-  \begin{minipage}{0.5\textwidth}
-    \includegraphics[height=4cm]{sdo-cone/sdo-cone.pdf}
-  \end{minipage}
+  \textbf{Proof [$\star$] : } Let $R=f(x+h)-f(x)-\iprod{f'(x)}{h}$ and $g(t) \defn f(x+t h)+(1-t)\iprod{f'(x+t h)}{h} + Rt^2$. Then $g(1)-g(0)=2R=g'(t)$ for a $t\in (0, 1)$ because of the mean value theorem. Thus $g'(t) = (t-1)\iprod{f''(x+th)h}{h} + 2 R t = 2R$. It remains to simplify.
+
+\end{frame}
+
+\begin{frame}{Second-Order Necessary Condition}
+
+  \textbf{Theorem : } Suppose that $x^\star \in \interior(\dom(f))$ is a local minimum of $f:E\to\nRe$ twice continuously differentiable. Then, $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{+}$.
+
+  \vfill
   
+  \textbf{Proof [$\star$]:}
+  \begin{itemize}
+  \item For contradiction assume $\iprod{f''(x^\star) h}{h} < 0$ for some direction $h$
+  \item<2-> Let $g(t) \defn f(x^\star+t h)$, $g'(t) = \iprod{f'(x^\star+t h)}{h}$ and $g''(t) = \iprod{f'(x^\star+t h) h}{h}$
+  \item<3-> As $g''(0)<0$ and continuity of $g''$ there is a $T>0$ such that $g''(t)<0$ for all $t\in [0, T]$.
+  \item<4-> Thus, $g(T)= g(0)+g'(0) T + g''(t^\star) T^2/2 < f(x^\star)$ for some $t^\star$; a contradiction
+  \end{itemize}
   
+\end{frame}
+
+\begin{frame}{Example}
+
+  \begin{itemize}
+    \setlength\itemsep{1.5em}
+  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
+  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
+  \item Stationary points: $\bold{x}^*=(4,0)$ and $\bar{ \bold{x}}=(3,1)$
+  \item $f''( \bold{x}) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4-6 x_2
+      \end{array}
+    \right]$
+  \item $f''(\bold{x}^*) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4
+      \end{array}
+    \right]\succeq_{S^2_+} \bold{0}$
+  \item $f''(\bar{\bold{x}}) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & -2
+      \end{array}
+    \right]\not\succeq_{S^2_+} \bold{0}$
+  \item $x^\star$ is the only \emph{candidate local minimum}.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Second-Order Sufficient Condition}
+
+  \textbf{Theorem : } Suppose that $x^\star \in \interior(\dom(f))$ satisfies $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{++}$ and $f$ is twice continuously differentiable. Then, $x^\star$ is a local minimum of $f$.
+
+  \vfill
+
+  \textbf{Proof [$\star$]: }
+
+  \begin{itemize}
+  \item For contradiction assume that $x^\star$ is not a local minimizer of $f$
+  \item<2-> For every $\epsilon > 0$, there exists $x^\star_\epsilon\in B(x^\star, \epsilon)$ and $t_\epsilon\in (0,1)$ for which
+    \[
+      f(x^\star) > f(x^\star_\epsilon) = f(x^\star) + \frac12 \iprod{f''(x^\star+t_\epsilon (x_\epsilon^\star-x^\star)) (x_\epsilon^\star-x^\star)}{x_\epsilon^\star-x^\star}.
+    \]
+  \item<3-> Hence, $\lambda_{\min}(f''(x^\star+t_\epsilon (x_\epsilon^\star-x^\star))) < 0$ for every $\epsilon > 0$
+  \item<4-> By continuity of $\lambda_{\min}$ and of $f''$ we deduce that $\lambda_{\min}(f''(x^\star))\leq 0$; a contradiction.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Example}
+
+  \begin{itemize}
+    \setlength\itemsep{1.5em}
+  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
+  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
+  \item Candidates $\bold{x}^*=(4,0)$ and $\bar{ \bold{x}}=(3,1)$
+  \item $f''( \bold{x}) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4-6 x_2
+      \end{array}
+    \right]$
+  \item $f''(\bold{x}^*) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4
+      \end{array}
+    \right]\succ_{S^2_+} \bold{0}$
+  \item $x^\star$ is the only local minimum.
+  \end{itemize}
 \end{frame}
 
 \end{document}

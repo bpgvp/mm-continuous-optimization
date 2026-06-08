@@ -7,7 +7,7 @@
 The goal of this course is to provide an analytical and computational approach to continuous optimization problems. 
 Nonlinear optimization problems arise in a wide variety of applications ranging from machine learning and portfolio selection to signal processing.
 Course topics include constrained optimization, linear and conic optimization, duality theory, convex and self-concordant functions. 
-Optimization algorithms such as gradient descent, interior-point methods and ADMM are covered as well.
+Optimization algorithms such as gradient and stochastic gradient methods, Newton's method, and interior-point methods are covered as well.
 
 ## Team
 
@@ -37,26 +37,23 @@ Optimization algorithms such as gradient descent, interior-point methods and ADM
 
 ## Outline
 
-| Lecture                                                                                                           | Date  |
-|:------------------------------------------------------------------------------------------------------------------|:------|
-| 1. [Introduction to Optimization](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L1-Introduction.pdf)             | Mon 7 Sep (wk 37)  |
-| 2. [Convexity](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L2-Convex-Sets.pdf)                                 | Mon 14 Sep (wk 38) |
-| 2. [Convex Functions](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L3-Convex-Functions.pdf)                     | Mon 14 Sep (wk 38) |
-| 3. [Separation](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L5-Separation.pdf)                                 | Mon 21 Sep (wk 39) |
-| 3. [Duality](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L6-Duality.pdf)                                       | Mon 21 Sep (wk 39) |
-| 3. [Lagrangian Duality](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L7-Lagrangian-duality.pdf)                 | Mon 21 Sep (wk 39) |
-| 4. [Conjugates and Subgradients](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L8-Subgradients.pdf)              | Mon 28 Sep (wk 40) |
-| 5. [KKT Optimality Conditions](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L9-KKT.pdf)                         | Mon 5 Oct (wk 41)  |
-| 6. [The Black Box model](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L10-Black-Box.pdf)                        | Mon 12 Oct (wk 42) |
-| 7. [Gradient Method](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L11-Gradient-method.pdf)                      | Mon 19 Oct (wk 43) |
-| 8. [Performance Estimation]                                                                                        | Mon 26 Oct (wk 44) |
-| 9. [Newton's Method](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L12-Newtons-Method.pdf)                       | Mon 2 Nov (wk 45)  |
-| 10. [Self Concordant Functions](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L13-Self-Concordant-Functions.pdf) | Mon 9 Nov (wk 46)  |
-| 11. [Interior Point Methods](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L14-Interior-Point-Methods.pdf)       | Mon 16 Nov (wk 47) |
-| 12. [Stochastic Optimization](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L17-Stochastic-Gradient-Descent.pdf) | Mon 23 Nov (wk 48) |
-| 13. [Neural Networks]                                                                                              | Mon 30 Nov (wk 49) |
-| 14. [Variable Metric Methods](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L18-Variable-Metric.pdf) *(advanced, may be skipped)*       | Mon 7 Dec (wk 50)  |
-| 15. [Robust Optimization](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L20-Robust-Optimization.pdf) *(advanced, may be skipped)*       | Mon 14 Dec (wk 51) |
+| Lecture                                                                                                                          | Date               |
+|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------|
+| 1. [Introduction to Continuous Optimization](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L1-Introduction.pdf)   | Mon 7 Sep (wk 37)  |
+| 2. [Convexity](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L2-Convex-Sets.pdf)                                  | Mon 14 Sep (wk 38) |
+| 3. [Separation Theorems & Farkas' Lemma](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L3-Separation.pdf)         | Mon 21 Sep (wk 39) |
+| 4. [Lagrangian Duality](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L4-Lagrangian-duality.pdf)                  | Mon 28 Sep (wk 40) |
+| 5. [Gradient Descent & Subgradients](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L5-Subgradients.pdf)           | Mon 5 Oct (wk 41)  |
+| 6. [KKT Optimality Conditions](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L6-KKT.pdf)                          | Mon 12 Oct (wk 42) |
+| 7. [Black-Box Optimization Methods](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L7-Black-Box.pdf)               | Mon 19 Oct (wk 43) |
+| 8. [Gradient Methods](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L8-Gradient-method.pdf)                       | Mon 26 Oct (wk 44) |
+| 9. [Newton's Method](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L9-Newtons-Method.pdf)                         | Mon 2 Nov (wk 45)  |
+| 10. [Self-Concordant Functions](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L10-Self-Concordant-Functions.pdf) | Mon 9 Nov (wk 46)  |
+| 11. [Interior-Point Methods](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L11-Interior-Point-Methods.pdf)       | Mon 16 Nov (wk 47) |
+| 12. [Stochastic Gradient Descent](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L12-Stochastic-Gradient-Descent.pdf) | Mon 23 Nov (wk 48) |
+| 13. [Neural Networks & Automatic Differentiation](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L13-Neural-Networks.pdf) | Mon 30 Nov (wk 49) |
+| 14. [Performance Estimation Programming](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L14-Performance-Estimation.pdf) | Mon 7 Dec (wk 50)  |
+| 15. [Variable Metric & Quasi-Newton Methods](https://vanparys-courses.gitlab.io/mm-continuous-optimization/L15-Variable-Metric.pdf) | Mon 14 Dec (wk 51) |
 
 
 	
