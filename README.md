@@ -23,7 +23,7 @@ Optimization algorithms such as gradient and stochastic gradient methods, Newton
 
 ## Grading
 
-1. (20%) Problem Sets 
+1. (10%) Problem Sets 
    
    | Problem Set                                                              | 
    |:-------------------------------------------------------------------------|

@@ -12,10 +12,10 @@
 *.fdb_latexmk
 *.bbl
 *.blg
-*auto*
+auto/
 *.gnuplot
 *.table
 *.pdf
-*svg-inkscape*
+svg-inkscape/
 _region_*
 *~
