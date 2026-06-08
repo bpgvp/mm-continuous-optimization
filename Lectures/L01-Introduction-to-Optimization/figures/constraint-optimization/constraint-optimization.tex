@@ -1,0 +1,53 @@
+\documentclass[border=0mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+\newcommand{\radiusa}{0.7}
+\newcommand{\radiusb}{1.4}
+\newcommand{\radiusc}{2.236}
+
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \begin{axis}[
+    %ticks=none,
+    axis lines=center,
+    % y=3cm,            % y unit vector
+    % x=3cm,            % x unit vector
+    xmin=-1,
+    xmax=4,
+    ymin=-1,
+    ymax=3,
+    xtick={2, 3, 4},
+    ytick={2, 3}
+    ]
+    \addplot+[ultra thick, draw=blue, mark=none, fill=blue, opacity=0.5] coordinates {(1,1) (1, -1) (-1,-1) (-1,1)}--cycle;
+    
+    \addplot+[draw=red,mark options={fill=black},] coordinates {(3,2)} --cycle;
+    \addplot+[draw=red,mark options={fill=red},] coordinates {(1,1)} --cycle;
+
+    \addplot[domain=0:360, smooth, variable=\t, draw=black, densely dotted, thick] plot ({3 + \radiusa*sin(\t)}, {2+\radiusa*cos(\t)});
+    \addplot[domain=0:360, smooth, variable=\t, draw=black, densely dotted, thick] plot ({3 + \radiusb*sin(\t)}, {2+\radiusb*cos(\t)});
+    \addplot[domain=0:360, smooth, variable=\t, draw=black, densely dotted, thick] plot ({3 + \radiusc*sin(\t)}, {2+\radiusc*cos(\t)});
+
+    \node[right] at (axis cs:3,2) {$\begin{pmatrix} 3 \\ 2 \end{pmatrix}$};
+    \node[right] at (axis cs:1,1) {$x^\star$};
+    \node[above] at (axis cs:0.5,-0.5) {$X$};
+  \end{axis}
+
+  
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

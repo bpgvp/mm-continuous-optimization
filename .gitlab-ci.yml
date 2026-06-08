@@ -1,0 +1,22 @@
+build-job:       # This job runs in the build stage, which runs first.
+  tags:
+    - latex
+  script:
+    - make all
+  artifacts:
+    paths:
+      - Lectures/*/*.pdf
+
+pages:
+  stage: deploy
+  script:
+    - mkdir .public
+    - cp -r Lectures/*/*.pdf .public
+    - mv .public public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  environment: production
+

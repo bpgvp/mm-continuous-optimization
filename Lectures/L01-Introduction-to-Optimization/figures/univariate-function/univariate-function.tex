@@ -1,0 +1,41 @@
+\documentclass[border=0.5mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+\newcommand{\radiusa}{0.7}
+\newcommand{\radiusb}{1.4}
+\newcommand{\radiusc}{2.236}
+
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \begin{axis}[
+    ticks=none,
+    axis lines=left,
+    clip=false,
+    xlabel={$x$},
+    ylabel={$f$},
+    x label style={at={(axis description cs:0.95,0.05)},anchor=north},
+    y label style={at={(axis description cs:0.25,.9)},rotate=-90,anchor=south},
+    ]
+    
+    \addplot+[mark=none,samples=100, thick, domain=-4:4] {(exp(-x)+exp(x)/2)/8+sin(60*x)/2};
+    
+  \end{axis}
+
+  
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
