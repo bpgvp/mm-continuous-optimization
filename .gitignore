@@ -1,0 +1,16 @@
+.juliahistory
+*.aux
+*.log
+*.nav
+*.out
+*.rip
+*.snm
+*.gz
+*.toc
+*.vrb
+*auto*
+*.gnuplot
+*.table
+*.pdf
+*svg-inkscape*
+*~
