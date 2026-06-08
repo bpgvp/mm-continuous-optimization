@@ -8,6 +8,11 @@ The goal of this course is to provide an analytical and computational approach t
 Nonlinear optimization problems arise in a wide variety of applications ranging from machine learning and portfolio selection to signal processing.
 Course topics include constrained optimization, linear and conic optimization, duality theory, convex and self-concordant functions. 
 Optimization algorithms such as gradient and stochastic gradient methods, Newton's method, and interior-point methods are covered as well.
+A dedicated lecture treats the training of **neural networks** and the **automatic differentiation** that powers modern machine learning.
+
+## Prerequisites
+
+Following Boyd & Vandenberghe (*Convex Optimization*), the course assumes a good knowledge of linear algebra (vectors and matrices, eigenvalues, symmetric and positive (semi)definite matrices, inner products and norms) and of multivariable/advanced calculus (gradients, Hessians, the chain rule, Taylor's theorem). Some exposure to real analysis (sequences, continuity, compact sets) and mathematical maturity in reading and writing proofs are helpful but not strictly required. No prior knowledge of optimization is assumed.
 
 ## Team
 
@@ -21,9 +26,11 @@ Optimization algorithms such as gradient and stochastic gradient methods, Newton
 
 **Lectures:** Monday, 10.00am-12.45pm at Utrecht (room TBD)
 
+**Credits:** 6 EC
+
 ## Grading
 
-1. (10%) Problem Sets 
+1. (20%) Problem Sets 
    
    | Problem Set                                                              | 
    |:-------------------------------------------------------------------------|
@@ -32,8 +39,11 @@ Optimization algorithms such as gradient and stochastic gradient methods, Newton
    | 3. Nonlinear duality, conjugate functions.                               |
    | 4. Gradient methods and interior point methods.                          |
 
-2. (10%) Attendance
-3. (80%) Final Examination (open book). Material covered will be announced two weeks in advance.
+   All problem sets are graded and returned with feedback; at most one hand-in every two weeks.
+
+2. (80%) Written final examination (open book). The material covered is announced two weeks in advance.
+
+A student passes only if the score on the (final or retake) examination is at least 5.0; the final grade is then the weighted average above. The retake is a written open-book examination covering the whole course, and the homework grade is retained and still counts towards the final grade after the retake.
 
 ## Outline
 

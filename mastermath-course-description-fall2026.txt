@@ -1,0 +1,66 @@
+COURSE: Continuous Optimization
+Semester: Fall 2026
+Credits: 6 EC
+Lectures: Mondays, 10:00-12:45, Utrecht (room TBD)
+
+1) PREREQUISITES
+   The prerequisites are those of Boyd & Vandenberghe, "Convex Optimization":
+   - A good knowledge of linear algebra: vectors and matrices, rank,
+     eigenvalues/eigenvectors, symmetric and positive (semi)definite
+     matrices, inner products and norms.
+   - Multivariable / advanced calculus: differentiability of functions on
+     R^n, gradients and Hessians, the chain rule, and Taylor's theorem.
+   Some exposure to real analysis (sequences, continuity, open/closed/
+   compact sets) and mathematical maturity in reading and writing proofs
+   are helpful but not strictly required. No prior knowledge of
+   optimization is assumed.
+
+2) AIM OF THE COURSE
+   The course provides an analytical and computational approach to
+   continuous (nonlinear) optimization, with an emphasis on convex
+   optimization. Such problems arise across machine learning, portfolio
+   selection, signal processing, control and engineering design.
+   Topics include: convex sets and functions; separation theorems and
+   Farkas' lemma; Lagrangian duality; KKT optimality conditions;
+   subgradients and conjugate functions; self-concordant functions; and a
+   range of algorithms (gradient and subgradient methods, accelerated and
+   stochastic gradient methods, Newton's method, interior-point methods,
+   and quasi-Newton/variable-metric methods). A dedicated lecture treats
+   the training of neural networks and the automatic differentiation that
+   underlies modern machine learning.
+   After the course students can: model and recognise convex optimization
+   problems; derive and apply duality and KKT optimality conditions;
+   reason about the geometry of convex sets and functions; analyse the
+   convergence and complexity of first- and second-order optimization
+   methods; and understand how neural networks are trained via automatic
+   differentiation.
+   Workload: 6 EC corresponds to roughly 10 hours per week (lectures,
+   exercises, homework and exam preparation).
+
+3) HOMEWORK AND EXAM
+   Final grade:
+     - 80%  written final examination (open book)
+     - 20%  homework (hand-in problem sets)
+   Homework: 4 hand-in problem sets spread over the semester (at most one
+   hand-in every two weeks). Every hand-in is graded and returned with
+   feedback. Homework counts for 20% of the final grade (at most 30%).
+   Exam: a written, open-book examination; the material covered is
+   announced two weeks in advance.
+   Passing: a student passes only if the score on the (final or retake)
+   examination is at least 5.0, in which case the final grade is the
+   weighted average above.
+   Retake: a written, open-book examination covering the whole course. The
+   homework grade is retained and continues to count toward the final
+   grade after the retake.
+
+4) LECTURE NOTES / LITERATURE
+   Lecture slides are provided for every lecture (made available online).
+   Recommended reference books:
+   - S. Boyd and L. Vandenberghe, "Convex Optimization", Cambridge
+     University Press, 2004 (freely available online).
+   - Y. Nesterov, "Introductory Lectures on Convex Optimization",
+     Springer, 2004.
+
+5) LECTURERS
+   Bart Van Parys (Centrum Wiskunde & Informatica, Amsterdam),
+   mastermath@vanparys.xyz
