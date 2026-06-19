@@ -28,22 +28,21 @@ Lectures: Mondays, 10:00-12:45, Utrecht (room TBD)
    and quasi-Newton/variable-metric methods). A dedicated lecture treats
    the training of neural networks and the automatic differentiation that
    underlies modern machine learning.
+
    After the course students can: model and recognise convex optimization
    problems; derive and apply duality and KKT optimality conditions;
    reason about the geometry of convex sets and functions; analyse the
    convergence and complexity of first- and second-order optimization
    methods; and understand how neural networks are trained via automatic
    differentiation.
-   Workload: 6 EC corresponds to roughly 10 hours per week (lectures,
-   exercises, homework and exam preparation).
 
 3) HOMEWORK AND EXAM
    Final grade:
      - 80%  written final examination (open book)
      - 20%  homework (hand-in problem sets)
-   Homework: 4 hand-in problem sets spread over the semester (at most one
-   hand-in every two weeks). Every hand-in is graded and returned with
-   feedback. Homework counts for 20% of the final grade (at most 30%).
+   Homework: 4 hand-in problem sets spread over the semester.
+   Every hand-in is graded and returned with
+   feedback. Homework counts for 20% of the final grade.
    Exam: a written, open-book examination; the material covered is
    announced two weeks in advance.
    Passing: a student passes only if the score on the (final or retake)
