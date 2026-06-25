@@ -1,0 +1,10 @@
+[init]
+	defaultBranch = none
+[fetch]
+	recurseSubmodules = false
+[credential]
+	interactive = never
+[gc]
+	autoDetach = false
+[include]
+	path = /home/bart/Documents/Work/Courses/MasterMath.continuous-optimization/MM-Continuous-Optimization/builds/DOnAwGTCB/0/vanparys-courses/mm-continuous-optimization.tmp/.gitlab-runner.ext.conf
