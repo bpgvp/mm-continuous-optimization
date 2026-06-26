@@ -1,45 +1,49 @@
 """
-Adam can converge to the WRONG point: the Reddi-Kale-Kumar (2018) counterexample.
+Adam can converge to the WRONG point: the Reddi-Kale-Kumar (2018) counterexample,
+recast as a FIXED convex finite-sum (ERM) problem -- no online / regret machinery needed.
 ======================================================================================
 
 Reference
     S. J. Reddi, S. Kale, S. Kumar.
     "On the Convergence of Adam and Beyond." ICLR 2018 (best paper).
 
-The problem (online, one dimension, x constrained to [-1, 1])
-    The gradient seen at step t is periodic with period 3:
+The fixed convex problem (one dimension, x constrained to [-1, 1])
+    Three "training examples" give the component losses (with C > 2)
 
-        g_t =  +C   if  t % 3 == 1        (a large, RARE  gradient)
-        g_t =  -1   otherwise             (a small, FREQUENT gradient)
+        f_1(x) = C*x,     f_2(x) = -x,     f_3(x) = -x,
 
-    The cumulative loss over one period is (C - 2) * x, so for C > 2 it is
-    INCREASING in x and the optimum sits at  x* = -1.  A sound method must
-    therefore decrease x toward -1.
+    and the empirical risk is the fixed convex (linear) objective
+
+        f(x) = (1/3) (f_1 + f_2 + f_3) = ((C - 2)/3) * x,     minimiser  x* = -1.
+
+    We minimise f by SGD: each step uses ONE example's gradient, cycling i = 1,2,3,1,...
+    The per-step gradients are therefore  C, -1, -1, C, ...  -- the rare large gradient
+    (example 1) is the informative one pointing toward the optimum.
 
 What each method does
-    * SGD      uses the raw gradient: the rare +C step (magnitude C) outweighs the
-               two -1 steps, so x drifts to -1.  Correct.
-    * Adam     divides by sqrt(v), the running second moment.  This normalises the
-               rare large gradient down to ~1, so it can no longer outvote the two
-               frequent small gradients -> x drifts to +1.  WRONG corner.
-    * AMSGrad  Reddi et al.'s fix: it uses v_hat = max-so-far, which keeps the
-               denominator large after the big gradient, restoring convergence to -1.
+    * full-batch GD / SGD  follow the average gradient (C-2)/3 > 0, so x -> -1.  Correct.
+    * Adam     divides by sqrt(v): it normalises the rare large gradient down to ~1, so
+               the two frequent small gradients outvote it -> x -> +1.  WRONG corner ---
+               the MAXimiser of a convex function on the box.
+    * AMSGrad  Reddi et al.'s fix: v_hat = max-so-far keeps the denominator large after
+               the big gradient, restoring convergence to -1.
 
-We set beta1 = 0 to isolate the adaptive denominator 1/sqrt(v) -- the actual source
-of the pathology (this matches the paper's deterministic Theorem 1).  With momentum
+We set beta1 = 0 to isolate the adaptive denominator 1/sqrt(v) -- the actual source of
+the pathology (the paper's deterministic theorem also takes beta1 = 0).  With momentum
 (beta1 = 0.9) the moving average can mask the effect on THIS particular sequence; the
-paper's *stochastic* construction breaks Adam for any admissible (beta1, beta2).
-beta2 = 0.7 lets v decay fast enough to expose the failure within a few thousand
-steps; the same pathology occurs at the default beta2 = 0.999, but only for larger C
-and far longer horizons.
+paper's randomised-sampling variant breaks Adam for any admissible (beta1, beta2).
+beta2 = 0.7 lets v decay fast enough to expose the failure within a few thousand steps;
+the same pathology occurs at the default beta2 = 0.999, but only for larger C / longer runs.
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-def gradient(t, C):
-    """Periodic gradient of the Reddi counterexample (period 3)."""
+def stochastic_gradient(t, C):
+    """Gradient of one training example: SGD cycles i = 1,2,3,1,... over the 3-term
+    finite sum f = (f_1 + f_2 + f_3)/3.  Example 1 has gradient C, the other two have -1.
+    (Same sequence as Reddi et al.'s periodic construction, here read as plain SGD.)"""
     return C if (t % 3 == 1) else -1.0
 
 
@@ -48,7 +52,7 @@ def optimize(method, T, C, lr=0.02, beta1=0.0, beta2=0.7, eps=1e-8):
     x, m, v, vhat_max = 0.0, 0.0, 0.0, 0.0
     xs = np.empty(T)
     for t in range(1, T + 1):
-        g = gradient(t, C)
+        g = stochastic_gradient(t, C)
         m = beta1 * m + (1 - beta1) * g            # 1st moment (EMA of gradient)
         v = beta2 * v + (1 - beta2) * g * g        # 2nd moment (EMA of squared gradient)
         m_hat = m / (1 - beta1 ** t) if beta1 > 0 else m   # bias correction

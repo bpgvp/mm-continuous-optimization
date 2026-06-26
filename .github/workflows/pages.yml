@@ -33,15 +33,32 @@ jobs:
 
       - name: Assemble the Pages site
         run: |
-          mkdir -p public
-          # Render the README into a styled landing page.
-          pandoc README.md \
+          mkdir -p public/lectures
+          # Landing page: render the README, but repoint each lecture link from
+          # the raw PDF to its subpage (lectures/<base>.html). The README itself
+          # (viewed on GitHub) keeps linking straight to the PDF.
+          sed -E 's#https://bpgvp\.github\.io/mm-continuous-optimization/([A-Za-z0-9._-]+)\.pdf#lectures/\1.html#g' \
+            README.md > index.md
+          pandoc index.md \
             --standalone \
             --from gfm \
             --to html5 \
             --metadata pagetitle="Continuous Optimization" \
             --css style.css \
             --output public/index.html
+          # One subpage per lecture: description placeholder plus links to the
+          # PDF and any related Colab notebooks. Each source .md lives beside its
+          # slides in the lecture directory, sharing the PDF/.tex basename, and
+          # renders to lectures/<base>.html (matching the homepage links above).
+          for md in Lectures/*/*.md; do
+            name=$(basename "$md" .md)
+            pandoc "$md" \
+              --standalone \
+              --from gfm+yaml_metadata_block \
+              --to html5 \
+              --css ../style.css \
+              --output "public/lectures/$name.html"
+          done
           cp pages/style.css public/
           cp Max_paraboloid.svg.png public/
           # Publish every lecture PDF at the site root.

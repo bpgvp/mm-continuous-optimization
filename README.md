@@ -1,4 +1,4 @@
-# Continuous Optimization
+# <a href="https://bpgvp.github.io/mm-continuous-optimization/">Continuous Optimization</a>
 
 <img src="Max_paraboloid.svg.png" alt="optimization" width="400">
 
@@ -49,7 +49,7 @@ A student passes only if the score on the (final or retake) examination is at le
 
 | Lecture                                                                                                                                  | Date               |
 |:-----------------------------------------------------------------------------------------------------------------------------------------|:-------------------|
-| 1. [Introduction to Continuous Optimization](https://bpgvp.github.io/mm-continuous-optimization/L1-Introduction.pdf) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bpgvp/mm-continuous-optimization/blob/main/Lectures/L01-Introduction-to-Optimization/python/risk.ipynb) | Mon 7 Sep (wk 37)  |
+| 1. [Introduction to Continuous Optimization](https://bpgvp.github.io/mm-continuous-optimization/L1-Introduction.pdf) | Mon 7 Sep (wk 37)  |
 | 2. [Convexity](https://bpgvp.github.io/mm-continuous-optimization/L2-Convex-Sets.pdf)                                         | Mon 14 Sep (wk 38) |
 | 3. [Separation Theorems & Farkas' Lemma](https://bpgvp.github.io/mm-continuous-optimization/L3-Separation.pdf)                | Mon 21 Sep (wk 39) |
 | 4. [Lagrangian Duality](https://bpgvp.github.io/mm-continuous-optimization/L4-Lagrangian-duality.pdf)                         | Mon 28 Sep (wk 40) |
@@ -62,7 +62,7 @@ A student passes only if the score on the (final or retake) examination is at le
 | 11. [Interior-Point Methods](https://bpgvp.github.io/mm-continuous-optimization/L11-Interior-Point-Methods.pdf)               | Mon 16 Nov (wk 47) |
 | 12. [Variable Metric & Quasi-Newton Methods](https://bpgvp.github.io/mm-continuous-optimization/L12-Variable-Metric.pdf)      | Mon 23 Nov (wk 48) |
 | 13. [Stochastic Gradient Descent](https://bpgvp.github.io/mm-continuous-optimization/L13-Stochastic-Gradient-Descent.pdf)     | Mon 30 Nov (wk 49) |
-| 14. [Neural Networks & Automatic Differentiation](https://bpgvp.github.io/mm-continuous-optimization/L14-Neural-Networks.pdf) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bpgvp/mm-continuous-optimization/blob/main/Lectures/L14-Neural-Networks/python/adam_counterexample.ipynb) | Mon 7 Dec (wk 50)  |
+| 14. [Neural Networks & Automatic Differentiation](https://bpgvp.github.io/mm-continuous-optimization/L14-Neural-Networks.pdf) | Mon 7 Dec (wk 50)  |
 | 15. [Performance Estimation Programming](https://bpgvp.github.io/mm-continuous-optimization/L15-Performance-Estimation.pdf)   | Mon 14 Dec (wk 51) |
 
 
