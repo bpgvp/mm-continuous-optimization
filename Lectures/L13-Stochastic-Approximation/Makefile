@@ -5,8 +5,8 @@
 SUBDIRS := figures
 
 all: $(SUBDIRS)
-	pdflatex --shell-escape L15-Variable-Metric.tex
-	pdflatex --shell-escape L15-Variable-Metric.tex
+	pdflatex --shell-escape L13-Stochastic-Gradient-Descent.tex
+	pdflatex --shell-escape L13-Stochastic-Gradient-Descent.tex
 
 clean: $(SUBDIRS)
 	rm -rf auto svg-inkscape

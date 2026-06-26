@@ -4,9 +4,9 @@
 
 SUBDIRS := figures
 
-all: $(SUBDIRS)
-	pdflatex --shell-escape L12-Stochastic-Gradient-Descent.tex
-	pdflatex --shell-escape L12-Stochastic-Gradient-Descent.tex
+all:
+	pdflatex --shell-escape L14-Neural-Networks.tex
+	pdflatex --shell-escape L14-Neural-Networks.tex
 
 clean: $(SUBDIRS)
 	rm -rf auto svg-inkscape

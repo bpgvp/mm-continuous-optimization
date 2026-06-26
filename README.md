@@ -60,10 +60,11 @@ A student passes only if the score on the (final or retake) examination is at le
 | 9. [Newton's Method](https://bpgvp.github.io/mm-continuous-optimization/L9-Newtons-Method.pdf)                                | Mon 2 Nov (wk 45)  |
 | 10. [Self-Concordant Functions](https://bpgvp.github.io/mm-continuous-optimization/L10-Self-Concordant-Functions.pdf)         | Mon 9 Nov (wk 46)  |
 | 11. [Interior-Point Methods](https://bpgvp.github.io/mm-continuous-optimization/L11-Interior-Point-Methods.pdf)               | Mon 16 Nov (wk 47) |
-| 12. [Stochastic Gradient Descent](https://bpgvp.github.io/mm-continuous-optimization/L12-Stochastic-Gradient-Descent.pdf)     | Mon 23 Nov (wk 48) |
-| 13. [Neural Networks & Automatic Differentiation](https://bpgvp.github.io/mm-continuous-optimization/L13-Neural-Networks.pdf) | Mon 30 Nov (wk 49) |
-| 14. [Performance Estimation Programming](https://bpgvp.github.io/mm-continuous-optimization/L14-Performance-Estimation.pdf)   | Mon 7 Dec (wk 50)  |
-| 15. [Variable Metric & Quasi-Newton Methods](https://bpgvp.github.io/mm-continuous-optimization/L15-Variable-Metric.pdf)      | Mon 14 Dec (wk 51) |
+| 12. [Variable Metric & Quasi-Newton Methods](https://bpgvp.github.io/mm-continuous-optimization/L12-Variable-Metric.pdf)      | Mon 23 Nov (wk 48) |
+| 13. [Stochastic Gradient Descent](https://bpgvp.github.io/mm-continuous-optimization/L13-Stochastic-Gradient-Descent.pdf)     | Mon 30 Nov (wk 49) |
+| 14. [Neural Networks & Automatic Differentiation](https://bpgvp.github.io/mm-continuous-optimization/L14-Neural-Networks.pdf) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bpgvp/mm-continuous-optimization/blob/main/Lectures/L14-Neural-Networks/python/adam_counterexample.ipynb) | Mon 7 Dec (wk 50)  |
+| 15. [Performance Estimation Programming](https://bpgvp.github.io/mm-continuous-optimization/L15-Performance-Estimation.pdf)   | Mon 14 Dec (wk 51) |
+
 
 
 	

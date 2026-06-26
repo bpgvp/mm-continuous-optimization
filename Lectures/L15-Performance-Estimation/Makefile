@@ -3,8 +3,8 @@
 #
 
 all:
-	pdflatex --shell-escape L14-Performance-Estimation.tex
-	pdflatex --shell-escape L14-Performance-Estimation.tex
+	pdflatex --shell-escape L15-Performance-Estimation.tex
+	pdflatex --shell-escape L15-Performance-Estimation.tex
 
 clean:
 	rm -rf auto svg-inkscape
