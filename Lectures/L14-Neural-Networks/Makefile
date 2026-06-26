@@ -4,7 +4,7 @@
 
 SUBDIRS := figures
 
-all:
+all: $(SUBDIRS)
 	pdflatex --shell-escape L14-Neural-Networks.tex
 	pdflatex --shell-escape L14-Neural-Networks.tex
 
