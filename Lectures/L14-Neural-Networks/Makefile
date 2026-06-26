@@ -9,7 +9,6 @@ all:
 	pdflatex --shell-escape L14-Neural-Networks.tex
 
 clean: $(SUBDIRS)
-	rm -rf auto svg-inkscape
 	rm -f *.aux *.log *.nav *.out *.snm *.toc *.vrb *.rip *.fls *.fdb_latexmk *.synctex.gz *.gnuplot *.table *.bbl *.blg *.pdf _region_.* *~
 
 $(SUBDIRS):
