@@ -12,6 +12,10 @@
 
 % % Figures inline
 \usepackage{tikz}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{spy}
+\usetikzlibrary{patterns}
 \usepackage{pgfplots}
 \usetikzlibrary{calc}
 \usetikzlibrary{shapes.multipart}
@@ -45,29 +49,9 @@
 
 \begin{frame}[label=averaging]{Nonsmooth Convex Optimization}
 
-  \begin{center}
-  \begin{tikzpicture}[
-      box/.style={draw, thick, minimum width=2.2cm, minimum height=1.1cm,
-                  align=center, font=\small},
-      >=stealth, thick,
-    ]
-    \node[box] (alg) at (0,0) {Algorithm};
-    \node[box] (ora) at (5.5,0) {Oracle};
-
-    % query: Algorithm -> Oracle (above)
-    \draw[->] ([yshift=2pt]alg.east) -- ([yshift=2pt]ora.west)
-      node[midway, above, font=\small] {$x_i$};
-    % answer: Oracle -> Algorithm (below)
-    \draw[->] ([yshift=-2pt]ora.west) -- ([yshift=-2pt]alg.east)
-      node[midway, below, font=\small] {$g_i \in \partial f(x_i)$};
-\end{tikzpicture}
-  \end{center}
-
-  \vfill
-
   \textbf{Subgradient Descent:}
   \begin{align*}
-    x_{i+1} = & x_i - h_i g_i \quad \forall i \in [0, \dots, N-1]\\                                     
+    x_{i+1} = & \pi_{Q}(x_i - h_i g_i) \quad \forall i \in [0, \dots, N-1]\\                                     
     x_{A} = & \textstyle \tfrac{\sum_{i=0}^N h_i x_i}{\sum_{i=0}^N h_i.}
   \end{align*}
   
@@ -161,6 +145,326 @@
 \begin{frame}{Demo}
 
 \end{frame}
+
+\begin{frame}{Valid Inequalities}
+
+  We could try to improve our bound by including as many valid inequalities as we know:
+  
+  \begin{equation*}
+    \begin{array}{rl}
+      \max &  f_A-f_\star\\[0.5em]
+      \st  & f_i \defn f(x_i), ~g_i \in \partial f(x_i) \quad \forall i \in \{0, \dots, N+1, A, \star\} \\[0.5em]
+           & \norm{x_{i+1}-x_j}^2\leq \norm{x_i-h_i g_i - x_j}^2 ~~\forall j \in \{0, \dots, N+1, A, \star\} \\[0.5em]
+           & \blue{x_A= \sum_{i=0}^N h_i x_i/\sum_{i=0}^N h_i}\\[0.5em]
+           & \color{green}{\norm{x_0-x_\star}^2\leq R^2},\\[0.5em]
+           & \red{\langle  g_i, x_j-x_i\rangle \leq f_j-f_i} \quad \forall i\in [0, \dots, N], \\[0.5em]
+           & \red{\norm{ g_i}^2\leq L^2} \quad \forall i\in [0, \dots, N+1, A, \star].
+    \end{array}
+  \end{equation*}
+
+  \vfill
+
+  Using from Lecture 8,
+  \[
+    x^+ = \pi_Q(x) \implies \norm{x^+-y}^2\leq \norm{x-y}^2 \quad \forall y \in Q.
+  \]
+  and $x_0, \dots, x_{N+1}, x_A, x_\star$ are in $Q$.
+
+  
+\end{frame}
+
+\begin{frame}{Demo}
+
+\end{frame}
+
+\begin{frame}{Performance Estimation is a Generalization of this Idea}
+
+\end{frame}
+
+\section{Performance Estimation}
+
+\begin{frame}{Blackbox Framework}
+
+  % \begin{minipage}{0.55\textwidth}
+  \begin{center}
+    \begin{tikzpicture}[
+      box/.style={draw, thick, minimum width=1.7cm, minimum height=1.1cm,
+        align=center, font=\small},
+      >=stealth, thick,
+      ]
+      \node[box] (alg) at (0,0) {Algorithm};
+      \node[box] (ora) at (3.3,0) {Oracle};
+      % query: Algorithm -> Oracle (above)
+      \draw[->] ([yshift=4pt]alg.east) -- ([yshift=4pt]ora.west)
+      node[midway, above, font=\small] {$x_i$};
+      % answer: Oracle -> Algorithm (below)
+      \draw[->] ([yshift=-4pt]ora.west) -- ([yshift=-4pt]alg.east)
+      node[midway, below, font=\small] {$g_i \!\in\! \partial f(x_i)$};
+    \end{tikzpicture}
+  \end{center}
+  % \end{minipage}%
+  % \hfill
+  % \begin{minipage}{0.45\textwidth}
+  %   \begin{tikzpicture}[>=latex, font=\small]
+  %     % Outer box: All Algorithms
+  %     \draw[rounded corners=4pt, thick, blue]
+  %     (0,0) rectangle (4.6, 3.1);
+  %     \node[blue, anchor=north west] at (0.1, 3.1)
+  %     {\scriptsize All Algorithms};
+
+  %     % Middle box: First-Order Methods
+  %     \draw[rounded corners=3pt, thick, red]
+  %     (0.3, 0.22) rectangle (4.3, 2.5);
+  %     \node[red, anchor=north west] at (0.4, 2.5)
+  %     {\scriptsize First-Order Methods};
+
+  %     % Inner box: Fixed-Step FOMs
+  %     \draw[rounded corners=2pt, thick, darkgreen]
+  %     (0.65, 0.45) rectangle (3.95, 1.9);
+  %     \node[darkgreen, anchor=north west] at (0.75, 1.9)
+  %     {\scriptsize Fixed-Step FOMs};
+
+  %     % Gradient Descent dot
+  %     \filldraw[black] (1.6, 0.85) circle (2.2pt);
+  %     \node[anchor=west] at (1.75, 0.85) {\scriptsize Gradient Descent};
+
+  %     % % Fast Gradient Descent dot
+  %     % \filldraw[black] (1.4, 1.25) circle (2.2pt);
+  %     % \node[anchor=west] at (1.55, 1.25) {\scriptsize Fast Gradient Descent};
+      
+  %     % Extra labels in outer regions
+  %     \node[red!60, anchor=west, font=\scriptsize] at (0.4, 0.32)
+  %     {Line search, \ldots};
+  %     \node[blue!60, anchor=west, font=\scriptsize] at (0.1, 0.1)
+  %     {Newton, \ldots};
+  %   \end{tikzpicture}
+  % \end{minipage}
+
+  \vfill
+
+  \begin{itemize}
+    
+  \item A First-Order Method (FOM) uses only (sub)gradients $g_i\in \partial f(x_i)$.
+    
+  \item A \emph{Fixed-Step FOM (FSFOM):} starting from $x_0$ satisfies
+    \[
+      \only<1>{
+        x_{i+1} = x_{i} - \sum_{j=0}^{i} h_{i,j} \, g_j, \quad i \in [0, \dots, N-1].}
+      % \only<2->{
+      %   x_{i+1} = x_0 - \sum_{j=0}^{i} \bar h_{i,j} \, g_j, \quad i \in [0, \dots, N-1].}
+    \]
+    Fully characterized by its stepsize schedule $\only<1>{h}% \only<2->{\bar h}
+    $.
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Optimization Problem Class}
+
+  An \emph{optimization problem class} is a triplet $(\mathcal{F},\, \mathcal{C},\, \mathcal{E})$:
+  \begin{itemize}
+    \item $\mathcal{F}$: function class
+    \item $\mathcal{C}$: initial condition on $(x_0, x_\star)$
+  \end{itemize}
+
+  \vfill
+
+  \textbf{Example 1 – Smooth convex optimization:}
+  \[
+    \mathcal{F}_{sc} = \{f \text{ convex}: \nabla f ~\text{is}~ M-\text{Lipschitz}\},~~
+    \mathcal{C}_{sc} \equiv \|x_0 - x_\star\|^2 \leq R^2, ~~
+    % \mathcal{E}_{sc} = f(x_N) - f(x_\star)
+  \]
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Example 2 – Nonsmooth convex optimization:}
+  \[
+    \mathcal{F}_{nsc} = \{f \text{ convex}: \|\partial f\| \leq L\},\quad
+    \mathcal{C}_{nsc} \equiv \|x_0 - x_\star\|^2 \leq R^2,\quad
+    % \mathcal{E}_{nsc} = f({\color{red}x_{N+1}}) - f(x_\star)
+  \]}
+
+  \vfill
+  
+  \begin{itemize}
+  \item<3-> $\mathcal{E}$: performance measure function of $(x_i, f(x_i), \partial f(x_i))$ for $i\in I=\{0, \dots, N, \star\}$.
+    \begin{align*}
+      \mathcal{E}\bigl(\{x_i, f(x_i), \partial f(x_i)\}_{i\in I}\bigr)\leftarrow & \makebox[2.3cm][l]{$f(x_N)-f(x_\star)$} \quad {\color{gray}\text{Suboptimality}}\\
+      \leftarrow & \makebox[2.3cm][l]{${\rm{dist}}(0, \partial f(x_N))$}\quad  {\color{gray}\text{Last Iterate Gradient}}\\
+      % \leftarrow & \makebox[2.3cm][l]{$\textstyle\min_{i=1}^N\norm{\partial f(x_i)}^2$} \quad {\color{gray}\text{Best Iterate Gradient}}\\
+                   \leftarrow & \makebox[2.3cm][l]{$\norm{x_N-x_\star}^2$} \quad {\color{gray}\text{Iterate Error}}
+    \end{align*}
+  \end{itemize}
+ 
+  
+\end{frame}
+
+\begin{frame}{Performance Estimation Programming (PEP)}
+
+  The \emph{worst-case performance} of algorithm $A_N \in \mc A$ on class $(\mathcal{F},\mathcal{C},\mathcal{E})$:
+
+  \vfill
+
+  \begin{tcolorbox}[colback=black!8, colframe=black!8, boxrule=0pt,
+    arc=2pt, left=4pt, right=4pt, top=2pt, bottom=2pt]
+    \begin{equation}
+      \label{eq:pep}
+      \tag{PEP}
+      \begin{array}{rl}
+        \mc P(A_n) \defn \max_{f, x} &  \mathcal{E}\bigl(\{x_i, f(x_i), \partial f(x_i)\}_{i\in I}\bigr)\\[0.5em]
+        \st  & (x_0, \dots, x_N) \text{ from } A_N,\\[0.5em]
+                                     & (x_0,x_\star) \text{ satisfies } \mc C,\\[0.5em]
+                                     &x_\star \in \arg\min_x f(x),\\[0.5em]
+                                     & f\in \mc F.
+      \end{array}    
+    \end{equation}
+  \end{tcolorbox}
+
+  \vfill
+
+  \textbf{Thm:} When $\mc A={\text{FSFOM}}$, \eqref{eq:pep} can solved as a tractable convex SDP.
+  \begin{enumerate}
+  \item Interpolation condition on $\mc F$,
+  \item Grammian linearization.
+  \end{enumerate}
+  
+
+\end{frame}
+
+\begin{frame}{Step 1 : Interpolation Condition}
+
+  The \emph{worst-case performance} of algorithm $A_N \in \text{FSFOM}$ on class $(\mathcal{F}_{nsc},\mathcal{C}_{nsc},\mathcal{E}_{nsc})$:
+  \begin{tcolorbox}[colback=black!8, colframe=black!8, boxrule=0pt,
+    arc=2pt, left=4pt, right=4pt, top=2pt, bottom=2pt]
+  \[
+    \begin{array}{rl}
+      \mc P(A_n) = \max_{{\color{red}F}, {\color{red}g}, x} &  {\color{red}F_N}-{\color{red}F_\star} \\[0.5em]
+      \st  & (x_0, \dots, x_N, x_\star) \text{ from } A_N,\\[0.5em]
+                  & \norm{x_0-x_\star}^2 \leq R^2,\\[0.5em]
+                  & g_\star = 0,\\[0.5em]
+                  & \tikzmark{ic_start}f\in \mc F, ~{\color{red}F_i} = f(x_i), ~{\color{red}g_i}\in \partial f(x_i) \quad \forall i\in I\defn \{0,\dots, N, \star\}. ~~~~(\mc I)\tikzmark{ic_end}
+    \end{array}
+  \]
+\end{tcolorbox}
+\begin{tikzpicture}[remember picture, overlay]
+    \draw[red, rounded corners=3pt, thick]
+      ([xshift=-4pt, yshift=-4pt]pic cs:ic_start) rectangle
+      ([xshift=4pt,  yshift=10pt]pic cs:ic_end);
+  \end{tikzpicture}
+
+  \vfill
+
+  \uncover<2->{
+  \begin{minipage}{0.45\textwidth}
+    \emph{Interpolation constraint}: $\mc I\iff$
+    \[
+       \left\{\begin{array}{ll}
+        F_j \geq F_i + \langle g_i, x_j-x_i \rangle& \forall i\in I, ~j\in I,\\[0.5em]
+        \norm{g_i}^2\leq L^2 & \forall i\in I.
+      \end{array}\right.
+    \]
+  \end{minipage}}%
+  \hfill
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+\begin{axis}[
+  width=1.1\textwidth, height=4.5cm,
+  axis lines=left,
+  xmin=-0.3, xmax=3.3,
+  ymin=-0.9, ymax=4.5,
+  xtick=\empty, ytick=\empty,
+  clip=false,
+]
+  % Convex curve f(x) = x^2/2
+  \addplot[thick, black, domain=-0.1:3.05, samples=80] {x^2/2};
+  \node[anchor=west, font=\small] at (axis cs:3.05, 4.65) {$f$};
+
+  % Tangent line at x_i=1: y = x - 0.5
+  \addplot[blue, dashed, thick, domain=0.4:2.7] {x - 0.5};
+
+  % x_star at 0
+  \addplot[only marks, mark=*, mark size=2pt, black] coordinates {(0,0)};
+  \node[anchor=north] at (axis cs:0, -0.05) {$x_\star$};
+  % \node[anchor=north, gray, font=\scriptsize] at (axis cs:0, -0.42) {$g_\star=0$};
+
+  % x_i = 1
+  \addplot[only marks, mark=*, mark size=2.2pt, black] coordinates {(1, 0.5)};
+  \node[anchor=north east, black] at (axis cs:1.1, 0.3) {$x_i$};
+  \draw[densely dotted, black] (axis cs:-0.3, 0.5) -- (axis cs:1, 0.5);
+  \node[left] at (axis cs:-0.3, 0.5) {${\color{red}F_i}$};
+
+  % x_j = 2.5
+  \addplot[only marks, mark=*, mark size=2.2pt, black] coordinates {(2.5, 3.125)};
+  \node[anchor=south west, black] at (axis cs:2.5, 2.425) {$x_j$};
+  \draw[densely dotted, black] (axis cs:-0.3, 3.125) -- (axis cs:2.5, 3.125);
+  \node[left] at (axis cs:-0.3, 3.125) {${\color{red}F_j}$};
+
+  % % Tangent value at x_j: 2.5 - 0.5 = 2.0
+  % \addplot[only marks, mark=x, mark size=3.5pt, blue, thick] coordinates {(2.5, 2.0)};
+
+  % % Arrow showing the gap
+  % \draw[<->, red, thick] (axis cs:2.5, 2.07) -- (axis cs:2.5, 3.055);
+  % \node[anchor=west, red, font=\scriptsize] at (axis cs:2.57, 2.56)
+  %   {$F_j - F_i - \langle g_i, x_j\!-\!x_i\rangle \geq 0$};
+
+  % % Dashed verticals
+  % \draw[gray, dashed, thin] (axis cs:1,   0) -- (axis cs:1,   0.5);
+  % \draw[gray, dashed, thin] (axis cs:2.5, 0) -- (axis cs:2.5, 2.0);
+
+  % Tangent label
+  \node[blue, anchor=north] at (axis cs:2.4, 1.1)
+    {\footnotesize $x\!\mapsto\! {\color{red}F_i} \!+\! \langle {\color{red}g_i},x \!-\! x_i\rangle$};
+\end{axis}
+\end{tikzpicture}
+
+  \end{minipage}
+  
+\end{frame}
+
+\begin{frame}{Step 2: Grammian Linearization}
+
+  The \emph{worst-case performance} of algorithm $A_N \in \text{FSFOM}$ on class $(\mathcal{F},\mathcal{C},\mathcal{E})$
+  \begin{tcolorbox}[colback=black!8, colframe=black!8, boxrule=0pt,
+    arc=2pt, left=4pt, right=4pt, top=2pt, bottom=2pt]
+  \[
+    \begin{array}{rl}
+     \mc P(A_n)= \max_{F, g, x} &   F_N-F_\star \\[0.5em]
+      \st  & \tikzmark{fs_start}x_{i+1} = x_0 - \sum_{k=0}^{i} \bar h_{i,k} \, g_k \quad \forall i\in [0,\dots, N-1], \tikzmark{fs_end}\\[0.5em]
+                  & \norm{x_0-x_\star}^2\leq R^2,\\[0.5em]
+                  & \norm{g_\star}^2  = 0,\\[0.5em]
+                       & F_j \geq F_i + {\color{red}\langle g_i, x_j-x_i} \rangle \quad \forall i\in I,~ \forall j\in I,\\[0.5em]
+                       & \norm{g_i}^2\leq L^2 \quad \forall i \in I.
+    \end{array}    
+    % \mathcal{R}(M_N) = \max_{\substack{f \in \mathcal{F},\; \mathcal{C}(x_0,x_\star) \leq 0 \\ \{x_i\} \text{ from } M_N}}
+  \]
+\end{tcolorbox}
+\begin{tikzpicture}[remember picture, overlay]
+    \draw[red, rounded corners=3pt, thick]
+      ([xshift=-4pt, yshift=-4pt]pic cs:fs_start) rectangle
+      ([xshift=4pt,  yshift=10pt]pic cs:fs_end);
+  \end{tikzpicture}
+
+  
+  \vfill
+
+  \textbf{Remark:}
+  \begin{itemize}
+  \item Iterates $x$ can be \emph{eliminated}
+  \item \emph{linearize} in $F$ and the Grammian
+    \[
+      G = [x_0-x_\star, g_\star, g_0, \dots, g_{N-1}]\tpose [x_0-x_\star, g_\star, g_0, \dots, g_{N-1}] \in S^{N+2}_+
+    \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{PEPit}
+
+\end{frame}
+
 
 \end{document}
 %%% Local Variables:
