@@ -5,60 +5,60 @@ Lecture 1 demo, Continuous Optimization (MasterMath) -- Bart Van Parys.
 
 Johann Bernoulli (1696): along which curve does a bead slide under gravity
 from the origin to a point (L, H below) in the least time? By conservation
-of energy the speed at depth y is sqrt(2 g y). Parametrising the curve by
-its *depth* -- horizontal position x(y) for y in [0, H] -- the travel time
+of energy the speed at depth y is sqrt(2 g y), so for a curve z(s) =
+(x(s), y(s)), s in [0, 1], the travel time is
 
-    T[x] = int_0^H sqrt(1 + x'(y)^2) / sqrt(2 g y) dy,   x(0)=0, x(H)=L,
+    T[z] = int_0^1 ||z'(s)|| / sqrt(2 g y(s)) ds.
 
-is a CONVEX functional of x: the integrand depends on x only through x'(y)
-(a linear operation), p |-> sqrt(1 + p^2) is convex, and the weight
-1/sqrt(2 g y) is a positive constant for each y. Discretised on a depth
-grid this is a small second-order-cone program. (The parametrisation
-assumes the curve is a graph over depth, valid whenever L/H <= pi/2.)
+T is not convex in z, but by Cauchy-Schwarz the ENERGY
+
+    E[z] = int_0^1 ||z'(s)||^2 / (2 g y(s)) ds  >=  T[z]^2,
+
+with equality at constant metric speed (any curve can be reparametrised so),
+hence min E = (min T)^2. The integrand ||p||^2 / y is the perspective
+function -- jointly convex in (p, y) -- so E is a convex functional of the
+completely free curve z: a second-order-cone program after discretisation
+(one quad_over_lin term per segment). A floor y <= d is a linear constraint.
 
 The classical answer is a cycloid; we verify the solver rediscovers it.
 
-Run locally with:  pip install cvxpy numpy  &&  python brachistochrone.py
+Run locally with:  pip install cvxpy numpy scipy  &&  python brachistochrone.py
 """
 
 import numpy as np
 import cvxpy as cp
 
-g = 9.81      # gravity (m/s^2)
-L, H = 1.0, 1.0  # end point: L to the right, H straight down (keep L/H <= pi/2)
+g = 9.81         # gravity (m/s^2)
+L, H = 2.5, 1.0  # end point: L to the right, H straight down
 
-# Discretise the depth interval [0, H] into N segments. On a straight segment
-# the time int dy sqrt(1+(dx/h)^2) / sqrt(2 g y) integrates in closed form, so
-# with these weights the objective is the EXACT travel time of the
-# piecewise-linear path -- no quadrature error, only discretisation error.
-N = 500
-h = H / N
-y = np.arange(N + 1) * h
-w = np.sqrt(2 / g) * (np.sqrt(y[1:]) - np.sqrt(y[:-1])) / h
+# The curve z_k = (x_k, y_k) at s_k = k/N, completely free.
+N = 300
+Z = cp.Variable((N + 1, 2))
+dZ = cp.diff(Z, axis=0)
+y_seg = (Z[:-1, 1] + Z[1:, 1]) / 2      # mean depth of each segment
 
-# Decision variable: horizontal position x_k at depth y_k = k h.
-x = cp.Variable(N + 1)
+E = N * cp.sum(cp.vstack([cp.quad_over_lin(dZ[k], y_seg[k])
+                          for k in range(N)])) / (2 * g)
 
-# Segment length sqrt(h^2 + (x_{k+1}-x_k)^2): the norm of an affine expression.
-seg = cp.norm(cp.vstack([np.full(N, h), cp.diff(x)]), 2, axis=0)
-
-objective = cp.Minimize(w @ seg)       # total travel time (midpoint rule)
-constraints = [x[0] == 0, x[N] == L]
-
-problem = cp.Problem(objective, constraints)
+problem = cp.Problem(cp.Minimize(E), [Z[0] == [0, 0], Z[N] == [L, H]])
 problem.solve()
 
 print(f"Status: {problem.status}")
-print(f"Travel time (convex optimization) : {problem.value:.6f} s")
+print(f"Travel time = sqrt(E)             : {np.sqrt(problem.value):.6f} s")
+print(f"Deepest point reached             : {Z.value[:, 1].max():.4f}")
 
 # Bernoulli's closed-form answer: a cycloid x = r(t - sin t), y = r(1 - cos t)
-# through (L, H), reached at angle t = Theta, with travel time Theta sqrt(r/g).
+# through (L, H), reached at angle Theta, with travel time Theta sqrt(r/g).
 from scipy.optimize import brentq
 
-theta = brentq(lambda t: (t - np.sin(t)) / (1 - np.cos(t)) - L / H, 1e-3, np.pi)
+theta = brentq(lambda t: (t - np.sin(t)) / (1 - np.cos(t)) - L / H,
+               1e-3, 2 * np.pi - 1e-3)
 r = H / (1 - np.cos(theta))
 print(f"Travel time (Bernoulli's cycloid) : {theta * np.sqrt(r / g):.6f} s")
 
-# A straight slide, for comparison (the same weights time it exactly).
-straight = np.hypot(h, L / N) * np.sum(w)
-print(f"Travel time (straight line)       : {straight:.6f} s")
+# A floor at depth d < the free dip: one linear constraint, no closed form.
+d = 1.05
+problem_f = cp.Problem(cp.Minimize(E),
+                       [Z[0] == [0, 0], Z[N] == [L, H], Z[:, 1] <= d])
+problem_f.solve()
+print(f"Travel time with a floor at {d}  : {np.sqrt(problem_f.value):.6f} s")
