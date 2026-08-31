@@ -96,7 +96,7 @@
 \end{frame}
 
 
-\begin{frame}{History of Optimization -- Constraint Problems}
+\begin{frame}{History of Optimization -- Constrained Problems}
 
   Constraint mechanics
   \begin{center}
@@ -380,14 +380,6 @@
                 & \sum_{i=1}^n \left( 3 r^3_i - 2r_i\right) p_i = 40000.
     \end{array}
   \end{equation*}
-
-  \vfill
-
-  \begin{itemize}
-  \item Solution : see the provided Python\,/\,CVXPY program ---
-    run it in the cloud on
-    \href{https://colab.research.google.com/github/bpgvp/mm-continuous-optimization/blob/main/Lectures/L01-Introduction-to-Optimization/python/risk.ipynb}{\textcolor{blue}{Google Colab}}.
-  \end{itemize}
   
 \end{frame}
 
@@ -429,7 +421,7 @@
 
   \vfill
 
-  An optimization problem of several parts
+  An optimization problem consists of several parts
   \begin{itemize}
   \item The vector $x$ collects the \emph{optimization variables}
   \item The linear space $E(=\Re^n, \Re^{n\times n})$ is the \emph{domain} of the decision variables
@@ -500,7 +492,7 @@
     \)
   \item<5-> the set of $\epsilon$-suboptimal solutions
     \(
-      \arg \min_{x\in X} f(x) \defn \set{x\in X\subseteq E}{f(x)\leq J^\star\red{+\epsilon}}
+      \epsilon\text{-}\arg \min_{x\in X} f(x) \defn \set{x\in X\subseteq E}{f(x)\leq J^\star\red{+\epsilon}}
     \)
   \end{itemize}
   
@@ -873,25 +865,25 @@
     \setlength\itemsep{2.5em}
   \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
   \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
-  \item \emph{Stationary points}: $\bold{x}^*=(4,0)$ and $\bar{ \bold{x}}=(3,1)$
-  % \item $f''( \bold{x}) =\left[
+  \item \emph{Stationary points}: $\mathbf{x}^*=(4,0)$ and $\bar{ \mathbf{x}}=(3,1)$
+  % \item $f''( \mathbf{x}) =\left[
   %     \begin{array}{ccc}
   %       1  & & 1   \\
   %       1 & & 4-6 x_2
   %     \end{array}
   %   \right]$
-  % \item $f''(\bold{x}^*) =\left[
+  % \item $f''(\mathbf{x}^*) =\left[
   %     \begin{array}{ccc}
   %       1  & & 1   \\
   %       1 & & 4
   %     \end{array}
-  %   \right]\succeq \bold{0}$
-  % \item $f''(\bar{\bold{x}}) =\left[
+  %   \right]\succeq \mathbf{0}$
+  % \item $f''(\bar{\mathbf{x}}) =\left[
   %     \begin{array}{ccc}
   %       1  & & 1   \\
   %       1 & & -2
   %     \end{array}
-  %   \right]\not\succeq \bold{0}$
+  %   \right]\not\succeq \mathbf{0}$
   % \item $x^\star$ is the only \textbf{candidate} local minimum
   \end{itemize}
 \end{frame}
@@ -948,25 +940,25 @@
     \setlength\itemsep{1.5em}
   \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
   \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
-  \item Stationary points: $\bold{x}^*=(4,0)$ and $\bar{ \bold{x}}=(3,1)$
-  \item $f''( \bold{x}) =\left[
+  \item Stationary points: $\mathbf{x}^*=(4,0)$ and $\bar{ \mathbf{x}}=(3,1)$
+  \item $f''( \mathbf{x}) =\left[
       \begin{array}{ccc}
         1  & & 1   \\
         1 & & 4-6 x_2
       \end{array}
     \right]$
-  \item $f''(\bold{x}^*) =\left[
+  \item $f''(\mathbf{x}^*) =\left[
       \begin{array}{ccc}
         1  & & 1   \\
         1 & & 4
       \end{array}
-    \right]\succeq_{S^2_+} \bold{0}$
-  \item $f''(\bar{\bold{x}}) =\left[
+    \right]\succeq_{S^2_+} \mathbf{0}$
+  \item $f''(\bar{\mathbf{x}}) =\left[
       \begin{array}{ccc}
         1  & & 1   \\
         1 & & -2
       \end{array}
-    \right]\not\succeq_{S^2_+} \bold{0}$
+    \right]\not\succeq_{S^2_+} \mathbf{0}$
   \item $x^\star$ is the only \emph{candidate local minimum}.
   \end{itemize}
   
@@ -998,19 +990,19 @@
     \setlength\itemsep{1.5em}
   \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
   \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
-  \item Candidates $\bold{x}^*=(4,0)$ and $\bar{ \bold{x}}=(3,1)$
-  \item $f''( \bold{x}) =\left[
+  \item Candidates $\mathbf{x}^*=(4,0)$ and $\bar{ \mathbf{x}}=(3,1)$
+  \item $f''( \mathbf{x}) =\left[
       \begin{array}{ccc}
         1  & & 1   \\
         1 & & 4-6 x_2
       \end{array}
     \right]$
-  \item $f''(\bold{x}^*) =\left[
+  \item $f''(\mathbf{x}^*) =\left[
       \begin{array}{ccc}
         1  & & 1   \\
         1 & & 4
       \end{array}
-    \right]\succ_{S^2_+} \bold{0}$
+    \right]\succ_{S^2_+} \mathbf{0}$
   \item $x^\star$ is the only local minimum.
   \end{itemize}
 \end{frame}
