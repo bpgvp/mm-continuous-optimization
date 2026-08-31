@@ -232,7 +232,7 @@
     \]
 
   \item Reliable and efficient algorithms and software
-  \item Computational time scales as $n^2 p$ ($X\in\Re^{n\times p})$
+  \item Computational time scales as $n p^2$ ($X\in\Re^{n\times p}$, $n\geq p)$
   \item<2-> Mature technology
   \end{itemize}
   
@@ -476,16 +476,15 @@
   \]
   requires determining
   \begin{itemize}
-  \item<2-> If the set $X$ is empty, then the problem is \emph{infeasible} ($J^\star=\infty$)
-    
-  \item<3-> If $J^\star = -\infty$, then the problem is \emph{unbounded below}
-  \item<4-> the infimum (greatest lower bound)
+  \item<2-> the infimum (greatest lower bound)
     \[
       \begin{array}{rl}
         J^\star = \inf_x & f(x) \\
         \st & x\in X \subseteq E
       \end{array}
     \]
+  \item<3-> If the set $X$ is empty, then the problem is \emph{infeasible} ($J^\star=\infty$ by the convention $\inf_{x\in\emptyset} f(x) = +\infty$)
+  \item<4-> If $J^\star = -\infty$, then the problem is \emph{unbounded below}
   \item<5-> the set of minimizers
      \(
       \arg \min_{x\in X} f(x) \defn \set{x\in X\subseteq E}{f(x)\leq J^\star}
@@ -557,7 +556,11 @@
                 & x_2 \leq 1, ~-x_2 \leq 1.
     \end{array}
   \end{equation*}
-  
+
+  \begin{itemize}
+  \item<2-> The minimizer is $x^\star=(1, 1)$, yet $f'(x^\star)=(-4, -2)\neq 0$ : constrained problems require \emph{different optimality conditions} (see Lagrange duality and KKT later).
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}{Terminology}
@@ -620,6 +623,318 @@
 
 \end{frame}
 
+\section{Continuous Functions}
+
+\begin{frame}{A Brief Recall of Continuity}  
+
+  Let $f:\Re^n\to\Re$.
+  \begin{itemize}
+  \item A function $f$ is called \emph{continuous at a point} $x$ in $\Re^n$ if for every sequence
+    $\{x_i\}_{i\geq 0} \subset \Re^n$ converging to $x$, we have $\lim_{i\to\infty} f(x_i) = f(x)$\\[2em]
+
+  \item A function $f$ is called \emph{continuous} if it is continuous at all points.
+  \end{itemize}
+
+  \vfill
+  
+  \textbf{Counter example:}
+
+  \vfill
+
+  \includesvg[height=3cm]{Left-continuous.svg}
+
+  \hfill
+  {\tiny Figure from Wikipedia}
+  
+\end{frame}
+
+\begin{frame}{Extreme-Value Theorem (1830s)}
+
+  \textbf{Theorem (Bolzano-Weierstra\ss) :} If $f : \Re^n \to \Re$ is a continuous function and $K \subset \Re^n$ is a compact (bounded and closed) set, then $f$ is bounded on $K$ and there exist $c$, $d \in K$ such that $f ( c ) = \sup_{x\in K} f ( x )$ and $f ( d ) = \inf_{x \in K} f ( x )$.
+
+  \vfill
+
+  \begin{minipage}{0.6\textwidth}
+    \includesvg[height=5.5cm]{Extreme_Value_Theorem.svg}\\
+    {\tiny Figure from Wikipedia}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.4\textwidth}
+    \centering
+    \includegraphics[height=2cm]{bolzano.jpg}\\
+    Bolzano
+    
+    \vspace{2em}
+    \includegraphics[height=2cm]{weierstrass.jpg}\\
+    Weierstra\ss
+    
+  \end{minipage}
+  
+\end{frame}
+
+\section{Differentiable Functions}
+
+\begin{frame}{A Brief Recall of Differentiability}
+
+
+  Let $f:\Re^n\to\Re$ continuous and $d\in \Re^n$.
+
+  \begin{itemize}
+    \setlength\itemsep{2em}
+  \item The function $f$ is \emph{differentiable} at $x \in \Re^n$ \emph{in the direction} $d$ if the following limit exists:
+    \[
+      \nabla f(x)[d] = \lim_{t\to 0} \frac{f(x+t d)-f(x)}{t}.
+    \]
+  \item<2-> The function $f$ is \emph{G\^ateaux differentiable} in $x \in \Re^n$ if differentiable in $x$ in every direction $d \in \Re^n$ and if $d\mapsto \nabla f(x)[d]$ is linear.
+
+  \item<3-> The \emph{gradient} of $f$ at $x$ is the vector $f'(x)$ satisfying $$\iprod{f'(x)}{d}=f'(x)\tpose d=\nabla f(x)[d]$$
+  \item<4-> $f$ is \emph{continuously differentiable} if $x \mapsto f'(x)$ is continuous
+  \end{itemize}
+  
+  
+\end{frame}
+
+\section{Unconstrained Optimality Conditions}
+
+\begin{frame}{First-Order Optimality Conditions}
+
+  
+  \textbf{Theorem : } Suppose that $f:\Re^n\to\Re$ is continuously differentiable and $x^\star$ is a local minimizer. Then, $f'(x^\star) = 0$.
+
+  \vfill
+
+  \textbf{Remark : }
+
+  \begin{itemize}
+  \item Points $x$ satisfying $f'(x)=0$ are called \emph{stationary points}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{The Mean Value Theorem}
+
+  Let $f:\Re^n\to\Re$ be differentiable.
+
+  \vfill
+  \textbf{Theorem :} Let $x$, $h\in \Re^n$. There is a $t\in(0, 1)$ for which
+  \[
+    f(x+h) = f(x) + \iprod{f'(x+t h)}{ h}.
+  \]
+
+  \vfill
+
+  \textbf{Geometrically:}
+  \vfill
+  
+  \includesvg[height=4cm]{mean-value-theorem.svg}
+
+  \hfill
+  {\tiny Figure from Wikipedia}
+  
+  
+\end{frame}
+
+\begin{frame}{Rolle's Theorem [$\star$]}
+
+  \textbf{Theorem (Rolle) :} Let $g:\Re\to\Re$ be differentiable and $g(a)=g(b)$ for some $a<b$. Then, there is a $c\in (a, b)$ such that $g'(c)=0$.
+
+  \vfill
+
+  \textbf{Proof [$\star$] :}
+  \begin{itemize}
+  \item If $g$ is constant on $[a, b]$, any $c\in(a, b)$ works.
+  \item Otherwise, replacing $g$ with $-g$ if needed, there is a $t\in(a, b)$ with $g(t)>g(a)$. By the extreme-value theorem ($g$ continuous, $[a, b]$ compact) the maximum of $g$ over $[a, b]$ is attained at some $c$; as $g(c)>g(a)=g(b)$, necessarily $c \in (a, b)$.
+  \item Maximality of $c$ gives
+    \[
+      \frac{g(c+t)-g(c)}{t} \leq 0 {\rm{~for~}} t\in(0, b-c] \quad {\rm{and}} \quad \frac{g(c+t)-g(c)}{t} \geq 0 {\rm{~for~}} t \in [a-c, 0).
+    \]
+  \item As $g$ is differentiable at $c$, letting $t\to 0$ yields both $g'(c)\leq 0$ and $g'(c)\geq 0$; hence $g'(c)=0$.
+  \end{itemize}
+
+  \vfill
+
+  \textbf{Proof of the mean value theorem :} Apply Rolle's theorem to $g(t) \defn f(x+t h)+t\,(f(x)-f(x+h))$ with $a=0$ and $b=1$: indeed $g(0)=g(1)=f(x)$ and $g'(t) = \iprod{f'(x+t h)}{h} + f(x) - f(x+h)$.
+
+\end{frame}
+
+\begin{frame}{First-Order Optimality Conditions}
+
+  
+  \textbf{Theorem : } Suppose that $f$ is continuously differentiable and $x^\star$ is a local minimizer. Then, $f'(x^\star) = 0$.
+
+  \vfill
+  \textbf{Proof : }
+
+  \begin{itemize}
+  \item For contradiction, assume that $f'(x^\star)\neq 0$
+  \item<2-> Let $g(t)\defn f(x^\star-t f'(x^\star))$ with gradient $g'(t) = -\iprod{f'(x^\star-t f'(x^\star))}{f'(x^\star)}$
+  \item<3-> Then $g'(0)=-\iprod{f'(x^\star)}{f'(x^\star)}<0$
+  \item<4-> By continuity of $f'$ there exists a $T>0$ such that $g'(t)<0$ for all $t\in [0, T]$.
+  \item<5-> By the mean value theorem, for every $T'\in(0, T]$ there is a $t^\star\in (0, T')$ such that
+    \[
+      f(x^\star-T' f'(x^\star))-f(x^\star) = -T' \iprod{f'(x^\star-t^\star f'(x^\star))}{f'(x^\star)} = T' g'(t^\star) <0,
+    \]
+  \item<6-> Hence, points arbitrarily close to $x^\star$ have a smaller objective value; contradicting local minimality of $x^\star$
+  \end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{Drawing}
+
+\end{frame}
+
+\begin{frame}{Example}
+
+  \begin{itemize}
+    \setlength\itemsep{2.5em}
+  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
+  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
+  \item \emph{Stationary points}: $x^\star=(4,0)$ and $\bar{x}=(3,1)$
+  % \item $f''( x) =\left[
+  %     \begin{array}{ccc}
+  %       1  & & 1   \\
+  %       1 & & 4-6 x_2
+  %     \end{array}
+  %   \right]$
+  % \item $f''(x^\star) =\left[
+  %     \begin{array}{ccc}
+  %       1  & & 1   \\
+  %       1 & & 4
+  %     \end{array}
+  %   \right]\succeq 0$
+  % \item $f''(\bar{x}) =\left[
+  %     \begin{array}{ccc}
+  %       1  & & 1   \\
+  %       1 & & -2
+  %     \end{array}
+  %   \right]\not\succeq 0$
+  % \item $x^\star$ is the only \textbf{candidate} local minimum
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Second-Order Differentiability}
+
+  Let $f:\Re^n\to\Re$ be differentiable.
+  \begin{itemize}
+    \setlength\itemsep{1em}
+  \item If the components $f_i'(x)$ of the gradient are themselves differentiable at $x$ for each $i$ in $[1, \dots, n]$, then their gradients at $x$ form the \emph{Hessian matrix} $f''(x) \in \Re^{n\times n}$.
+  \item If $x\mapsto f''(x)$ is continuous, then the Hessian matrix \emph{is symmetric}, i.e., $f''(x)\in S^n \defn \set{A\in\Re^{n\times n}}{A=A\tpose}$, for each $x\in \Re^n$.
+  \item The symmetric matrices contain the \emph{positive semidefinite} and \emph{positive definite} matrices
+    \[
+      S^n_{+} \defn \set{A\in S^n}{\iprod{Ah}{h}\geq 0 ~~\forall h\in\Re^n}, \quad S^n_{++} \defn \set{A\in S^n}{\iprod{Ah}{h}> 0 ~~\forall h\neq 0}.
+    \]
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Second-Order Necessary Condition}
+
+  \textbf{Theorem : } Suppose that $x^\star$ is a local minimum of $f:\Re^n\to\Re$ twice continuously differentiable. Then, $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{+}$.
+  
+\end{frame}
+
+\begin{frame}{Taylor Expansion Theorem}
+
+  \textbf{Theorem : } Let $x$, $h\in \Re^n$ and $f:\Re^n\to\Re$ twice differentiable. There is a $t\in (0, 1)$ for which
+  \[
+    f(x+h) = f(x) + \iprod{f'(x)}{h} + \frac12 \iprod{f''(x+th) h}{h}.
+  \]
+
+  \vfill
+  
+  \textbf{Proof [$\star$] : } Let $R=f(x+h)-f(x)-\iprod{f'(x)}{h}$ and $g(t) \defn f(x+t h)+(1-t)\iprod{f'(x+t h)}{h} + Rt^2$. Then $g(1)-g(0)=2R=g'(t)$ for a $t\in (0, 1)$ because of the mean value theorem. Thus $g'(t) = (1-t)\iprod{f''(x+th)h}{h} + 2 R t = 2R$. It remains to simplify.
+
+\end{frame}
+
+\begin{frame}{Second-Order Necessary Condition}
+
+  \textbf{Theorem : } Suppose that $x^\star$ is a local minimum of $f:\Re^n\to\Re$ twice continuously differentiable. Then, $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{+}$.
+
+  \vfill
+  
+  \textbf{Proof [$\star$]:}
+  \begin{itemize}
+  \item For contradiction assume $\iprod{f''(x^\star) h}{h} < 0$ for some direction $h$
+  \item<2-> Let $g(t) \defn f(x^\star+t h)$, $g'(t) = \iprod{f'(x^\star+t h)}{h}$ and $g''(t) = \iprod{f''(x^\star+t h) h}{h}$
+  \item<3-> As $g''(0)<0$ and continuity of $g''$ there is a $T>0$ such that $g''(t)<0$ for all $t\in [0, T]$.
+  \item<4-> As $g'(0)=\iprod{f'(x^\star)}{h}=0$ (first-order condition), for every $\tau\in(0, T]$ there is a $t^\star$ with $g(\tau)= g(0) + g''(t^\star) \tau^2/2 < f(x^\star)$; contradicting local minimality
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Example}
+
+  \begin{itemize}
+    \setlength\itemsep{1.5em}
+  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
+  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
+  \item Stationary points: $x^\star=(4,0)$ and $\bar{x}=(3,1)$
+  \item $f''( x) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4-6 x_2
+      \end{array}
+    \right]$
+  \item $f''(x^\star) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4
+      \end{array}
+    \right]\succeq_{S^2_+} 0$
+  \item $f''(\bar{x}) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & -2
+      \end{array}
+    \right]\not\succeq_{S^2_+} 0$
+  \item $x^\star$ is the only \emph{candidate local minimum}.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Second-Order Sufficient Condition}
+
+  \textbf{Theorem : } Suppose that $x^\star$ satisfies $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{++}$ and $f:\Re^n\to\Re$ is twice continuously differentiable. Then, $x^\star$ is a local minimum of $f$.
+
+  \vfill
+
+  \textbf{Proof [$\star$]: }
+
+  \begin{itemize}
+  \item For contradiction assume that $x^\star$ is not a local minimizer of $f$
+  \item<2-> For every $\epsilon > 0$, there exists $x^\star_\epsilon\in B(x^\star, \epsilon)$ and $t_\epsilon\in (0,1)$ for which
+    \[
+      f(x^\star) > f(x^\star_\epsilon) = f(x^\star) + \frac12 \iprod{f''(x^\star+t_\epsilon (x_\epsilon^\star-x^\star)) (x_\epsilon^\star-x^\star)}{x_\epsilon^\star-x^\star}.
+    \]
+  \item<3-> Hence, the smallest eigenvalue satisfies $\lambda_{\min}(f''(x^\star+t_\epsilon (x_\epsilon^\star-x^\star))) < 0$ for every $\epsilon > 0$
+  \item<4-> By continuity of $\lambda_{\min}$ and of $f''$ we deduce that $\lambda_{\min}(f''(x^\star))\leq 0$; a contradiction.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Example}
+
+  \begin{itemize}
+    \setlength\itemsep{1.5em}
+  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
+  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
+  \item Candidates $x^\star=(4,0)$ and $\bar{x}=(3,1)$
+  \item $f''( x) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4-6 x_2
+      \end{array}
+    \right]$
+  \item $f''(x^\star) =\left[
+      \begin{array}{ccc}
+        1  & & 1   \\
+        1 & & 4
+      \end{array}
+    \right]\succ_{S^2_+} 0$
+  \item $x^\star$ is the only local minimum.
+  \end{itemize}
+\end{frame}
+
 \section{Convex Optimization}
 
 \begin{frame}{Convex Optimization}
@@ -679,332 +994,6 @@
   \item 2010s--now: Large-scale first-order methods (stochastic gradient, accelerated methods)
   \end{itemize}
   
-\end{frame}
-
-
-\begin{frame}{Course Overview}
-
-  \textbf{Introduction}
-  \begin{enumerate}
-  \item Convex Sets
-  \item Convex functions
-  \end{enumerate}
-
-  \vfill
-  
-  \textbf{Theory}
-  \begin{enumerate}
-  \item Duality
-  \item Conjugate Functions
-  \item KKT
-  \end{enumerate}
-
-  \vfill
-
-  \textbf{Algorithms}
-  \begin{enumerate}
-  \item Black Box Methods
-  \item Gradient Method
-  \item Newton Method
-  \item Interior Point Methods
-  \item SGD
-  \end{enumerate}
-  
-\end{frame}
-
-
-\section{Continuous Functions}
-
-\begin{frame}{A Brief Recall of Continuity}  
-
-  Let $f:\Re^n\to\nRe$.
-  \begin{itemize}
-  \item A function $f$ is called \emph{continuous at a point} $x$ in $\dom(f)$ if for every sequence
-    $\{x_i\}_{i\geq 0} \subset \Re^n$ converging to $x$, we have $\lim_{i\to\infty} f(x_i) = f(x)$\\[2em]
-
-  \item A function $f$ is called \emph{continuous} if it is continuous at all points of its domain.
-  \end{itemize}
-
-  \vfill
-  
-  \textbf{Counter example:}
-
-  \vfill
-
-  \includesvg[height=3cm]{Left-continuous.svg}
-
-  \hfill
-  {\tiny Figure from Wikipedia}
-  
-\end{frame}
-
-\begin{frame}{Extreme-Value Theorem (1830s)}
-
-  \textbf{Theorem (Bolzano-Weierstra\ss) :} If $K \subset \Re^n$ is a compact (bounded and closed) set and $f : K \to \Re$ is a continuous function, then $f$ is bounded and there exist $c$, $d \in K$ such that $f ( c ) = \sup_{x\in K} f ( x )$ and $f ( d ) = \inf_{x \in K} f ( x )$.
-
-  \vfill
-
-  \begin{minipage}{0.6\textwidth}
-    \includesvg[height=5.5cm]{Extreme_Value_Theorem.svg}\\
-    {\tiny Figure from Wikipedia}
-  \end{minipage}%
-  \hfill
-  \begin{minipage}{0.4\textwidth}
-    \centering
-    \includegraphics[height=2cm]{bolzano.jpg}\\
-    Bolzano
-    
-    \vspace{2em}
-    \includegraphics[height=2cm]{weierstrass.jpg}\\
-    Weierstra\ss
-    
-  \end{minipage}
-  
-\end{frame}
-
-\section{Differentiable Functions}
-
-\begin{frame}{A Brief Recall of Differentiability}
-
-
-  Let $f:\Re^n\to\nRe$ continuous and $d\in \Re^n$.
-
-  \begin{itemize}
-    \setlength\itemsep{2em}
-  \item The function $f$ is \emph{differentiable} at $x \in \dom(f)$ \emph{in the direction} $d$ if the following limit exists:
-    \[
-      \nabla f(x)[d] = \lim_{t\to 0} \frac{f(x+t d)-f(x)}{t}.
-    \]
-  \item<2-> The function $f$ is \emph{G\^ateaux differentiable} in $x \in \dom(f)$ if differentiable in $x$ in every direction $d \in \Re^n$ and if $d\mapsto \nabla f(x)[d]$ is linear.
-
-  \item<3-> The \emph{gradient} of $f$ at $x$ is the vector $f'(x)$ satisfying $$\iprod{f'(x)}{d}=f'(x)\tpose d=\nabla f(x)[d]$$
-  \item<4-> $f$ is \emph{continuously differentiable} if $x \mapsto f'(x)$ is continuous
-  \end{itemize}
-  
-  
-\end{frame}
-
-\section{Unconstrained Optimality Conditions}
-
-\begin{frame}{First-Order Optimality Conditions}
-
-  
-  \textbf{Theorem : } Suppose that $f:E\to\nRe$ is continuously differentiable and there exists a minimizer $x^\star \in \interior(\dom(f))$. Then, $f'(x^\star) = 0$.
-
-  \vfill
-  \textbf{Remarks : }
-
-  \begin{itemize}
-  \item The condition $x^\star \in \interior(\dom(f))$ is critical. Always satisfied when $\dom(f)=E$.
-  \end{itemize}
- 
-\end{frame}
-
-\begin{frame}{The Mean Value Theorem}
-
-  Let $f:\Re^n\to\nRe$ be differentiable.
-
-  \vfill
-  \textbf{Theorem :} Let $x \in \dom(f)$ and $h\in \Re^n$ such that $x+h\in \dom(f)$. There is a $t\in(0, 1)$ for which
-  \[
-    f(x+h) = f(x) + \iprod{f'(x+t h)}{ h}.
-  \]
-
-  \vfill
-
-  \textbf{Geometrically:}
-  \vfill
-  
-  \includesvg[height=4cm]{mean-value-theorem.svg}
-
-  \hfill
-  {\tiny Figure from Wikipedia}
-  
-  
-\end{frame}
-
-\begin{frame}{Rolle's Theorem [$\star$]}
-
-    \textbf{Proof [$\star$] :} Follows from Rolle's Theorem. Let $g:[a, b]\to\Re$ differentiable such that $g(a)=g(b)$. Then, there is a $c\in (a, b)$ such that $g'(c)=0$. Assume without loss of generality that there is a $t\in(a, b)$ for which $g(t)>g(a)$ and take $a\neq b\neq c\defn \arg \max \set{g(t)}{t \in [a, b]}$ (use the extreme value theorem). We have
-  \[
-    \frac{g(c+t)-g(c)}{t} \leq 0 {\rm{~for~}} t\in(0, b-c] {\rm{~and~}} \frac{g(c+t)-g(c)}{t} \geq 0 {\rm{~for~}} t \in [a-c, 0).
-  \]
-  As $g$ is differentiable, the limit exists when $t\to 0$ and hence $g'(c)=0$. Take now $g(t) = f(x+th)+t(f(x)-f(x+h))$ and $a=0$, $b=1$.  
-  
-\end{frame}
-
-\begin{frame}{First-Order Optimality Conditions}
-
-  
-  \textbf{Theorem : } Suppose that $f$ is continuously differentiable and there exists a minimizer $x^\star \in \interior(\dom(f))$. Then, $f'(x^\star) = 0$.
-
-  \vfill
-  \textbf{Proof : }
-
-  \begin{itemize}
-  \item For contradiction, assume that $f'(x^\star)\neq 0$
-  \item<2-> Let $g(t)\defn f(x^\star-t f'(x^\star))$ with gradient $g'(t) = -\iprod{f'(x^\star-t f'(x^\star))}{f'(x^\star)}$
-  \item<3-> Then $g'(0)=-\iprod{f'(x^\star)}{f'(x^\star)}<0$
-  \item<4-> By continuity of $f'$ there exists a $T>0$ such that $g'(t)<0$ for all $t\in [0, T]$.
-  \item<5-> By the mean value theorem, there is an $t^\star\in (0, T)$ such that
-    \[
-      f(x^\star-T f'(x^\star))-f(x^\star) = -T \iprod{f'(x^\star-t^\star f'(x^\star))}{f'(x^\star)} = T g'(t^\star) <0,
-    \]
-  \item<6-> Inequality $f(x^\star-T f'(x^\star))<f(x^\star)$ contradicts minimality of $x^\star$
-  \end{itemize}
- 
-\end{frame}
-
-\begin{frame}{Drawing}
-
-\end{frame}
-
-\begin{frame}{Example}
-
-  \begin{itemize}
-    \setlength\itemsep{2.5em}
-  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
-  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
-  \item \emph{Stationary points}: $\mathbf{x}^*=(4,0)$ and $\bar{ \mathbf{x}}=(3,1)$
-  % \item $f''( \mathbf{x}) =\left[
-  %     \begin{array}{ccc}
-  %       1  & & 1   \\
-  %       1 & & 4-6 x_2
-  %     \end{array}
-  %   \right]$
-  % \item $f''(\mathbf{x}^*) =\left[
-  %     \begin{array}{ccc}
-  %       1  & & 1   \\
-  %       1 & & 4
-  %     \end{array}
-  %   \right]\succeq \mathbf{0}$
-  % \item $f''(\bar{\mathbf{x}}) =\left[
-  %     \begin{array}{ccc}
-  %       1  & & 1   \\
-  %       1 & & -2
-  %     \end{array}
-  %   \right]\not\succeq \mathbf{0}$
-  % \item $x^\star$ is the only \textbf{candidate} local minimum
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Second-Order Differentiability}
-
-  Let $f:\Re^n\to\nRe$ be differentiable.
-  \begin{itemize}
-    \setlength\itemsep{1em}
-  \item If $f_i'(x)$ are themselves differentiable at $x$ for each $i$, then their gradients at $x$ form the \emph{Hessian matrix} $f''(x) \in \Re^{n\times n}$.
-  \item If $x\mapsto f''(x)$ is continuous, \emph{Hessian matrix} $f''(x)\in S^n$ \emph{is symmetric} for each $x\in \interior(\dom(f))$. 
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Second-Order Necessary Condition}
-
-  \textbf{Theorem : } Suppose that $x^\star \in \interior(\dom(f))$ is a local minimum of $f:E\to\nRe$ twice continuously differentiable. Then, $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{+}$.
-  
-\end{frame}
-
-\begin{frame}{Taylor Expansion Theorem}
-
-  \textbf{Theorem : } Let $x\in \dom(f)$ and $h\in \Re^n$ such that $x+h\in\dom(f)$ and $f:E\to\nRe$ twice differentiable. There is a $t\in (0, 1)$ for which
-  \[
-    f(x+h) = f(x) + \iprod{f'(x)}{h} + \frac12 \iprod{f''(x+th) h}{h}.
-  \]
-
-  \vfill
-  
-  \textbf{Proof [$\star$] : } Let $R=f(x+h)-f(x)-\iprod{f'(x)}{h}$ and $g(t) \defn f(x+t h)+(1-t)\iprod{f'(x+t h)}{h} + Rt^2$. Then $g(1)-g(0)=2R=g'(t)$ for a $t\in (0, 1)$ because of the mean value theorem. Thus $g'(t) = (t-1)\iprod{f''(x+th)h}{h} + 2 R t = 2R$. It remains to simplify.
-
-\end{frame}
-
-\begin{frame}{Second-Order Necessary Condition}
-
-  \textbf{Theorem : } Suppose that $x^\star \in \interior(\dom(f))$ is a local minimum of $f:E\to\nRe$ twice continuously differentiable. Then, $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{+}$.
-
-  \vfill
-  
-  \textbf{Proof [$\star$]:}
-  \begin{itemize}
-  \item For contradiction assume $\iprod{f''(x^\star) h}{h} < 0$ for some direction $h$
-  \item<2-> Let $g(t) \defn f(x^\star+t h)$, $g'(t) = \iprod{f'(x^\star+t h)}{h}$ and $g''(t) = \iprod{f'(x^\star+t h) h}{h}$
-  \item<3-> As $g''(0)<0$ and continuity of $g''$ there is a $T>0$ such that $g''(t)<0$ for all $t\in [0, T]$.
-  \item<4-> Thus, $g(T)= g(0)+g'(0) T + g''(t^\star) T^2/2 < f(x^\star)$ for some $t^\star$; a contradiction
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Example}
-
-  \begin{itemize}
-    \setlength\itemsep{1.5em}
-  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
-  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
-  \item Stationary points: $\mathbf{x}^*=(4,0)$ and $\bar{ \mathbf{x}}=(3,1)$
-  \item $f''( \mathbf{x}) =\left[
-      \begin{array}{ccc}
-        1  & & 1   \\
-        1 & & 4-6 x_2
-      \end{array}
-    \right]$
-  \item $f''(\mathbf{x}^*) =\left[
-      \begin{array}{ccc}
-        1  & & 1   \\
-        1 & & 4
-      \end{array}
-    \right]\succeq_{S^2_+} \mathbf{0}$
-  \item $f''(\bar{\mathbf{x}}) =\left[
-      \begin{array}{ccc}
-        1  & & 1   \\
-        1 & & -2
-      \end{array}
-    \right]\not\succeq_{S^2_+} \mathbf{0}$
-  \item $x^\star$ is the only \emph{candidate local minimum}.
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Second-Order Sufficient Condition}
-
-  \textbf{Theorem : } Suppose that $x^\star \in \interior(\dom(f))$ satisfies $f'(x^\star)=0$ and $f''(x^\star)\in S^n_{++}$ and $f$ is twice continuously differentiable. Then, $x^\star$ is a local minimum of $f$.
-
-  \vfill
-
-  \textbf{Proof [$\star$]: }
-
-  \begin{itemize}
-  \item For contradiction assume that $x^\star$ is not a local minimizer of $f$
-  \item<2-> For every $\epsilon > 0$, there exists $x^\star_\epsilon\in B(x^\star, \epsilon)$ and $t_\epsilon\in (0,1)$ for which
-    \[
-      f(x^\star) > f(x^\star_\epsilon) = f(x^\star) + \frac12 \iprod{f''(x^\star+t_\epsilon (x_\epsilon^\star-x^\star)) (x_\epsilon^\star-x^\star)}{x_\epsilon^\star-x^\star}.
-    \]
-  \item<3-> Hence, $\lambda_{\min}(f''(x^\star+t_\epsilon (x_\epsilon^\star-x^\star))) < 0$ for every $\epsilon > 0$
-  \item<4-> By continuity of $\lambda_{\min}$ and of $f''$ we deduce that $\lambda_{\min}(f''(x^\star))\leq 0$; a contradiction.
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Example}
-
-  \begin{itemize}
-    \setlength\itemsep{1.5em}
-  \item $f(x) =\frac{1}{2} x_1^2 +x_1 x_2 +2 x_2^2 -4x_1-4 x_2-x_2^3$\\
-  \item $f'(x)= (x_1+x_2-4,~x_1+4x_2-4-3x_2^2)$. \\
-  \item Candidates $\mathbf{x}^*=(4,0)$ and $\bar{ \mathbf{x}}=(3,1)$
-  \item $f''( \mathbf{x}) =\left[
-      \begin{array}{ccc}
-        1  & & 1   \\
-        1 & & 4-6 x_2
-      \end{array}
-    \right]$
-  \item $f''(\mathbf{x}^*) =\left[
-      \begin{array}{ccc}
-        1  & & 1   \\
-        1 & & 4
-      \end{array}
-    \right]\succ_{S^2_+} \mathbf{0}$
-  \item $x^\star$ is the only local minimum.
-  \end{itemize}
 \end{frame}
 
 \end{document}
