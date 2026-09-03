@@ -34,11 +34,19 @@ jobs:
       - name: Assemble the Pages site
         run: |
           mkdir -p public/lectures
-          # Landing page: render the README, but repoint each lecture link from
-          # the raw PDF to its subpage (lectures/<base>.html). The README itself
-          # (viewed on GitHub) keeps linking straight to the PDF.
-          sed -E 's#https://bpgvp\.github\.io/mm-continuous-optimization/([A-Za-z0-9._-]+)\.pdf#lectures/\1.html#g' \
-            README.md > index.md
+          # A lecture directory containing a .hide file is not revealed yet:
+          # its outline entry keeps its title but loses its link, and neither
+          # its subpage nor its PDF is published.
+          cp README.md index.md
+          for hide in Lectures/*/.hide; do
+            [ -e "$hide" ] || continue
+            base=$(basename "$(ls "$(dirname "$hide")"/*.tex | head -1)" .tex)
+            sed -Ei "s#\[([^]]+)\]\(https://bpgvp\.github\.io/mm-continuous-optimization/$base\.pdf\)#\1#g" index.md
+          done
+          # Landing page: render the README, but repoint each remaining lecture
+          # link from the raw PDF to its subpage (lectures/<base>.html). The
+          # README itself (viewed on GitHub) keeps linking straight to the PDF.
+          sed -Ei 's#https://bpgvp\.github\.io/mm-continuous-optimization/([A-Za-z0-9._-]+)\.pdf#lectures/\1.html#g' index.md
           pandoc index.md \
             --standalone \
             --from gfm \
@@ -46,13 +54,14 @@ jobs:
             --metadata pagetitle="Continuous Optimization" \
             --css style.css \
             --output public/index.html
-          # One subpage per lecture: each lecture directory holds a README.md
-          # (rendered by GitHub when browsing the folder). Render it to
-          # lectures/<base>.html, where <base> is the lecture's PDF/.tex basename
-          # so it matches the homepage links rewritten above. The browser-tab
-          # title is taken from the page's first heading.
+          # One subpage per revealed lecture: each lecture directory holds a
+          # README.md (rendered by GitHub when browsing the folder). Render it
+          # to lectures/<base>.html, where <base> is the lecture's PDF/.tex
+          # basename so it matches the homepage links rewritten above. The
+          # browser-tab title is taken from the page's first heading.
           for md in Lectures/*/README.md; do
             dir=$(dirname "$md")
+            [ -e "$dir/.hide" ] && continue
             base=$(basename "$(ls "$dir"/*.tex | head -1)" .tex)
             title=$(sed -n 's/^# //p' "$md" | head -1)
             pandoc "$md" \
@@ -65,8 +74,10 @@ jobs:
           done
           cp pages/style.css public/
           cp Max_paraboloid.svg.png public/
-          # Publish every lecture PDF at the site root.
-          cp Lectures/*/*.pdf public/
+          # Publish the revealed lecture PDFs at the site root.
+          for pdf in Lectures/*/*.pdf; do
+            [ -e "$(dirname "$pdf")/.hide" ] || cp "$pdf" public/
+          done
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
