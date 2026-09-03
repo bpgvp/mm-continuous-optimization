@@ -9,9 +9,9 @@
 - A brief history of optimization: Fermat, Lagrange, calculus of variations
 - Least squares and linear optimization; the transport problem
 - Nonlinear optimization: terminology (feasibility, boundedness, optimality) and standard form
-- Convex optimization: definition and a brief history
 - Recall of continuity and differentiability; extreme-value and mean value theorems
 - Unconstrained optimality conditions: first- and second-order necessary conditions, second-order sufficient condition
+- Convex optimization: definition and a brief history
 
 ## Materials
 
