@@ -857,7 +857,7 @@
   \item For contradiction assume $\iprod{f''(x^\star) h}{h} < 0$ for some direction $h$
   \item<2-> Let $g(t) \defn f(x^\star+t h)$, $g'(t) = \iprod{f'(x^\star+t h)}{h}$ and $g''(t) = \iprod{f''(x^\star+t h) h}{h}$
   \item<3-> As $g''(0)<0$ and continuity of $g''$ there is a $T>0$ such that $g''(t)<0$ for all $t\in [0, T]$.
-  \item<4-> As $g'(0)=\iprod{f'(x^\star)}{h}=0$ (first-order condition), for every $\tau\in(0, T]$ there is a $t^\star$ with $g(\tau)= g(0) + g''(t^\star) \tau^2/2 < f(x^\star)$; contradicting local minimality
+  \item<4-> As $g'(0)=\iprod{f'(x^\star)}{h}=0$ (first-order condition), for every $\tau\in(0, T]$ there is a $t^\star\in(0, \tau)$ with $g(\tau)= g(0) + g''(t^\star) \tau^2/2 < f(x^\star)$; contradicting local minimality
   \end{itemize}
   
 \end{frame}

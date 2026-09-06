@@ -35,11 +35,8 @@ constraints = [
 # Objective: maximise the probability of a loss, P(R < 0).
 objective = cp.Maximize(cp.sum(p[r < 0]))
 
-# Solve with HiGHS (simplex): it returns a vertex (basic feasible solution),
-# supported on at most as many points as there are constraints.
 problem = cp.Problem(objective, constraints)
 problem.solve(solver=cp.HIGHS)
 
 print(f"Status: {problem.status}")
 print(f"Worst-case probability of loss  P(R < 0) = {problem.value:.4f}")
-print(f"Support points: {np.count_nonzero(p.value > 1e-9)}")
