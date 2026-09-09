@@ -105,7 +105,7 @@
 
   \begin{itemize}
   \item Linear spaces are affine
-  \item Solution set of linear system $\set{x\in\Re^m}{Ax = b}$ with $A\in \Re^{m\times n}$
+  \item Solution set of linear system $\set{x\in\Re^n}{Ax = b}$ with $A\in \Re^{m\times n}$
   \end{itemize}
 
   \vfill
@@ -271,7 +271,7 @@
 
   A point $x$ is called an \emph{extreme point} of a convex set $C$ if it can not be written as a strict convex combination of two distinct points in that set, i.e.\
   \[
-    x \in \ex(C) \iff \,!\exists y\neq z \in C: ~~x = \theta y + (1-\theta) z
+    x \in \ex(C) \iff \nexists y\neq z \in C: ~~x = \theta y + (1-\theta) z
   \]
   with $\theta \in (0, 1)$.
 
@@ -340,7 +340,7 @@
 
   Consider a vertex $v\in C$ with $\{v\} = \arg\min_{x\in C} c\tpose x$ for some cost vector $c$. Assume, for contradiction that $v$ is not an extreme point. That is, there exists $x_1\neq x_2\in C$ and $\theta\in (0, 1)$ so that
   \(
-  v = \theta x_1+(1-\theta) x_2.
+  v = \theta x_1+(1-\theta) x_2
   \)
   and hence $c\tpose v = \theta c\tpose x_1 + (1-\theta) c\tpose x_2$. This implies that $\min \{c\tpose x_1, c\tpose x_2\}\leq c\tpose v$.
   However, this is a direct contradiction with $\{v\} = \arg\min_{x\in C} c\tpose x$ (unique minimizer) as $v\neq x_1$ and $v\neq x_2$. 
@@ -425,7 +425,7 @@
 
   \vfill
   
-  \textbf{Theorem : } A cone $K \subseteq E$ is closed under conic combinations.
+  \textbf{Theorem : } A convex cone $K \subseteq E$ is closed under conic combinations.
 
   \vfill
   
@@ -493,7 +493,7 @@
     \[
       \mc P_k = \set{p\in \Re^k}{\sum_{i=1}^k p_i=1, ~p_i\geq 0 ~~\forall i\in [1, \dots,k] }
     \]
-  \item The convex hull of a finite set $\{x_1, \dots, x_k\}$
+  \item The convex hull of a finite set $\{x_1, \dots, x_k\}$ (Minkowski--Weyl theorem)
   \end{itemize}
   
 \end{frame}
@@ -502,7 +502,7 @@
 
   \emph{Euclidean ball} with center $x_c$ and radius $r$:
   \begin{align*}
-    & \set{x}{\norm{x-x_c}_2^2 = (x-x_c)\tpose \frac{1}{r^2} (x-x_c) \leq 1} \\
+    & \set{x}{\norm{x-x_c}_2^2 = (x-x_c)\tpose (x-x_c) \leq r^2} \\
     = & \set{x_c + r u}{\norm{u}_2 \leq 1}
   \end{align*}
   \vfill
@@ -586,7 +586,7 @@
     \]
     or
     \[
-      x\geq 0, ~ z x \geq y^2.
+      x\geq 0, ~z\geq 0, ~ z x \geq y^2.
     \]
   \end{minipage}%
   \hfill
@@ -1055,9 +1055,9 @@
   \begin{itemize}
   \item Affine functions, e.g.\
     \[
-      f(x) = A x - b.
+      f(x) = a\tpose x - b.
     \]
-    Convex on $\Re^n$ for any $A\in\Re^{m\times n}$ and $b\in\Re^m$.
+    Convex on $\Re^n$ for any $a\in\Re^{n}$ and $b\in\Re$.
   \item<2-> Exponential functions
     \[
       f(x) = \exp(a x).
@@ -1068,6 +1068,7 @@
       f(x) = x^a.
     \]
     convex on $\Re_{++}$ when $a\in (-\infty, 0]\cup [1, \infty)$.
+  \item<3-> Negative logarithm $f(x) = -\log(x)$. Convex on $\Re_{++}$.
   \item<4-> Log-sum-exp functions
     \[
       f(x) = \log\left(\sum_{i=1}^k \exp(a_i\tpose x)\right).
@@ -1083,9 +1084,9 @@
   \begin{itemize}
   \item Affine functions, e.g.\
     \[
-      f(x) = A x - b.
+      f(x) = a\tpose x - b.
     \]
-    Concave on $\Re^n$ for any $A\in\Re^{m\times n}$ and $b\in\Re^m$.
+    Concave on $\Re^n$ for any $a\in\Re^{n}$ and $b\in\Re$.
   \item<2-> Geometric mean
     \[
       f(x) = \left(\prod_{i=1}^n x_i\right)^{1/n}
@@ -1186,7 +1187,7 @@
 
   Let $f:E_1\to E_2$ be an affine function. Suppose $g:E_2\to\nRe$ is a convex function.\\[1em]
 
-  \textbf{Theorem : } Define the composition $h:E_2\to\nRe$ as
+  \textbf{Theorem : } Define the composition $h:E_1\to\nRe$ as
   \[
     h(x) = (g \circ f)(x) = g(f(x)).
   \]
@@ -1235,15 +1236,20 @@
 
   \vfill
   \uncover<2->{
-  \textbf{Proof [$\star$]:} The proof follows from
+  \textbf{Proof [$\star$]:} Take $y_1$, $y_2\in E_2$ and $\theta\in(0, 1)$ ($\theta\in\{0,1\}$ is trivial).
+
+  \emph{Trivial case} ($g(y_1)=-\infty$, say): pick $x_2\in C$ with $f(x_2, y_2)<\infty$ (if none exists, $g(y_2)=+\infty$ and there is nothing to prove) and, for every $M>0$, an $x_1\in C$ with $f(x_1, y_1)\leq -M$. As $\theta x_1 + (1-\theta) x_2\in C$,
+  \[
+    g(\theta y_1 + (1-\theta) y_2) \leq \theta f(x_1, y_1) + (1-\theta) f(x_2, y_2) \leq -\theta M + (1-\theta) f(x_2, y_2)
+  \]
+  and letting $M\to\infty$ gives $g(\theta y_1 + (1-\theta) y_2) = -\infty$; the inequality holds.
+
+  \emph{Interesting case} ($g(y_1), g(y_2)>-\infty$): for $\epsilon>0$ choose $x_1$, $x_2\in C$ with $f(x_i, y_i)\leq g(y_i)+\epsilon$ (any $x_i\in C$ works when $g(y_i)=+\infty$). As $\theta x_1 + (1-\theta) x_2\in C$ by convexity of $C$,
   \begin{align*}
-    \epi(g) \defn & \set{(y, t)\in E_1\times \Re}{g(y)\leq t} \\
-            = & \cap_{\epsilon>0}\set{(y, t)\in E_1\times \Re}{\exists x\in C ~:~ f(x, y)\leq t+\epsilon} \\
-            = & p(\cap_{\epsilon>0} \set{(x, y, t)\in E_1\times C\times \Re}{f(x, y)\leq t+\epsilon})\\
-            = & p(\set{(x, y, t)\in E_1\times C\times \Re}{f(x, y)\leq t})\\
-            = & p(\set{(x, y, t)\in E_1\times C\times \Re}{(x, y, t)\in\epi(f)})
+    g(\theta y_1 + (1-\theta) y_2) & \leq f(\theta x_1 + (1-\theta) x_2, ~\theta y_1 + (1-\theta) y_2)\\
+                                   & \leq \theta f(x_1, y_1) + (1-\theta) f(x_2, y_2) \leq \theta g(y_1) + (1-\theta) g(y_2) + \epsilon.
   \end{align*}
-  where $p:(x, y, t) \mapsto (y, t)$ is a linear projection function.
+  Let $\epsilon \downarrow 0$.
   }
 \end{frame}
 
@@ -1326,7 +1332,7 @@
 
     \begin{enumerate}
     \item \emph{$f$ is locally bounded on $\interior(\dom(f))$}. Let $x \in \interior(\dom(f))$, $P\defn \{x_0, \dots, x_n\}$ points such that $x \in \Delta\defn \conv(P)$, $M \defn \max_{0\leq i\leq n} f(x_i)$. Then $f(y)\leq M$ for all $y \in \Delta$ by convexity of $f$. Let $y \in B\defn B(x, \epsilon)\subseteq \Delta$, then $2 x -y \in B$ and $f(x) \leq [f(2x -y) + f(y)]/2 \leq [M + f(y)]/2$. Hence $m\defn 2 f(x) - M \leq f(y) \leq M$ for any $y\in B$.
-    \item \emph{$f$ is locally Lipschitz continuous on $\interior(\dom(f))$}, i.e., $\forall x \in\interior(\dom(f))$, $\exists U \ni x$ an open set, $\exists L>0$ : $\forall y, z \in U$ such that $\abs{f(y)-f(z)}\leq L \norm{y-z}$. Let $U\defn B(x, \epsilon/2)$, $y\neq z \in U$, $y'\defn y+\epsilon (y-z)/2 \norm{y-z}\in B$ so that $y = (1-\lambda) z + \lambda y'$ for some $\lambda \leq 2 \norm{y-z}/\epsilon$. Define $\Gamma = \max \{m, M\}$. Then, $\abs{f(y)-f(z)}\leq \abs{\lambda f(y') + (1-\lambda) f(z) -f(z)} = \lambda \abs{f(y')-f(z)}\leq 4 \Gamma \norm{y-z}/\epsilon$.
+    \item \emph{$f$ is locally Lipschitz continuous on $\interior(\dom(f))$}, i.e., $\forall x \in\interior(\dom(f))$, $\exists U \ni x$ an open set, $\exists L>0$ : $\forall y, z \in U$ such that $\abs{f(y)-f(z)}\leq L \norm{y-z}$. Let $U\defn B(x, \epsilon/2)$, $y\neq z \in U$, $y'\defn y+\epsilon (y-z)/2 \norm{y-z}\in B$ so that $y = (1-\lambda) z + \lambda y'$ for some $\lambda \leq 2 \norm{y-z}/\epsilon$. Define $\Gamma = \max \{\abs{m}, \abs{M}\}$. Then, $\abs{f(y)-f(z)}\leq \abs{\lambda f(y') + (1-\lambda) f(z) -f(z)} = \lambda \abs{f(y')-f(z)}\leq 4 \Gamma \norm{y-z}/\epsilon$.
     \item \emph{Locally Lipschitz continuous functions are continuous}. Let $(x_i)_{i\geq 0} \in U$ converge to $x\in U$. As $\abs{f(x_i) - f(x)} \leq L \norm{x_i-x} \to 0$, $f(x_i) \to f(x)$ and $f$ is continuous at $x$.
     \end{enumerate}
   }
@@ -1357,8 +1363,8 @@
 
   Let $f:\Re^n\to\nRe$ be a differentiable convex function. For any two points $x, y\in\dom(f)$ we have
   \begin{align*}
-    \iprod{f'(x)}{y-x} & = \lim_{t\to 0} \frac{f(x + t(y-x))-f(x)}{t} \\
-                       & \leq \lim_{t\to 0} \frac{(1-t)f(x) + t f(y)-f(x)}{t} = f(y) - f(x).
+    \iprod{f'(x)}{y-x} & = \lim_{t\downarrow 0} \frac{f(x + t(y-x))-f(x)}{t} \\
+                       & \leq \lim_{t\downarrow 0} \frac{(1-t)f(x) + t f(y)-f(x)}{t} = f(y) - f(x).
   \end{align*}
   
   \vfill
