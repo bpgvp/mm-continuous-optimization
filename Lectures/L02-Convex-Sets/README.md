@@ -19,3 +19,4 @@
 
 - [Lecture slides (PDF)](https://bpgvp.github.io/mm-continuous-optimization/L2-Convex-Sets.pdf)
 - Related reading: sections 2.1&ndash;2.4 and 3.1&ndash;3.2 of [*Convex Optimization*](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) by Boyd &amp; Vandenberghe
+- Practice problems: Exercises 2.2, 3.11, 3.13 and 3.31 of [*Convex Optimization*](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) by Boyd &amp; Vandenberghe
