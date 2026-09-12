@@ -336,7 +336,7 @@
   \textbf{Theorem:} A vertex is always an extreme point.
 
   \uncover<2->{
-  \textbf{Proof [$\star$]:}
+  \textbf{Proof:}
 
   Consider a vertex $v\in C$ with $\{v\} = \arg\min_{x\in C} c\tpose x$ for some cost vector $c$. Assume, for contradiction that $v$ is not an extreme point. That is, there exists $x_1\neq x_2\in C$ and $\theta\in (0, 1)$ so that
   \(
@@ -1328,11 +1328,11 @@
   \textbf{Theorem :} A convex function $f:\Re^n\to\nRe$ is continuous on $\interior(\dom(f))$.\\[1em]
 
   \uncover<2->{
-    \textbf{Proof [$\star$] :}
+    \textbf{Proof :}
 
     \begin{enumerate}
     \item \emph{$f$ is locally bounded on $\interior(\dom(f))$}. Let $x \in \interior(\dom(f))$, $P\defn \{x_0, \dots, x_n\}$ points such that $x \in \Delta\defn \conv(P)$, $M \defn \max_{0\leq i\leq n} f(x_i)$. Then $f(y)\leq M$ for all $y \in \Delta$ by convexity of $f$. Let $y \in B\defn B(x, \epsilon)\subseteq \Delta$, then $2 x -y \in B$ and $f(x) \leq [f(2x -y) + f(y)]/2 \leq [M + f(y)]/2$. Hence $m\defn 2 f(x) - M \leq f(y) \leq M$ for any $y\in B$.
-    \item \emph{$f$ is locally Lipschitz continuous on $\interior(\dom(f))$}, i.e., $\forall x \in\interior(\dom(f))$, $\exists U \ni x$ an open set, $\exists L>0$ : $\forall y, z \in U$ such that $\abs{f(y)-f(z)}\leq L \norm{y-z}$. Let $U\defn B(x, \epsilon/2)$, $y\neq z \in U$, $y'\defn y+\epsilon (y-z)/2 \norm{y-z}\in B$ so that $y = (1-\lambda) z + \lambda y'$ for some $\lambda \leq 2 \norm{y-z}/\epsilon$. Define $\Gamma = \max \{\abs{m}, \abs{M}\}$. Then, $\abs{f(y)-f(z)}\leq \abs{\lambda f(y') + (1-\lambda) f(z) -f(z)} = \lambda \abs{f(y')-f(z)}\leq 4 \Gamma \norm{y-z}/\epsilon$.
+    \item \emph{$f$ is locally Lipschitz continuous on $\interior(\dom(f))$}, i.e., $\forall x \in\interior(\dom(f))$, $\exists U \ni x$ an open set, $\exists L>0$ : $\forall y, z \in U$ such that $\abs{f(y)-f(z)}\leq L \norm{y-z}$. Let $U\defn B(x, \epsilon/2)$, $y\neq z \in U$, $y'\defn y+\epsilon (y-z)/(2 \norm{y-z})\in B$ so that $y = (1-\lambda) z + \lambda y'$ for some $\lambda \leq 2 \norm{y-z}/\epsilon$. Define $\Gamma =M-m$. Then, $\abs{f(y)-f(z)}\leq \abs{\lambda f(y') + (1-\lambda) f(z) -f(z)} = \lambda \abs{f(y')-f(z)}\leq 2 \Gamma \norm{y-z}/\epsilon$.
     \item \emph{Locally Lipschitz continuous functions are continuous}. Let $(x_i)_{i\geq 0} \in U$ converge to $x\in U$. As $\abs{f(x_i) - f(x)} \leq L \norm{x_i-x} \to 0$, $f(x_i) \to f(x)$ and $f$ is continuous at $x$.
     \end{enumerate}
   }
@@ -1356,7 +1356,7 @@
 
   \uncover<2->{
   \textbf{Proof [$\star$] : }
-  Let $\mu(t)\defn {(f(x+td)-f(x))/}{t}$ for all $t>0$. The function $\mu$ is increasing as $f$ is convex. Furthermore, the function $f$ is locally Lipschitz on $\interior(\dom(f))$ (shown earlier). Therefore, $\mu(t)$ is bounded from below by $-L(x) \norm{d}$ for $t>0$. Since $\mu(t)$ decreases when $t\downarrow 0$ but is bounded from below, a finite limit $\lim_{t\downarrow 0}\mu(t)$ must exist.}
+  Let $\mu(t)\defn {(f(x+td)-f(x))/}{t}$ for all $t>0$. The function $\mu$ is increasing as $f$ is convex. Furthermore, the function $f$ is locally Lipschitz on $\interior(\dom(f))$ (shown earlier). Therefore, $\mu(t)$ is bounded from below by $-L(x) \norm{d}$ for $t>0$ sufficiently small. Since $\mu(t)$ decreases when $t\downarrow 0$ but is bounded from below, a finite limit $\lim_{t\downarrow 0}\mu(t)$ must exist.}
 \end{frame}
 
 \begin{frame}{Differentiable Convex Functions}
