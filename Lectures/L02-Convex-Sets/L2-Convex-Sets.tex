@@ -70,12 +70,12 @@
 
 \begin{frame}{Linear Hull}
 
-  The \emph{linear hull} $span (S) \defn \cap_{L~\rm{linear},\, S\subseteq L} ~L$ of a set $S$ is the unique smallest linear set that contains $S$, i.e.\
-  $$ L~\mathrm{linear~set}, ~S \subseteq L \implies span(S) \subseteq L$$  
+  The \emph{linear hull} $\operatorname{span} (S) \defn \cap_{L~\rm{linear},\, S\subseteq L} ~L$ of a set $S$ is the unique smallest linear set that contains $S$, i.e.\
+  $$ L~\mathrm{linear~set}, ~S \subseteq L \implies \operatorname{span}(S) \subseteq L$$
 
   \vfill
 
-  The \emph{dimension} $\dim(L)=k$ of a linear space $L$ is the smallest number of vectors $v_i\in L$ such that $$span(\{v_1, \dots, v_k\}) = L.$$
+  The \emph{dimension} $\dim(L)=k$ of a linear space $L$ is the smallest number of vectors $v_i\in L$ such that $$\operatorname{span}(\{v_1, \dots, v_k\}) = L.$$
 
   \vfill
   
@@ -1332,7 +1332,7 @@
 
     \begin{enumerate}
     \item \emph{$f$ is locally bounded on $\interior(\dom(f))$}. Let $x \in \interior(\dom(f))$, $P\defn \{x_0, \dots, x_n\}$ points such that $x \in \Delta\defn \conv(P)$, $M \defn \max_{0\leq i\leq n} f(x_i)$. Then $f(y)\leq M$ for all $y \in \Delta$ by convexity of $f$. Let $y \in B\defn B(x, \epsilon)\subseteq \Delta$, then $2 x -y \in B$ and $f(x) \leq [f(2x -y) + f(y)]/2 \leq [M + f(y)]/2$. Hence $m\defn 2 f(x) - M \leq f(y) \leq M$ for any $y\in B$.
-    \item \emph{$f$ is locally Lipschitz continuous on $\interior(\dom(f))$}, i.e., $\forall x \in\interior(\dom(f))$, $\exists U \ni x$ an open set, $\exists L>0$ : $\forall y, z \in U$ such that $\abs{f(y)-f(z)}\leq L \norm{y-z}$. Let $U\defn B(x, \epsilon/2)$, $y\neq z \in U$, $y'\defn y+\epsilon (y-z)/(2 \norm{y-z})\in B$ so that $y = (1-\lambda) z + \lambda y'$ for some $\lambda \leq 2 \norm{y-z}/\epsilon$. Define $\Gamma =M-m$. Then, $\abs{f(y)-f(z)}\leq \abs{\lambda f(y') + (1-\lambda) f(z) -f(z)} = \lambda \abs{f(y')-f(z)}\leq 2 \Gamma \norm{y-z}/\epsilon$.
+    \item \emph{$f$ is locally Lipschitz continuous on $\interior(\dom(f))$}, i.e., $\forall x \in\interior(\dom(f))$, $\exists U \ni x$ an open set, $\exists L>0$ : $\forall y, z \in U$ such that $\abs{f(y)-f(z)}\leq L \norm{y-z}$. Let $U\defn B(x, \epsilon/2)$, $y\neq z \in U$, $y'\defn y+\epsilon (y-z)/(2 \norm{y-z})\in B$ so that $y = (1-\lambda) z + \lambda y'$ for some $\lambda \leq 2 \norm{y-z}/\epsilon$. Define $\Gamma \defn M-m$. Then, convexity gives $f(y)-f(z) \leq \lambda f(y') + (1-\lambda) f(z) - f(z) = \lambda\, (f(y')-f(z))  \leq 2 \Gamma \norm{y-z}/\epsilon$, which is enough by symmetry in $y$ and $z$.
     \item \emph{Locally Lipschitz continuous functions are continuous}. Let $(x_i)_{i\geq 0} \in U$ converge to $x\in U$. As $\abs{f(x_i) - f(x)} \leq L \norm{x_i-x} \to 0$, $f(x_i) \to f(x)$ and $f$ is continuous at $x$.
     \end{enumerate}
   }

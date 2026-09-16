@@ -43,7 +43,7 @@
   \begin{minipage}{0.5\textwidth}
     Suppose we have the \emph{polyhedral} set
     \[
-      C = \set{x\geq 0} {a_i\tpose x = b_i, \quad i \in [1, \dots, k]}
+      C = \set{x\in\Re^n_+} {a_i\tpose x = b_i, \quad i \in [1, \dots, k]}
     \]
     \textbf{Example : $C=\{\rm{system~failure~events}\}$}
   \end{minipage}%
@@ -166,9 +166,9 @@
 
   \vfill
   
-  \textbf{Theorem (Riesz):} Let $E$ be a Hilbert space and $E^\star$ its associated dual space. Let $f\in E^\star$, then there exists a unique $a\in E$ such that
+  \textbf{Theorem (Riesz):} Let $E$ be a finite-dimensional inner product space and $E^\star$ its associated dual space. Let $f\in E^\star$, then there exists a unique $a\in E$ such that
   \[
-    f(x) = \iprod{a}{x}.
+    f(x) = \iprod{a}{x} \quad \forall x \in E.
   \]
 
   \vfill
@@ -206,7 +206,7 @@
 
 \begin{frame}{Types of Separation}
 
-  A separation is denoted as
+  A separation is called
   \begin{itemize}
   \item \emph{proper} if $H \nsupseteq C \cup D$. \emph{Counter-example : }
 
@@ -248,7 +248,7 @@
   \uncover<2->{
   \textbf{Remark :}  
   \begin{itemize}
-  \item \emph{Proper} separation : if and only if equality does not hold $\forall x, y$
+  \item \emph{Proper} separation : if and only if $f$ is not constantly equal to $\alpha$ on $C\cup D$
   \item \emph{Strict} separation : if and only if equalities are strict
   \item \emph{Strong} separation : if and only if true for all $\alpha \in (\alpha_0 - \epsilon, \alpha_0 + \epsilon)$ for an $\epsilon > 0$
   \end{itemize}
@@ -319,7 +319,7 @@
   \item<5-> Let $g(t)\defn \norm{y(t)-c}_2^2$ a continuously differentiable (quadratic) function.
   \item<6-> We have $g'(0)=2 \iprod{d-c}{u-d}<0$. Hence, there exists $0< T\leq 1$ so that for all $t\in [0, T]$ we have $g'(t)<0$. The \emph{mean value theorem} states
     \[
-      \norm{d+T(u-d)-c}_2^2 = g(T) = g(0) + \iprod{g'(t')}{T} < \norm{d-c}_2^2
+      \norm{d+T(u-d)-c}_2^2 = g(T) = g(0) + g'(t')\, T < \norm{d-c}_2^2
     \]
     for some $t'\in (0, T)$. A contradiction with \eqref{eq:minimum_distance}.
   \end{itemize}
@@ -334,11 +334,11 @@
 
   \textbf{Pitfalls:}
   \begin{itemize}
-  \item<2-> Strict / Strong separation: fails when sets are unbounded
+  \item<2-> Strict / Strong separation: may fail when sets are unbounded
     \begin{center}
       \includegraphics[width=0.4\textwidth]{separating-hyperplane/counter-example-strong.pdf}
     \end{center}
-  \item<3-> Strict / Strong separation: fails when sets are open
+  \item<3-> Strict / Strong separation: may fail when sets are open
     \begin{center}
       \includegraphics[width=0.3\textwidth]{separating-hyperplane/counter-example-open.pdf}
     \end{center}
@@ -394,7 +394,7 @@
   \textbf{Proof : }
   \begin{itemize}
   \item<2-> Assume without loss of generality that $0 \in C$, so that $y\neq 0$. Let $p(x) \defn \mu_{C}(x)$ the Minkowski function of $C$. 
-  \item<3->  Let $L = \rm{span}(y)$ and $f(t y) = t$ for $t\in \Re$.
+  \item<3->  Let $L = \operatorname{span}(y)$ and $f(t y) = t$ for $t\in \Re$.
   \item<4-> We have, $\mu_{C}(y) \geq 1$ because $y\notin C$.  Hence, $\mu_C \geq f$ on subspace $L$.
   \item<5-> Note that $\mu_C(x) < 1$ for any $x$ in $C$ because $C$ is open.
   \item<6-> By Hahn-Banach, there exists a linear function $\hat f$ such that $\hat f(y) = f(y)=1$ and $\hat f(x) \leq \mu_C(x) < 1$ for $x \in C$.
@@ -474,401 +474,16 @@
   \item<4-> We argue that $C'\setminus C = \emptyset$ which implies with $C \subseteq C'$ that $C=C'$.
   \item<5-> For the sake of contradiction, let $x \in C'\setminus C$
   \item<6-> As $x\in\Re^n\setminus C$, which is open, $\exists \epsilon>0$ such that $B(x, \epsilon) \subseteq \Re^n\setminus C$.
-  \item<7-> We can (strongly) separate the open set $B(x, \epsilon)$ from closed set $C$. That is, $\exists f:\Re^n\to\Re$ linear with
+  \item<7-> We can separate the open set $B(x, \epsilon)$ from the convex set $C$. That is, $\exists f=\iprod{a}{\cdot}$ linear, $a\neq 0$ with $f(z)<f(y)$ for all $z\in B(x, \epsilon)$, $y\in C$. Hence,
     \[
-      t \defn \inf \set{f(z)}{z\in C} > \sup \set{f(z)}{z\in B(x, \epsilon)} \geq f(x).
+      t \defn \inf \set{f(z)}{z\in C} \geq \sup \set{f(z)}{z\in B(x, \epsilon)} \geq f(x) + \epsilon \norm{a} > f(x).
     \]
   \item<8-> Consider the half-space $H^+\defn \set{z\in \Re^n}{f(z)\geq t}$, so that $C\subseteq H^+$. $H^+$ is in the collection of half-spaces defining $C'$. However, $x\notin H^+$, a contradiction.
   \end{itemize}
     
 \end{frame}
 
-% \begin{frame}{Lower Semi-Continuous Functions}
-
-%   \textbf{Definition :} A \emph{lower semi-continuous} (LSC) function is a function with closed epigraph.
-
-%   \vfill
-%   \textbf{Examples :}
-%   \begin{itemize}
-%   \item All continuous functions, e.g., $f(x) = x^2$.
-%   \item The function $f:\Re^2_+\to\nRe$, defined as
-%     \[
-%       f(x, y) \defn
-%       \begin{cases}
-%         x \cdot \log\left(x/y\right) & {\rm{if}~} x>0,~y>0,\\
-%         0 & {\rm{if}~} x=0, ~y\geq 0,\\
-%         +\infty & {\rm{otherwise}}.
-%       \end{cases}
-%     \]
-%   \end{itemize}
-  
-%   \vfill
-
-%   \uncover<2->{
-%   \textbf{Corollary :} Every convex LSC function is the supremum of affine functions.
-
-%   \vfill
-%   \begin{center}
-%     \includegraphics[height=3cm]{lsc-function/lsc-function.pdf}
-%   \end{center}
-%   }
-  
-% \end{frame}
-
 \section{Dual Cone}
-
-% \begin{frame}{How to check the quality of a solution ?}
-
-
-%   Let $f : \Re^n \to \nRe$. Suppose we are given an approximate solution $\hat x$.
-
-%   \vfill
-%   Problem:
-%   \begin{itemize}
-%   \item Finding the roots $f(x) = 0$ : How good is approximate solution $\hat x$? Just compute $f(\hat x)=0!$.\\[1em]
-%   \item Minimization problem $f^\star = \inf f(x)$. How good is approximate solution $\hat x$? Ideally, compute $f(\hat x) - f^\star$. However, $f^\star$ is not known.
-%   \end{itemize}
-
-%   \vfill
-
-%   \begin{tcolorbox}
-%     \emph{Duality} is an indirect way to check quality $\hat x$.
-%   \end{tcolorbox}
-  
-% \end{frame}
-
-% \begin{frame}{Duality : example}
-
-%   \[
-%     \begin{array}{rl}
-%       \minimize & f(x) \defn x_1 + x_2 + \dots + x_{3000}\\[0.5em]
-%       \st & x_1 + 2 x_2 + \dots + 3000 x_{3000}\geq 1 \\[0.5em]
-%                 & 3000 x_1 + 2999 x_2 + \dots + x_{3000} \geq 100
-%     \end{array}
-%   \]
-
-%   The optimizer is $x^\star$ with optimal value $101/3001$. How to check this ?
-%   \uncover<2->{
-%     \vfill
-%     Combine first and second inequality. For all \emph{feasible} $x$ we must have
-%     \begin{align*}
-%       (1+3000)x_1 + (2+2999) x_2 + \dots + (3000+1) x_{3000} & \geq 100+1\\
-%       3001 ( x_1 + x_2 + \dots + x_{3000} ) & \geq 101 \\
-%       f(x) & \geq {101}/{3001}
-%     \end{align*}
-%   }
-  
-
-%   \vfill
-
-%   \uncover<3->{
-%   \begin{tcolorbox}
-%     \emph{Duality} is \textbf{nothing else} than a generalization of this trick.
-%   \end{tcolorbox}
-%   }
-  
-% \end{frame}
-
-% \begin{frame}{General Optimization Problem}
-
-%   \begin{array}{rl}
-%     Let & $X \subseteq\Re^n$ be a set of feasible decisions $x$ \\[0.5em]
-%         & $f:\Re^n\to\Re$ be the cost function \\[0.5em]
-%         & $g:\Re^n\to\Re^m$ be the constraint function \\[0.5em]
-%         & $b\in \Re^m$ be the budget
-%   \end{array}
-
-%   \vfill
-
-%   \begin{tcolorbox}
-%     \[
-%       \begin{array}{rl}
-%         p^\star \defn \inf &  f(x) \\
-%         \st  & x \in X \\
-%                            & g(x) \succeq_{\Re^m} b
-%       \end{array}
-%     \]
-%   \end{tcolorbox}
-% \end{frame}
-
-% \begin{frame}{Roadmap}
-
-%   \begin{center}
-%     \begin{tikzpicture}[node distance=1cm, auto]  
-
-%       \node[rectangle, draw=black] (constraints) {Playing with standard constraints};  
-%       \node[below=1cm of constraints] (dummy1) {}; 
-
-%       \node[rectangle, draw=black, left=of dummy1] (F_full) {$\mc F(\Re^m_+)$};
-%       \draw[->] (constraints.south) ++(-.5,0) -- ++(0,-0.5) -| (F_full.north);
-%       \node[below=1cm of F_full] (dummy2) {};
-%       \node[rectangle, draw=black, left=of dummy2] (weak_duality_full) {Weak duality};
-%       \draw[->] (F_full.west) -- ++(-0.5,0) -| (weak_duality_full.north);
-%       \node[rectangle, draw=black, below=0.5cm of weak_duality_full] (strong_duality_full) {Strong duality};
-%       \node[rectangle, draw=black, below=1cm of strong_duality_full] (complementarity) {Complementarity conditions};
-%       \draw[->] (complementarity.north) -- (strong_duality_full.south);
-      
-%       \node[rectangle, draw=black, right=of dummy1] (F) {$\mc F\subset\mc F(\Re^m_+)$};
-%       \draw[->] (constraints.south) ++(+.5,0) -- ++(0,-0.5) -| (F.north);
-%       \node[below=1cm of F] (dummy3) {};
-      
-%       \node[rectangle, draw=black, right=of dummy3] (weak_duality_partial) {Weak duality};
-%       \draw[->] (F.east) -- ++(0.5,0) -| (weak_duality_partial.north);
-%       \node[rectangle, draw=black, below=0.5cm of weak_duality_partial] (strong_duality_partial) {Strong duality};
-%       \node[rectangle, draw=black, below=1cm of strong_duality_partial] (lsc) {$\mc F=\{\rm{affine}\}$, $\phi$ convex LSC};
-%       \draw[->] (lsc.north) -- (strong_duality_partial.south);
-            
-
-%       \node[below=1.5cm of dummy1] (pf) {\emph{Perturbation function $\phi$}};
-%       \draw[->] (weak_duality_full.east) -- (pf.north west);
-%       \draw[->] (weak_duality_partial.west) -- (pf.north east);
-%       \draw[->] (pf.south west) -- (strong_duality_full.east);
-%       \draw[->] (pf.south east) -- (lsc.north west);
-      
-%     \end{tikzpicture} 
-%   \end{center}
-% \end{frame}
-
-% \begin{frame}{Playing with Constraints}
-
-%   Let $\mc F(\Re^m_+)$ be the set of \emph{increasing functions} $F:\Re^m\to\Re$. That is, 
-%   \[
-%     u \succeq_{\Re^m_+} v \implies F(u) \geq F(v).
-%   \]
-
-%   \textbf{Our trick :} $g(x) \succeq_{\Re^m_+} b$ implies $F(g(x))\geq F(b)$ when $F\in \mc F(\Re^m_+)$. If $f(x) \geq F(g(x))$ for all $x\in X$, then $p^\star \geq F(b)$. This holds for any increasing $F$. Looking for the best such function is defined as the dual problem!
-
-%   \vfill
-  
-%   \begin{tcolorbox}
-%     \textbf{Dual Optimization Problem : }
-%     \[
-%       \begin{array}{rl}
-%         p^\star \geq d^\star \defn \sup & F(b) \\[0.5em]
-%                                      \st   & F \in \mc F(\Re^n_+) \\[0.5em]
-%                                         & F(g(x)) \leq f(x), ~\forall x \in X
-%       \end{array}
-%     \]
-%   \end{tcolorbox}
-
-  
-% \end{frame}
-
-% \begin{frame}{Weak duality}
-
-%   \textbf{Theorem : } We have always that $p^\star \geq d^\star$. That is, 
-%   \[
-%     \begin{array}{rlcrl}
-%       \inf & f(x)  & \geq & \sup & F(b) \\[0.5em]
-%       \st & x\in X   & &                       \st & F \in \mc F(\Re^n_+) \\[0.5em]
-%            & g(x) \succeq b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
-%     \end{array}
-%   \]
-
-%   Recall that $f(x) \geq F(g(x)) \geq F(b)$ for all feasible $x$.
-
-
-%   \vfill
-%   \textbf{Remarks :}
-%   \begin{itemize}
-%   \item As there are many ways of representing $\set{x}{g(x)\succeq b}$, there are many (not equivalent) dual problems.
-%   \item In this setting strong duality $p^\star=d^\star$ always holds.
-%   \end{itemize}
-  
-% \end{frame}
-
-% \begin{frame}{Strong duality}
-
-%   \textbf{Theorem : } We have always that $p^\star = d^\star$. That is, 
-%   \[
-%     \begin{array}{rlcrl}
-%       \inf & f(x)  & = & \sup & F(b) \\[0.5em]
-%       \st & x\in X   & &                       \st & F \in \mc F(\Re^n_+) \\[0.5em]
-%            & g(x) \succeq b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
-%     \end{array}
-%   \]
-
-%   \vfill
-
-%   \textbf{Proof : } Define the \emph{perturbation function} $\phi:\Re^m\to\Re$ as follows
-%   \[
-%     \begin{array}{rl}
-%       \phi(b) \defn \inf & f(x) \\
-%       \st & x\in X\\
-%                          & g(x) \succeq_{\Re^m_+} b.
-%     \end{array}
-%   \]
-%   Observe that $\phi \in \mc F(\Re^m_+)$ and that $\phi(g(x))\leq f(x)$ for all $x\in X$. Hence,
-%   \[
-%     \begin{array}{rll}
-%       \phi(b) \geq \sup & F(b) & \geq \phi(b) \\[0.5em]
-%       \st     & F \in \mc F(\Re^m_+) & \\[0.5em]
-%                         & F(g(x)) \leq f(x) ~\forall x \in X &
-%     \end{array}
-%   \]
-  
-% \end{frame}
-
-% \begin{frame}{General Strong duality}
-
-%   \emph{The dual over $\mc F(\Re^m_+)$ is too complicated}
-
-%   \begin{itemize}
-%   \item It contains infinitely many constraints
-%   \item The set $\mc F(\Re^m_+)$ is infinite dimensional
-%   \end{itemize}
-
-%   \vfill
-
-%   Instead we will consider a consider a subclass $\mc F \subset \mc F(\Re^m_+)$.
-
-%   \begin{itemize}
-%   \item Weak duality still holds
-%   \item Strong duality not necessarily
-%   \end{itemize}
-
-%   \vfill
-  
-%   \begin{tcolorbox}[title=Central Problem of Duality]
-
-%     Given a problem class, choose \textit{simple} $\mc F$ for which \emph{strong duality} holds
-    
-%   \end{tcolorbox}
-%   \begin{itemize}
-%   \item Affine functions $\mc F = \{x\mapsto \iprod{u}{x} + u_0\}$ are sensible choice.
-%   \end{itemize}
-% \end{frame}
-
-% \begin{frame}{When we do not loose anything}
-
-%   \[
-%     \begin{array}{rl}
-%       d^\star(\mc F) = \sup  & F(b) \\[0.5em]
-%                        \st   & F\in \mc F \\[0.5em]
-%                              & F(g(x)) \leq f(x),~~ \forall x \in X
-                               
-%     \end{array}
-%   \]
-
-%   \vfill
-  
-%   \textbf{Theorem : } If perturbation function $\phi  = \sup_{i\in I}\,F_i$ for $F_i\in \mc F$, then $p^\star=d^\star(\mc F)$. If $\phi \in \mc F$, then $\phi$ is also optimal for the dual.
-
-%   \vfill
-  
-%   \textbf{Proof : } Since $F_i(g(x)) \leq \phi(g(x)) \leq f(x)$ when $x\in X$ for all $i\in I$,
-%   \[
-%     \begin{array}{rlr}
-%       \phi(b) \defn \inf & f(x) & \geq d^\star(\mc F) \geq \sup_{i\in I}\,F_i(b) = \phi(b).\\
-%       \st & x\in X & \\
-%                          & g(x) \succeq b. & 
-%     \end{array}
-%   \]
-  
-% \end{frame}
-
-% \begin{frame}{Affine Dual Functions}
-
-%   Consider the class \emph{$\mc F \defn \set{x\mapsto \iprod{u}{x} + u_0}{u\succeq 0, ~u_0\in\Re}$} of all nondecreasing affine functions. Note that
-%   \[
-%     \tilde{\mc F} \defn \set{\sup_{i\in I} \, F_i}{F_i \in \mc F}
-%   \]
-%   is the set of \textbf{LSC, convex and nondecreasing} functions.
-
-%   \vfill
-
-%   \textbf{Theorem :} If the perturbation function $\phi$ of a problem is LSC and convex, then strong duality holds with $\tilde F$.
-  
-% \end{frame}
-
-% \begin{frame}{Strong duality in Nonlinear Programming}
-
-%   \textbf{Theorem :} If the perturbation function $\phi$ of a problem is LSC and convex, then
-%   strong duality holds with $\tilde F$.
-
-%   \vfill
-
-%   \begin{itemize}
-%   \item Sometimes showing ``$\phi$ is LSC and convex'' is easy
-%   \item Perturbation functions are always nondecreasing
-%   \item Perturbation functions are always convex for convex problems
-%   \item \emph{Dual is always a convex problem}
-
-%     \[
-%       \begin{array}{rl}
-%         d^\star(\tilde F) = \sup & \iprod{u}{b} + u_0 \\[0.5em]
-%         \st & \iprod{u}{g(x)}+ u_0 \leq f(x), ~~\forall x\in X \\[0.5em]
-%                                  & u\geq 0
-%       \end{array}
-%     \]
-%   \end{itemize}
-% \end{frame}
-
-% \begin{frame}{Roadmap}
-
-%   \begin{center}
-%     \begin{tikzpicture}[node distance=1cm, auto]  
-
-%       \node[rectangle, draw=black] (constraints) {Playing with \emph{conic} constraints};  
-%       \node[below=1cm of constraints] (dummy1) {}; 
-
-%       \node[rectangle, draw=black, left=of dummy1] (F_full) {$\mc F(\emph{K})$};
-%       \draw[->] (constraints.south) ++(-.5,0) -- ++(0,-0.5) -| (F_full.north);
-%       \node[below=1cm of F_full] (dummy2) {};
-%       \node[rectangle, draw=black, left=of dummy2] (weak_duality_full) {Weak duality};
-%       \draw[->] (F_full.west) -- ++(-0.5,0) -| (weak_duality_full.north);
-%       \node[rectangle, draw=black, below=0.5cm of weak_duality_full] (strong_duality_full) {Strong duality};
-%       \node[rectangle, draw=black, below=1cm of strong_duality_full] (complementarity) {Complementarity conditions};
-%       \draw[->] (complementarity.north) -- (strong_duality_full.south);
-      
-%       \node[rectangle, draw=black, right=of dummy1] (F) {$\mc F\subset\mc F(\emph{K})$};
-%       \draw[->] (constraints.south) ++(+.5,0) -- ++(0,-0.5) -| (F.north);
-%       \node[below=1cm of F] (dummy3) {};
-      
-%       \node[rectangle, draw=black, right=of dummy3] (weak_duality_partial) {Weak duality};
-%       \draw[->] (F.east) -- ++(0.5,0) -| (weak_duality_partial.north);
-%       \node[rectangle, draw=black, below=0.5cm of weak_duality_partial] (strong_duality_partial) {Strong duality};
-%       \node[rectangle, draw=black, below=1cm of strong_duality_partial] (lsc) {$\mc F=\{\rm{affine}\}$, $\phi$ convex LSC};
-%       \draw[->] (lsc.north) -- (strong_duality_partial.south);
-            
-
-%       \node[below=1.5cm of dummy1] (pf) {\emph{Perturbation function $\phi$}};
-%       \draw[->] (weak_duality_full.east) -- (pf.north west);
-%       \draw[->] (weak_duality_partial.west) -- (pf.north east);
-%       \draw[->] (pf.south west) -- (strong_duality_full.east);
-%       \draw[->] (pf.south east) -- (lsc.north west);
-      
-%     \end{tikzpicture} 
-%   \end{center}
-% \end{frame}
-
-
-% \begin{frame}{An extremely useful generalization}
-
-%   \[
-%     \begin{array}{rlcrl}
-%       \inf & f(x)  \\[0.5em]
-%       \st & x\in X  \\[0.5em]
-%            & g(x) \succeq_{\emph{K}} b.
-%     \end{array}
-%   \]
-
-%   \vfill
-%   Non-decreasing functions :
-%   \[
-%     \mc F(\emph{K}) \defn \set{F : \Re^m \to\Re }{u \succeq_K v \implies F(u)\geq F(v)}
-%   \]
-%   Evidently, weak duality holds still
-%   \[
-%     \begin{array}{rlcrl}
-%       \inf & f(x)  & \geq & \sup & F(b) \\[0.5em]
-%       \st & x\in X   & &                       \st & F \in \mc F(\emph{K}) \\[0.5em]
-%            & g(x) \succeq_{\emph{K}} b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
-%     \end{array}
-%   \]
-%   Strong duality holds too. (Replicate the proof with the perturbation function.)
-
-% \end{frame}
 
 \begin{frame}{Dual Cones}
 
@@ -919,7 +534,7 @@
     \item<3-> Since $K$ is closed, there exists $\epsilon > 0$ so that $B \defn B(\hat x, \epsilon)$ does not intersect $K$.
     \item<4-> By the separation theorem, we have a linear function $f$ such that $f(x) < f(y)$ for all $x\in B$ and $y \in K$.
     \item<5-> In particular, as $\hat x\in B$ and $0\in K$, we have that $f(\hat x) < 0=f(0)$
-    \item<6-> Finally, we have $f(y) \geq 0$ for $y\in K$. Suppose on the contrary that $f(z) < 0$ for a $z\in K$. As $\lambda z\in K$ for all $\lambda >0$, $ f(\lambda z) = \lambda f(z)$ can be taken smaller than $f(\hat x)$ a contradiction.
+    \item<6-> Finally, we have $f(y) \geq 0$ for $y\in K$. Suppose on the contrary that $f(z) < 0$ for a $z\in K$. As $\lambda z\in K$ for all $\lambda >0$, $ f(\lambda z) = \lambda f(z)$ can be taken smaller than $f(\hat x)$, a contradiction.
     \item<7-> We can write $f(x) = \iprod{u}{x}$ and $u$ is what we needed.
     \end{itemize}
          
@@ -937,7 +552,7 @@
   \item $(\Re_+^m)^\star = \Re_+^m$ with scalar product $\iprod{x}{y} = x\tpose y$.
   \item<2-> $(S^n_+)^\star = S^n_+$ with the Frobenius scalar product $\iprod{X}{Y} = \tr(X\tpose Y)$.
 
-    \textbf{Proof [$\star$]:} \emph{$(S^n_+)^\star \supseteq S^n_+$.} This follows immediately from $\tr(X\tpose Y)\geq 0$ when $X, Y \in S^n_+$. \emph{$(S^n_+)^\star \subseteq S^n_+$.} Assume that there exists $U \in (S^n_+)^\star$, but $U \notin S^n_+$. Then $U$ has a negative eigenvalue $\lambda_i$ with associated normed eigenvector $u_i$. Denote with $X \defn u_i u_i\tpose$. Then, $X\in S^n_+$ and $\iprod{U}{X} = u_i\tpose U u_i = \lambda_i < 0$, a contradiction.
+    \textbf{Proof [$\star$]:} \emph{$(S^n_+)^\star \supseteq S^n_+$.} This follows immediately from $\tr(X\tpose Y)\geq 0$ when $X, Y \in S^n_+$. \emph{$(S^n_+)^\star \subseteq S^n_+$.} Assume that there exists $U \in (S^n_+)^\star$, but $U \notin S^n_+$. Then $U$ has a negative eigenvalue $\lambda_i$ with associated unit eigenvector $u_i$. Denote with $X \defn u_i u_i\tpose$. Then, $X\in S^n_+$ and $\iprod{U}{X} = u_i\tpose U u_i = \lambda_i < 0$, a contradiction.
 
   \end{itemize}
   
@@ -950,7 +565,7 @@
   \begin{minipage}{0.5\textwidth}
     Suppose we have the \emph{polyhedral} set
     \[
-      C = \set{x\geq 0} {a_i\tpose x = b_i, \quad i \in [1, \dots, k]}
+      C = \set{x\in\Re^n_+} {a_i\tpose x = b_i, \quad i \in [1, \dots, k]}
     \]
     \textbf{Example : $C=\{\rm{system~failure~events}\}$}
   \end{minipage}%
@@ -994,7 +609,7 @@
     \begin{align}
       \label{statement:2}
       \forall p\in\Re^n ~\st~ & p\tpose A_1\geq 0, \dots, p\tpose A_m \geq 0 : \quad p\tpose b\geq 0 \\
-      \uncover<2->{\iff \not \exists p \in \Re^n ~\st~ & p\tpose A_1\geq 0, \dots, p\tpose A_m \geq 0 : \quad p\tpose b<0}
+      \uncover<2->{\iff \not \exists p \in \Re^n ~\st~ & p\tpose A_1\geq 0, \dots, p\tpose A_m \geq 0 : \quad p\tpose b<0} \nonumber
     \end{align}
   \end{minipage}
 
@@ -1012,7 +627,7 @@
 
   \textbf{Proof:} Let \eqref{statement:1} be the first statement and \eqref{statement:2} the second statement.
   \begin{itemize}
-  \item Set $K\defn \cone(\{A_1, \dots, A_m\})$. Then, $\eqref{statement:1}\iff b\in K$.
+  \item Set $K\defn \cone(\{A_1, \dots, A_m\})$, a convex and closed set (Minkowski--Weyl theorem). Then, $\eqref{statement:1}\iff b\in K$.
   \item Let $p$ such that $p\tpose A_1\geq 0, \dots, p\tpose A_m \geq 0$. By definition then $p\in K^\star$. Hence, $\eqref{statement:2} \iff b\in K^{\star\star}$
   \item<2-> $K=K^{\star\star}$ because $K$ is closed and convex.
   \end{itemize}
