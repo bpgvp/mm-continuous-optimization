@@ -145,9 +145,9 @@
 
   \vfill
 
-  The dual is built from the \emph{non-decreasing (price) functions}
+  The dual is built from a set $\mc F$ of \emph{non-decreasing (price) functions} $F:\Re^m\to\Re$, now with respect to the cone $K$:
   \[
-    \mc F(K) \defn \set{F:\Re^m\to\Re}{u \succeq_{K} v \implies F(u)\geq F(v)}.
+    u \succeq_{K} v \implies F(u)\geq F(v).
   \]
 
   \vfill
@@ -366,7 +366,7 @@
   \]
   and $\mc F$ sufficiently rich, i.e.\
   \begin{enumerate}
-  \item $x\mapsto\iprod{u}{x}$ belong to $\mc F$ for all $u$ in $K^\star$.
+  \item $c\mapsto\iprod{u}{c}$ belongs to $\mc F$ for all $u$ in $K^\star$.
   \item $F\in \mc F$ and $\alpha\geq 0$ implies $\alpha F \in \mc F$.
   \item $F\in \mc F$ and $a\in \Re$ implies $a+F \in \mc F$
   \end{enumerate}
@@ -374,7 +374,7 @@
   \vfill
   
   \uncover<2->{
-  In particular, $\mc F_{\rm{aff}}\defn \set{x\mapsto \iprod{u}{x} + u_0}{u\in K^\star}$ satisfies all conditions.
+  In particular, $\mc F_{\rm{aff}}\defn \set{c\mapsto \iprod{u}{c} + u_0}{u\in K^\star}$ satisfies all conditions.
   }
 \end{frame}
 
@@ -386,12 +386,12 @@
     \begin{array}{rlcrl}
       \inf & f(x)  & \geq & \sup & F(b) \\[0.5em]
       \st & x\in X   & &                       \st & F \in \mc F \\[0.5em]
-           & g(x) \succeq b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
+           & g(x) \succeq_{\Re^m_+} b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
     \end{array}
   \]
 
   \vfill
-  For $\mc F_{{\rm{aff}}}\defn \set{c\mapsto \iprod{{u}}{c} + u_0}{{u}\geq 0}$, the Lagrangian simplifies to \[L(x, {u}) = f(x) + \iprod{{u}}{b-g(x)}.\]
+  For $K=\Re^m_+$ and $\mc F_{{\rm{aff}}}\defn \set{c\mapsto \iprod{{u}}{c} + u_0}{{u}\geq 0}$, the Lagrangian simplifies to \[L(x, {u}) = f(x) + \iprod{{u}}{b-g(x)}.\]
 
   \vfill
 
@@ -480,7 +480,7 @@
     \end{array}
   \]
   \textbf{Proof:}
-  We have strong duality unconditionally for linear optimization problems which are feasible and bounded.
+  We have strong duality unconditionally for linear optimization problems which are feasible and bounded (a consequence of Farkas' lemma).
  
 \end{frame}
 
@@ -509,7 +509,7 @@
   \begin{itemize}
   \item \emph{Training set} $\{(x_i, y_i)\}_{i=1}^n$ : covariates $x_i\in\Re^p$ and class labels $y_i \in \{-1, 1\}$.
 
-  \item \emph{Classifier} $h(x) = sign(x\tpose w + w_0)$
+  \item \emph{Classifier} $h(x) = \operatorname{sign}(x\tpose w + w_0)$
   \end{itemize}
 
   \vfill
@@ -640,7 +640,7 @@
     Transformation $\emph{\varphi}:\Re^p\to\Re^{p'}$ with $p'\gg p$,\\ e.g.,\\
     $\varphi(x) = (1, x_1, \dots, x_p, \log(x_1), \dots, \log(x_p))$\\
     $\varphi(x) = (1,\sin(\omega_1 x_1), \dots, \sin(\omega_m x_p) )$\\
-    $\varphi(x) = (1, x_1, x_2, x_1^2, x_1 x_2, x_1^2, x_2^2, \dots, x_p^2 )$\\[5em]
+    $\varphi(x) = (1, x_1, x_2, x_1^2, x_1 x_2, x_2^2, \dots, x_p^2 )$\\[5em]
   \end{minipage}
 
   % \vfill
@@ -649,7 +649,7 @@
   % \begin{itemize}
   % \item Training set $\{(\emph{\varphi}(x_i), y_i)\}_{i=1}^n$ : features $\emph{\varphi}(x_i)\in\Re^{p'}$ and class labels $y_i \in \{-1, 1\}$.
 
-  % \item Classifier $h(x) = sign(\iprod{\emph{\varphi}(x_i)}{w} + w_0)$
+  % \item Classifier $h(x) = \operatorname{sign}(\iprod{\emph{\varphi}(x_i)}{w} + w_0)$
   % \end{itemize}
   
 \end{frame}
@@ -721,7 +721,7 @@
   \[
     f(x^\star) \geq F^\star(g(x^\star)) \geq F^\star(b) =f(x^\star).
   \]
-  %Furthermore, weak duality guarantees $F^\star(b) \leq d^\star(\mc F) \leq p^\star \leq f(x^\star) = F^\star(b)$.
+  Furthermore, weak duality guarantees $F^\star(b) \leq d^\star(\mc F) \leq p^\star \leq f(x^\star) = F^\star(b)$.
   
 \end{frame}
 
@@ -731,7 +731,7 @@
   \(
     \sum_{i=1}^m u_i^\star(g_i(x^\star)-b_i) = 0.
   \)
-  As $u_i^\star\geq 0$ and $g_i(x^\star)\geq b_i$, it follows that $$u_i^\star \left(g_i(x^\star)-b_i\right)=0 \quad \forall i\in [1,\dots, n].$$
+  As $u_i^\star\geq 0$ and $g_i(x^\star)\geq b_i$, it follows that $$u_i^\star \left(g_i(x^\star)-b_i\right)=0 \quad \forall i\in [1,\dots, m].$$
 
 \end{frame}
 
@@ -766,7 +766,7 @@
   \item Transformation $\emph{\varphi}:\Re^p\to\Re^{p'}$ with $p'\gg p$.
   \item Training set $\{(\emph{\varphi}(x_i), y_i)\}_{i=1}^n$ : features $\emph{\varphi}(x_i)\in\Re^{p'}$ and class labels $y_i \in \{-1, 1\}$.
 
-  \item \textbf{Classifier $h(x) = sign(\emph{\varphi}(x)\tpose w + w_0)$}
+  \item \textbf{Classifier $h(x) = \operatorname{sign}(\emph{\varphi}(x)\tpose w + w_0)$}
   \end{itemize}
 
   \vfill
@@ -794,7 +794,7 @@
 
   \vfill
 
-  \emph{Classifier :} $h(x) = sign(\sum_{j=1}^n u^\star_j y_j K(x, x_j) + w^\star_0)$ with $K(x, x_j)=\iprod{\varphi(x)}{\varphi(x_j)}$. 
+  \emph{Classifier :} $h(x) = \operatorname{sign}(\sum_{j=1}^n u^\star_j y_j K(x, x_j) + w^\star_0)$ with $K(x, x_j)=\iprod{\varphi(x)}{\varphi(x_j)}$. 
 
   \vfill
 
@@ -804,7 +804,7 @@
        &  u^\star_i  [y_i\sum_{j=1}^n  u^\star_j y_j K(x_i, x_j) + y_iw^\star_0-1]= 0 ~~\forall i \in [1,\dots, n]\\[0.5em]
       \iff &  u^\star_i  [\sum_{j=1}^n  u^\star_j y_j K(x_i, x_j) + w^\star_0-y_i]= 0~~\forall i \in [1,\dots, n]\\[0.5em]
       \implies & \sum_{i=1}^n u^\star_i  [\sum_{j=1}^n  u^\star_j y_j K(x_i, x_j) + w^\star_0-y_i] = 0\\[0.5em]
-          \iff &      w^\star_0 = -\sum_{i=1}^n u^\star_i \sum_{j=1}^n u^\star_j y_j K(x_i, x_j)/(\sum_{i=1}^n u_i^\star).
+          \implies &      w^\star_0 = -\sum_{i=1}^n u^\star_i \sum_{j=1}^n u^\star_j y_j K(x_i, x_j)/(\sum_{i=1}^n u_i^\star).
     \end{array}
   \]
   
@@ -850,7 +850,7 @@
     \quad \geq \quad
     \begin{array}{rl}
       \sup & \iprod{y}{b}\\
-      \st & A\tpose y + s = c \\
+      \st & A^\star y + s = c \\
            & s\in K^\star.
     \end{array}
   \]
@@ -896,7 +896,7 @@
 
   \vfill
   
-  \textbf{Theorem : } Under convexity and Slater's condition
+  \textbf{Theorem : } Under convexity and Slater's condition (proof in the KKT lecture)
   \[
     p^\star = \inf_{x\in X}\,\sup_{u\in K^\star}~f(x) + \iprod{u}{b-g(x)} = \sup_{u\in K^\star}\,\inf_{x\in X}~f(x) + \iprod{u}{b-g(x)} = d^\star
   \]
@@ -915,12 +915,12 @@
   Primal and dual formulations:
   \[
     \begin{array}{rlcrl}
-      \inf & \norm{w}_2^2/2 & = & \sup & \sum_{i=1}^n u_i - \frac12 \sum_{1\leq i, j \leq n}u_i u_j y_i y_j (x_i\tpose x_j) \\[0.5em]
-      \st & w\in\Re^p,~w_0\in\Re & & \st & u \in \Re^n_+ \\[0.5em] 
+      \inf & \norm{w}_2^2/2 & = & \sup & \sum_{i=1}^n u_i - \frac12 u\tpose Q u \\[0.5em]
+      \st & w\in\Re^p,~w_0\in\Re & & \st & u \in \Re^n_+ \\[0.5em]
            & y_i(x_i\tpose w + w_0) \geq 1,~ \forall i & & & \sum_{i=1}^n u_i y_i = 0
     \end{array}
   \]
-  with $K_{ij}=y_iy_j\iprod{x_i}{x_j}$ for all $1\leq i, j\leq n$.
+  with $Q_{ij}=y_iy_j\iprod{x_i}{x_j}$ for all $1\leq i, j\leq n$.
   
 
   \vfill
