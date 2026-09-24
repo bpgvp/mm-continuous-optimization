@@ -53,7 +53,7 @@
     \[
       \nabla f(x)[d] = \lim_{t\downarrow 0} \frac{f(x+t d)-f(x)}{t}.
     \]
-  \item<2-> The function $f$ is (G\^ateaux) \emph{differentiable} in $x \in \dom(f)$ if differentiable in $x$ in every direction $d \in \Re^n$ and if the directional derivative is linear in the direction, i.e.,
+  \item<2-> The function $f$ is (G\^ateaux) \emph{differentiable} in $x \in \dom(f)$ if directionally differentiable in $x$ in every direction $d \in \Re^n$ and if the directional derivative is linear in the direction, i.e.,
     \[
       \nabla f(x)[d] = \iprod{f'(x)}{d} = f'(x)\tpose d  \qquad\forall d \in \Re^n.
     \]
@@ -200,7 +200,7 @@
 \end{frame}
 
 
-\begin{frame}{Geometric interpretation}
+\begin{frame}{Geometric Interpretation}
 
   \begin{center}
     \includegraphics[height=6cm]{smooth-function/smooth-function.pdf}
@@ -231,7 +231,7 @@
 
 \begin{frame}{Gradient Method Converges with Fixed Step-Size}
 
-  \textbf{Theorem:} Let $f$ be $L$-smooth and $-\infty < p^\star = \inf_{x\in\Re^n} f(x)$. The gradient method with step-size $0<h_k = \eta < \frac{2}{L}$ converges to a stationary point.
+  \textbf{Theorem:} Let $f$ be $L$-smooth w.r.t.\ $\norm{\cdot}_2$ and $-\infty < p^\star = \inf_{x\in\Re^n} f(x)$. The gradient method with step-size $0<h_k = \eta < \frac{2}{L}$ generates iterates with $\norm{f'(x_k)}\to 0$, i.e., every limit point of $(x_k)$ is stationary.
 
 \end{frame}
 
@@ -283,20 +283,21 @@
   
   Descent method when $0<\eta<\tfrac{2}{L}$ as
   \[
-    f(x_{k+1}) \leq  f(x_k) - \eta (1-\tfrac{L \eta}{2})\norm{f'(x_k)}^2<f(x_{k}).
+    f(x_{k+1}) \leq  f(x_k) - \eta (1-\tfrac{L \eta}{2})\norm{f'(x_k)}^2<f(x_{k})
   \]
+  when $f'(x_k)\neq 0$.
 
   \vfill
 
   Choose step size $\eta^\star$ which maximizes the descent lower bound
   \begin{align*}
-    \eta^\star \in & \arg\max_{\eta} ~\eta(1-\tfrac{L \eta}{2})\\
+    \eta^\star = & \arg\max_{\eta} ~\eta(1-\tfrac{L \eta}{2})\\
     = & ~\frac{1}{L}.
   \end{align*}
   
 \end{frame}
 
-\begin{frame}{What happens if the step length is not $\frac{1}{L}$}
+\begin{frame}{What Happens if the Step Length is not $\frac{1}{L}$}
 
   \begin{minipage}{0.5\textwidth}
     \center
@@ -326,7 +327,7 @@
 
   \vfill
 
-  \textbf{Theorem:} Let $f$ be $L$-smooth and $-\infty < p^\star = \inf_{x\in\Re^n} f(x)$. The gradient method with exact line search converges to a stationary point.
+  \textbf{Theorem:} Let $f$ be $L$-smooth w.r.t.\ $\norm{\cdot}_2$ and $-\infty < p^\star = \inf_{x\in\Re^n} f(x)$. The gradient method with exact line search (assuming the minimizers $h_k$ exist) generates iterates with $\norm{f'(x_k)}\to 0$, i.e., every limit point of $(x_k)$ is stationary.
   
   \textbf{Proof:} Exactly the same as before, as the descent
   \[
@@ -391,21 +392,22 @@
 
   \vfill
   
-  \textbf{Algorithms:} There are efficient algorithms to find points in $W_{\alpha, \beta}(\bar x)$ efficiently.
+  \textbf{Algorithms:} There are efficient algorithms to find points in $W_{\alpha, \beta}(\bar x)$.
 \end{frame}
 
 \begin{frame}{Proof [$\star$]}
 
-  \textbf{Proof:} We have that $f'(\bar x)\neq 0$ and hence $g'(t) = -\iprod{f'(\bar x-t f'(\bar x))}{f'(\bar x)}$ and $g'(0)<0$. Let $d(t)\defn g(t)-g(0)-\alpha t g'(0)$. Then, $d'(0)=g'(0)(1-\alpha)<0$.
-  By continuity of $f'$ there exists a $T>0$ such that $d'(t)<0$ for all $t\in [0, t']$ with $0<t'\leq T$. By the \emph{MVT}, there is an $\bar t \in (0, t')$ such that
+  \textbf{Proof:} We have $g'(t) = -\iprod{f'(\bar x-t f'(\bar x))}{f'(\bar x)}$ and, as $f'(\bar x)\neq 0$, $g'(0)=-\norm{f'(\bar x)}^2<0$. Let $d(t)\defn g(t)-g(0)-\alpha t g'(0)$. Then, $d'(0)=g'(0)(1-\alpha)<0$.
+  By continuity of $f'$ there exists a $T>0$ such that $d'(t)<0$ for all $t\in [0, T]$. By the \emph{MVT}, for any $t'\in(0, T]$ there is an $\bar t \in (0, t')$ such that
   \[
     d(t')-d(0) =  t' d'(\bar t) <0.
   \]
-  Hence, $d(t')<d(0)$ for all $t'\in(0,T)$. Note that $g(t)$ is bounded from below for all $t> 0$ while $g(0)-\alpha t g'(0)$ with $\alpha>0$ is not. Hence, we may take
+  Hence, $d(t')<d(0)$ for all $t'\in(0,T)$. Note that $g(t)$ is bounded from below for all $t> 0$ while $g(0)+\alpha t g'(0)$ with $\alpha>0$ is not. Hence, $d(t)\to+\infty$ and by continuity of $d$ the first zero
   \[
-    0 < T \leq t_a = \min \set{t>0}{d(t)=d(0)=0}.
+    t_a \defn \min \set{t>0}{d(t)=d(0)=0} \geq T
   \]
-  All step sizes $\bar t \in (0, t_a)$ evidently satisfy the sufficient decrease condition. The \emph{MVT} guarantees $d(t_a)-d(0)=t_a d'(t_b) = 0$ for some $t_b \in (0, t_a)$. Hence, $d'(t_b) = g'(t_b)-\alpha g'(0)=0$ and thus $g'(t_b)>\beta g'(0)$ as $\alpha < \beta$ and $g'(0)<0$. All step sizes $\bar t \in (t_b, t_a)$ with $0<t_b<t_a$ satisfy both Wolfe conditions.
+  exists.
+  All step sizes $\bar t \in (0, t_a)$ evidently satisfy the sufficient decrease condition. The \emph{MVT} guarantees $d(t_a)-d(0)=t_a d'(t_b) = 0$ for some $t_b \in (0, t_a)$. Hence, $d'(t_b) = g'(t_b)-\alpha g'(0)=0$ and thus $g'(t_b)>\beta g'(0)$ as $\alpha < \beta$ and $g'(0)<0$. By continuity of $g'$, there is an $\epsilon>0$ such that all step sizes $\bar t \in (t_b-\epsilon, t_b+\epsilon)\subseteq(0, t_a)$ satisfy both Wolfe conditions.
 
 
 \end{frame}
@@ -424,14 +426,14 @@
 
   \vfill
   
-  \textbf{Theorem:} Let $f$ be $L$-smooth and $-\infty < p^\star = \inf_{x\in\Re^n} f(x)$. The gradient method with any step size satisfying the Wolfe conditions converges to a stationary point.
+  \textbf{Theorem:} Let $f$ be $L$-smooth w.r.t.\ $\norm{\cdot}_2$ and $-\infty < p^\star = \inf_{x\in\Re^n} f(x)$. The gradient method with any step size satisfying the Wolfe conditions generates iterates with $\norm{f'(x_k)}\to 0$, i.e., every limit point of $(x_k)$ is stationary.
 
   \vfill
   
   \uncover<2->{
   \textbf{Proof [$\star$]:} We have using Cauchy-Schwarz and  $L$ smoothness that
   \(
-    \iprod{f'(x_{k+1})-f'(x_k)}{-f'(x_k)} \leq \norm{f'(x_{k+1})-f'(x_k)}_\star\norm{f'(x_k)} 
+    \iprod{f'(x_{k+1})-f'(x_k)}{-f'(x_k)} \leq \norm{f'(x_{k+1})-f'(x_k)}_2\norm{f'(x_k)}
     \leq L \norm{x_{k+1}-x_k}\norm{f'(x_k)} \leq L h_k \norm{f'(x_k)}^2
     \). From the second Wolfe condition we have that \(\iprod{f'(x_{k+1})-f'(x_k)}{-f'(x_k)} \geq (1-\beta)\norm{f'(x_k)}^2\) and hence $h_k \geq (1-\beta)/L$. The first Wolfe condition guarantees hence
     \[
@@ -474,12 +476,12 @@
 
 \section{Subgradients}
 
-\begin{frame}{Differentiable Convex Functions}
+\begin{frame}{Recall : Differentiable Convex Functions}
 
   Let $f:\Re^n\to\nRe$ be a differentiable convex function. For any two points $x, y\in\dom(f)$ we have
   \begin{align*}
-    \iprod{f'(x)}{y-x} & = \lim_{t\to 0} \frac{f(x + t(y-x))-f(x)}{t} \\
-                       & \leq \lim_{t\to 0} \frac{(1-t)f(x) + t f(y)-f(x)}{t} = f(y) - f(x).
+    \iprod{f'(x)}{y-x} & = \lim_{t\downarrow 0} \frac{f(x + t(y-x))-f(x)}{t} \\
+                       & \leq \lim_{t\downarrow 0} \frac{(1-t)f(x) + t f(y)-f(x)}{t} = f(y) - f(x).
   \end{align*}
   
   \vfill
@@ -546,8 +548,8 @@
         \node[circle, inner sep=1, draw=red, fill=red] (x0) at (axis cs:0.926522, 0.2073478) {};
         \node[above] at (x0) {\red{$x_0$}};
 
-        \addplot[mark=none, red, samples=100, domain=-2:2] {0.2073478 - 0.1*(x-0.926522))};
-        \addplot[mark=none, red, samples=100, domain=-2:2] {0.2073478 + 0.108366*(x-0.926522))};
+        \addplot[mark=none, red, samples=100, domain=-2:2] {0.2073478 - 0.1*(x-0.926522)};
+        \addplot[mark=none, red, samples=100, domain=-2:2] {0.2073478 + 0.108366*(x-0.926522)};
         
         % \addplot+[thick, draw=blue, mark=none, fill=blue] coordinates {(-1,0.362777) (1.5, 0.307996) };
         
@@ -625,7 +627,7 @@
 
 \begin{frame}{Supporting Hyperplanes}
 
-  A \emph{supporting hyperplane} $H=\set{x}{h(x)=\alpha}$, with $h$ a linear function, of a convex set $S$ at a point $x_0 \in \bnd(S)$ is such that $x_0\in H$ and $S\subseteq H^-\defn \set{x}{h(x)\leq \alpha}$.
+  A \emph{supporting hyperplane} $H=\set{x}{h(x)=\alpha}$, with $h\neq 0$ a linear function, of a convex set $S$ at a point $x_0 \in \bnd(S)$ is such that $x_0\in H$ and $S\subseteq H^-\defn \set{x}{h(x)\leq \alpha}$.
 
 
   \vfill
@@ -731,19 +733,19 @@
   \item Let hyperplane $H\defn \set{y\in \Re^n\times \Re}{h(y)=c\defn h(x, f(x))}$ separate $C$ and $D$
   \item As $C\subseteq \set{y\in \Re^n\times \Re}{h(y)<c}$, we have
   \[
-    \epi(f) = \cl(C)\subseteq \set{y\in \Re^n\times \Re}{h(y)\leq c}.
+    \epi(f) = \cl(C)\subseteq \set{y\in \Re^n\times \Re}{h(y)\leq c}
   \]
-  and $H$ is hence a supporting hyperplane of $\epi(f)$ at $x$
+  and $H$ is hence a supporting hyperplane of $\epi(f)$ at $(x, f(x))$
   \item<2-> $H$ is also not vertical, because $x\in \interior(\dom(f))$.
   \end{itemize}
 
 \end{frame}
 
-\section{Conjugate functions}
+\section{Conjugate Functions}
 
 \begin{frame}{The Conjugate Function}
 
-  We define the \emph{conjugate} of any function $f:\Re^n\to\Re$ as
+  We define the \emph{conjugate} of any function $f:\Re^n\to\nRe$ as
   \[
     f^\star(y)\defn \sup_{x\in\Re^n} \iprod{y}{x}-f(x).
   \]
@@ -844,11 +846,11 @@
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item Point : $X=\{x\}$. Then $\sigma_X(u) = \iprod{u}{x}$.
-  \item $k$-simplex : $X=\conv(\{v_0, \dots, v_k\})$.
+  \item Polytope : $X=\conv(\{v_0, \dots, v_k\})$.
     \[
       \sigma_X(u) = \sup \set{\iprod{u}{\textstyle\sum_{i=0}^k p_i v_i}}{p_i\geq 0, ~\textstyle\sum_{i=0}^k p_i=1} =\textstyle \max_{i\in[0,\dots, k]} \iprod{u}{v_i}.
     \]
-  \item Half-space : $X= \set{x\in \Re^n}{\iprod{a}{x}\leq b}$. Then, $\sigma_X(\gamma a) = \gamma b$ for $\gamma \geq 0$ and $+\infty$ otherwise.
+  \item Half-space : $X= \set{x\in \Re^n}{\iprod{a}{x}\leq b}$ with $a\neq 0$. Then, $\sigma_X(\gamma a) = \gamma b$ for $\gamma \geq 0$ and $+\infty$ otherwise.
   \item Dual norm : $X=\set{x}{\norm{x}\leq 1}$. Then $\sigma_X(u)=\norm{u}_\star$.
   \end{itemize}
 
@@ -857,7 +859,7 @@
 
 \begin{frame}{Support Function of Subdifferential}
 
-  Let $f:\Re^n\to\nRe$ be a \ac{lsc} convex function. Let $x\in\relint(\dom(f))$.
+  Let $f:\Re^n\to\nRe$ be a \ac{lsc} convex function. Let $x\in\interior(\dom(f))$.
 
   \vfill
 
@@ -870,17 +872,17 @@
 
   \textbf{Proof [$\star$] :}
 
-  Fix $x\in \relint(\dom(f))$ and $d\in \Re^n$. We need to check $h(d) = \sup \set{\iprod{g}{d}\!}{\!g \in \partial f(x)}$. First, $h(d) \geq \sup \set{\iprod{g}{d}\!}{\!g \in \partial f(x)}$ as
+  Fix $x\in \interior(\dom(f))$ and $d\in \Re^n$. We need to check $h(d) = \sup \set{\iprod{g}{d}\!}{\!g \in \partial f(x)}$. First, $h(d) \geq \sup \set{\iprod{g}{d}\!}{\!g \in \partial f(x)}$ as
   \[
     \forall g \in \partial f(x), ~ h(d)\defn \lim_{t\downarrow 0} \, \mu(t)\defn (f(x+t d) - f(x))/t \geq \iprod{g}{td}/t = \iprod{g}{d}.
   \]
-  Second, the function $h$ is convex with $\dom(h)=\Re^n$ as $f$ is convex and $x\in\relint(\dom(f))$. Thus, $\partial h(d) \neq \emptyset$. Let $g_h\in \partial h(d)$ and $v\in\Re^n$. Note that for all $\tau \geq 0$
+  Second, the function $h$ is convex with $\dom(h)=\Re^n$ as $f$ is convex and $x\in\interior(\dom(f))$. Thus, $\partial h(d) \neq \emptyset$. Let $g_h\in \partial h(d)$ and $v\in\Re^n$. Note that for all $\tau \geq 0$
   \[
     \tau h(v) = h(\tau v) \geq h(d) + \iprod{g_h}{\tau v - d} \implies h(v)\geq \iprod{g_h}{v} = h(0) + \iprod{g_h}{v},
   \]
   by taking $\tau\to\infty$. Hence, $g_h \in \partial h(0)$. Also for $\tau=0$, we have $\iprod{g_h}{d}\geq h(d)$. As $\mu(t)$ is decreasing with $t\downarrow 0$ for convex $f$ and $g_h \in \partial h(0)$ we have
   \[
-    f(y) - f(x) \geq \lim_{t\downarrow 0} \, (f(x + t(y-x))-f(x))/t =  h(y-x) \geq \iprod{g_h}{y-x} \forall x, y \in \dom(f).
+    f(y) - f(x) \geq \lim_{t\downarrow 0} \, (f(x + t(y-x))-f(x))/t =  h(y-x) \geq \iprod{g_h}{y-x} \quad \forall y \in \dom(f).
   \]
   Therefore, $g_h\in \partial f(x)$ and $\sup\set{\iprod{g}{d}}{g\in\partial f(x)} \geq \iprod{g_h}{d} \geq h(d)$.
   
@@ -888,7 +890,7 @@
 
 \begin{frame}{Subdifferential and Differential}
 
-  \textbf{Theorem :} A convex function $f$ is differentiable at $x$ if and only if $\partial f(x) = \{g\}$. In that case, $g = f'(x)$.
+  \textbf{Theorem :} A \ac{lsc} convex function $f$ is differentiable at $x\in\interior(\dom(f))$ if and only if $\partial f(x) = \{g\}$. In that case, $g = f'(x)$.
 
   \vfill
   
@@ -906,7 +908,7 @@
   \vfill
   
   \textbf{Proof [$\star$]:}
-  By definition we have the subdifferential that
+  By definition of the subdifferential, we have
   \begin{align*}
     g\in \partial f(x) \iff & \,f(y) \geq f(x) + \iprod{g}{y-x} \quad \forall y\in\Re^n\\
                        \iff & \iprod{g}{x}-f(x) \geq {\textstyle\sup_{y\in \Re^n}} \iprod{g}{y} -f(y) = f^\star(g) \geq \iprod{g}{x}-f(x).
