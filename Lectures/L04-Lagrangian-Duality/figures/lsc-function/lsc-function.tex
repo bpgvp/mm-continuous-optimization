@@ -1,0 +1,46 @@
+\documentclass[border=1mm]{standalone}
+
+\usepackage{import}
+\subimport{../../../}{preamble.tex}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \draw[draw=blue, thick] plot[id=ex1,domain=-4:4,samples=1000] function {cosh(0.4*x)};
+  \fill[blue!5] plot[id=ex2,domain=-4:4,samples=1000] function {cosh(0.4*x)} -- (4, 3) -- (-4, 3) -- cycle;
+
+  \node[above] at ($(4, {cosh(0.4*4)})+(-0.4, -0.1)$) {\color{blue} $f(x)$};
+  
+  \draw[->] (-4, 0) -- (4, 0);
+  %\node[right] at (4, 0) {$\S^p_k$};
+  % \node[above] at (-4, 3) {$\Re_+$};
+  \draw[->] (-4, 0) -- (-4, 3);
+
+  % Lazy constraint 1
+  \def\sa{-2}
+
+  \draw[draw=red,line width=0.2mm] plot[id=lc1,domain=-4:1.2,samples=1000] function {0.4*sinh(0.4*\sa)*(x-\sa)+cosh(0.4*\sa)};
+
+  % Lazy constraint 2
+  \def\sb{1.8}
+  
+  \draw[draw=red, line width=0.2mm] plot[id=lc2,domain=-1.2:4,samples=1000] function {0.4*sinh(0.4*\sb)*(x-\sb)+cosh(0.4*\sb)};
+
+  % Lazy constraint 3
+  \def\sC{0}
+
+
+  \draw[draw=red, line width=0.2mm] plot[id=lc3,domain=-2.2:2.2,samples=1000] function {0.4*sinh(0.4*\sC)*(x-\sC)+cosh(0.4*\sC)};
+  
+ 
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

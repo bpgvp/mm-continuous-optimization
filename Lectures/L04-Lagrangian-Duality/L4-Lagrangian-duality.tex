@@ -14,6 +14,7 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usetikzlibrary{calc}
+\usetikzlibrary{positioning}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{decorations.pathreplacing}
 \usetikzlibrary{arrows.meta}
@@ -103,10 +104,11 @@
 
 \begin{frame}{Playing with Constraints}
 
-  Let $\mc F$ be a set of \emph{non-decreasing (price) functions} $F:\Re^m\to\Re$. That is, 
+  Let $\mc F$ be a set of \emph{non-decreasing (price) functions} $F:\Re^m\to\Re\cup\{\pm\infty\}$. That is, 
   \[
     u \succeq_{\Re^m_+} v \implies F(u) \geq F(v).
   \]
+  We denote the set of \emph{all} such non-decreasing functions by $\mc F(\Re^m_+)$.
 
   \textbf{Admissible (dual feasible) functions satisfy}
   \begin{enumerate}
@@ -132,6 +134,29 @@
   
 \end{frame}
 
+\begin{frame}{Example}
+
+  Consider the linear optimization problem
+  \[
+    \begin{array}{rl}
+      p^\star=\minimize & f(x) \defn x_1 + x_2 + \dots + x_{3000}\\[0.5em]
+      \st & g_1(x) = x_1 + 2 x_2 + \dots + 3000 x_{3000}\geq 1 = b_1 \\[0.5em]
+                & g_2(x)=3000 x_1 + 2999 x_2 + \dots + x_{3000} \geq 100 = b_2
+    \end{array}
+  \]
+
+  \textbf{Remark:}
+  \begin{itemize}
+  \item Consider the price function $F^\star= (c_1, c_2) \mapsto (c_1+c_2)/3001\in \mc F(\Re^2_+)$
+  \item<2-> Clearly
+    \begin{align*}
+      & F^\star(g(x)) = F^\star(x_1 + 2 x_2 + \dots + 3000 x_{3000}, 3000 x_1 + 2999 x_2 + \dots + x_{3000})\\
+      = & x_1 + x_2 + \dots + x_{3000} = f(x)
+    \end{align*}
+  \item<3-> Hence, $p^\star\geq F^\star(b) = 101/3001$
+  \end{itemize}
+  
+\end{frame}
 
 \begin{frame}{Generalized Conic Constraints}
 
@@ -145,7 +170,7 @@
 
   \vfill
 
-  The dual is built from a set $\mc F$ of \emph{non-decreasing (price) functions} $F:\Re^m\to\Re$, now with respect to the cone $K$:
+  The dual is built from a set $\mc F$ of \emph{non-decreasing (price) functions} $F:\Re^m\to\Re\cup\{\pm\infty\}$, now with respect to the cone $K$:
   \[
     u \succeq_{K} v \implies F(u)\geq F(v).
   \]
@@ -157,6 +182,370 @@
     p^\star \geq d^\star \defn \sup\set{F(b)}{F\in\mc F,~F(g(x))\leq f(x)~~\forall x\in X}.
   \]
 \end{frame}
+
+
+\begin{frame}{Weak Duality}
+
+  \textbf{Theorem : } We have always that $p^\star \geq d^\star$. That is, 
+  \[
+    \begin{array}{rlcrl}
+      \inf_x & f(x)  & \geq & \sup_F & F(b) \\[0.5em]
+      \st & x\in X   & &                       \st & F \in \mc F(\Re^m_+) \\[0.5em]
+           & g(x) \succeq_{\Re^m_+} b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
+    \end{array}
+  \]
+
+  Recall that $f(x) \geq F(g(x)) \geq F(b)$ for all primal feasible $x$ and dual feasible $F$.
+
+
+  \vfill
+  \textbf{Remarks :}
+  \begin{itemize}
+  \item<2-> In this general setting strong duality $p^\star=d^\star$ always holds.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Strong Duality}
+
+  \textbf{Theorem : } We have always that $p^\star = d^\star$. That is, 
+  \[
+    \begin{array}{rlcrl}
+      \inf_x & f(x)  & = & \sup_F & F(b) \\[0.5em]
+      \st & x\in X   & &                       \st & F \in \mc F(\Re^m_+) \\[0.5em]
+           & g(x) \succeq_{\Re^m_+} b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
+    \end{array}
+  \]
+
+  \vfill
+
+  \textbf{Proof : }
+  \begin{itemize}
+  \item<2-> Define the \emph{perturbation function} as follows
+    \[
+      \begin{array}{rl}
+        \phi(b) \defn \inf_x & f(x) \\
+        \st & x\in X\\
+                             & g(x) \succeq_{\Re^m_+} b.
+      \end{array}
+    \]
+  \item<3-> Observe that $\phi \in \mc F(\Re^m_+)$ and that $\phi(g(x))\leq f(x)$ for all $x\in X$
+  \item<4-> Hence,
+    \[
+      \begin{array}{rll}
+        \phi(b) \geq \sup_F & F(b) & \geq \phi(b) \\[0.5em]
+        \st     & F \in \mc F(\Re^m_+) & \\[0.5em]
+                            & F(g(x)) \leq f(x) ~\forall x \in X &
+      \end{array}
+    \]
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{General Strong Duality}
+
+  \emph{The dual over $\mc F(\Re^m_+)$ is too complicated}
+
+  \begin{itemize}
+  \item It contains infinitely many constraints
+  \item The set $\mc F(\Re^m_+)$ is infinite dimensional
+  \end{itemize}
+
+  \vfill
+
+  \uncover<2->{
+    Instead we will consider a subclass $\mc F \subset \mc F(\Re^m_+)$.
+    \begin{itemize}
+    \item Weak duality still holds
+    \item Strong duality not necessarily!
+    \end{itemize}
+  }
+  \vfill
+
+  \uncover<3->{
+  \begin{tcolorbox}[title=Central Problem of Duality]
+
+    Given a problem class, choose \textit{simple} $\mc F$ for which \emph{strong duality} holds!?
+    
+  \end{tcolorbox}
+  }
+  
+\end{frame}
+
+\begin{frame}{Affine Dual}
+
+  Nondecreasing affine functions $\mc F_{{\rm{aff}}} = \set{c\mapsto \iprod{u}{c} + u_0}{u\in \Re_+^m,~u_0\in \Re}$ are a sensible choice.
+%
+  Dual problem becomes
+  \[
+    \begin{array}{rl}
+      d^\star(\mc F_{{\rm{aff}}}) = \sup  & F(b) \\[0.5em]
+                       \st   & F\in \mc F_{{\rm{aff}}} \\[0.5em]
+                             & F(g(x)) \leq f(x),~~ \forall x \in X.
+    \end{array}
+  \]
+
+  \vfill
+
+  We know that if perturbation function $\phi\in \mc F_{{\rm{aff}}}$ then we have strong duality.
+
+  \vfill
+
+  \uncover<2->{
+    \textbf{Remarks:}
+    \begin{itemize}
+    \item Even in linear optimization the perturbation function is (convex) piece-wise linear rather than affine!
+    \item Hence, we expect $\phi \not \in \mc F_{{\rm{aff}}}$ which is problematic
+    \end{itemize}
+  }  
+\end{frame}
+
+
+\begin{frame}{When We Do Not Lose Anything}
+
+  \[
+    \begin{array}{rl}
+      d^\star(\mc F) = \sup  & F(b) \\[0.5em]
+                       \st   & F\in \mc F \\[0.5em]
+                             & F(g(x)) \leq f(x),~~ \forall x \in X
+    \end{array}
+  \]
+
+  \vfill
+  
+  \textbf{Theorem : } If perturbation function $\phi  = \sup_{F\in \mc S}\, F $ for $\mc S \subseteq \mc F$, then $p^\star=d^\star(\mc F)$.
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Proof : } Since $F(g(x)) \leq \phi(g(x)) \leq f(x)$ when $x\in X$ for all $F\in \mc S$,
+  \[
+    \begin{array}{rlr}
+      \phi(b) \defn \inf_x & f(x) & \geq d^\star(\mc F) \geq \sup_{F\in \mc S}\,F(b) = \phi(b).\\
+      \st & x\in X & \\
+                         & g(x) \succeq b. & 
+    \end{array}
+  \]
+  }
+\end{frame}
+
+
+
+\begin{frame}{Geometrical Interpretation}
+
+  Suppose that we have
+  \[
+    \mc F_{{\rm{aff}}} =\set{c\mapsto\iprod{u}{c}+u_0}{u\in\Re_+^m, ~u_0\in \Re}.
+  \]
+  However, $\phi \not\in \mc F$. Nevertheless, $\phi=\max_{F\in \mc S} F$ for some $\mc S\subseteq \mc F_{{\rm{aff}}}$.
+
+  \vfill
+  
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[
+        axis lines = left,
+        xlabel = $b$,
+        ticks={none},
+        width=0.55*\textwidth,
+        height=0.6*\axisdefaultheight,
+        x label style={at={(1.05, 0.18)}},
+        clip=true,
+        ymin=0.8,
+        ymax=4
+        ]
+
+        \addplot [
+        domain=0:4, 
+        samples=100, 
+        color=blue,
+        thick
+        ]
+        {exp(0.3*x)};
+        \addlegendentry{$\phi$}
+
+        
+        \foreach \p in {0, 1, ..., 4}
+        {
+          {
+            \addplot [
+            domain=0:4, 
+            samples=100, 
+            color=red,
+            ]
+            {exp(0.3*\p) + 0.3*exp(0.3*\p)*(x-\p)};
+          }
+        };
+
+                
+      \end{axis}
+    \end{tikzpicture}
+
+
+  \end{center}
+  
+\end{frame}
+
+\begin{frame}{Global Sensitivity Interpretation}
+
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[
+        axis lines = left,
+        xlabel = $b$,
+        ticks={none},
+        width=0.55*\textwidth,
+        height=0.6*\axisdefaultheight,
+        x label style={at={(1.05, 0.18)}},
+        clip=true,
+        ymin=0.8,
+        ymax=4
+        ]
+
+        \addplot [
+        domain=0:4, 
+        samples=100, 
+        color=blue,
+        thick
+        ]
+        {exp(0.3*x)};
+        \addlegendentry{$\phi$}
+
+        
+        \foreach \p in {2}
+        {
+          {
+            \addplot [
+            domain=0:4, 
+            samples=100, 
+            color=red,
+            ]
+            {exp(0.3*\p) + 0.3*exp(0.3*\p)*(x-\p)};
+            \addlegendentry{$F^\star$}
+          }
+        };
+
+        \draw[densely dotted] (axis cs:2,0)--(axis cs:2,1.82212);
+        \node[above right] at (axis cs:2,0.7) {$b_0$};
+
+        \draw[densely dotted] (axis cs:0,1.82212)--(axis cs:2,1.82212);
+        \node[above right] at (axis cs:0,1.82212) {$\phi(b_0) = F^\star(b_0)$};
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+
+  
+  \vfill
+
+  \textbf{Remark:}
+  \begin{itemize}
+  \item For any dual feasible $F$ we have $\phi(b)\geq F(b)$ for all $b$.
+  \item<2-> Consider a dual optimal $F^\star$ at $b_0$ with $F^\star(b_0)=\phi(b_0)$.
+  \item<3-> The optimal dual function $F^\star=c\mapsto  \iprod{u^\star}{c-b_0}+\phi(b_0)$ serves as a \emph{sensitivity/price} function of the primal infimum.
+  \end{itemize}  
+ 
+\end{frame}
+
+\begin{frame}{Example}
+
+  Consider the linear optimization problem
+  \[
+    \begin{array}{rl}
+      p^\star=\minimize & f(x) \defn x_1 + x_2 + \dots + x_{3000}\\[0.5em]
+      \st & g_1(x) = x_1 + 2 x_2 + \dots + 3000 x_{3000}\geq 1 = b_1 \\[0.5em]
+                & g_2(x)=3000 x_1 + 2999 x_2 + \dots + x_{3000} \geq 100 = b_2
+    \end{array}
+  \]
+
+  \textbf{Remark:}
+  \begin{itemize}
+  \item Consider the price function $F^\star= (c_1, c_2) \mapsto (c_1+c_2)/3001\in \mc F(\Re^2_+)$
+  \item<2-> Suppose we are forced to guarantee $g_1(x)\geq 1+\epsilon$. Additional cost will scale as
+    \[
+      p^\star \approx 101/3001+\epsilon/3001
+    \]
+    for small $\epsilon>0$.
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Lower Semi-Continuous Functions}
+
+  \textbf{Definition :} A \emph{lower semi-continuous} (LSC) function is a function with closed epigraph. A function is \emph{proper} if it never takes the value $-\infty$ and is not identically $+\infty$.
+  
+  \uncover<2->{
+  \textbf{Theorem :} Every proper convex LSC function is the supremum of affine functions.
+
+  \vfill
+  \begin{center}
+    \includegraphics[height=3cm]{lsc-function/lsc-function.pdf}
+  \end{center}
+  }
+  
+\end{frame}
+
+\begin{frame}{Strong Duality in Nonlinear Programming}
+
+  \textbf{Theorem :} If the perturbation function $\phi$ is proper, convex and LSC, then strong duality holds $p^\star=d^\star(\mc{F}_{{\rm{aff}}})$.
+
+  \vfill
+
+  \begin{itemize}
+  \item Perturbation functions are always convex for convex problems
+  
+  \item \emph{Dual is always a convex problem}
+
+    \[
+      \begin{array}{rl}
+        d^\star(\mc{F}_{{\rm{aff}}}) = \sup & \iprod{u}{b} + u_0 \\[0.5em]
+        \st & \iprod{u}{g(x)}+ u_0 \leq f(x), ~~\forall x\in X \\[0.5em]
+                                 & u\geq 0
+      \end{array}
+    \]
+  \item<2-> Often showing ``$\phi$ is LSC and convex'' is not too difficult
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}{Roadmap}
+
+%   \begin{center}
+%     \begin{tikzpicture}[node distance=1cm, auto]  
+
+%       \node[rectangle, draw=black] (constraints) {Playing with standard constraints};  
+%       \node[below=1cm of constraints] (dummy1) {}; 
+
+%       \node[rectangle, draw=black, left=of dummy1] (F_full) {$\mc F(\Re^m_+)$};
+%       \draw[->] (constraints.south) ++(-.5,0) -- ++(0,-0.5) -| (F_full.north);
+%       \node[below=1cm of F_full] (dummy2) {};
+%       \node[rectangle, draw=black, left=of dummy2] (weak_duality_full) {Weak duality};
+%       \draw[->] (F_full.west) -- ++(-0.5,0) -| (weak_duality_full.north);
+%       \node[rectangle, draw=black, below=0.5cm of weak_duality_full] (strong_duality_full) {Strong duality};
+%       % \node[rectangle, draw=black, below=1cm of strong_duality_full] (complementarity) {Complementarity conditions};
+%       % \draw[->] (complementarity.north) -- (strong_duality_full.south);
+      
+%       \node[rectangle, draw=black, right=of dummy1] (F) {$\mc F\subset\mc F(\Re^m_+)$};
+%       \draw[->] (constraints.south) ++(+.5,0) -- ++(0,-0.5) -| (F.north);
+%       \node[below=1cm of F] (dummy3) {};
+      
+%       \node[rectangle, draw=black, right=of dummy3] (weak_duality_partial) {Weak duality};
+%       \draw[->] (F.east) -- ++(0.5,0) -| (weak_duality_partial.north);
+%       \node[rectangle, draw=black, below=0.5cm of weak_duality_partial] (strong_duality_partial) {Strong duality};
+%       \node[rectangle, draw=black, below=1cm of strong_duality_partial] (lsc) {$\mc F_{{\rm{aff}}}=\{\rm{affine}\}$, $\phi$ convex LSC};
+%       \draw[->] (lsc.north) -- (strong_duality_partial.south);
+            
+
+%       \node[below=1.5cm of dummy1] (pf) {\emph{Perturbation function $\phi$}};
+%       \draw[->] (weak_duality_full.east) -- (pf.north west);
+%       \draw[->] (weak_duality_partial.west) -- (pf.north east);
+%       \draw[->] (pf.south west) -- (strong_duality_full.east);
+%       \draw[->] (pf.south east) -- (lsc.north west);
+      
+%     \end{tikzpicture} 
+%   \end{center}
+% \end{frame}
+
 
 \section{Lagrangian Duality}
 
@@ -404,104 +793,104 @@
 
 
 
-\section{Applications}
+% \section{Applications}
 
-\subsection{Top-k Minimization}
+% \subsection{Top-k Minimization}
 
-\begin{frame}{Top-$k$ Minimization}
+% \begin{frame}{Top-$k$ Minimization}
 
-  \textbf{Example: } Top-$k$ minimization for convex set $C\subseteq \Re^n$, i.e.,
-  \begin{align*}
-    \min & ~ \textstyle\sum^k_{i=1} x_{[i]} \\[0.5em]
-    \st &  ~x \in C.
-  \end{align*}
+%   \textbf{Example: } Top-$k$ minimization for convex set $C\subseteq \Re^n$, i.e.,
+%   \begin{align*}
+%     \min & ~ \textstyle\sum^k_{i=1} x_{[i]} \\[0.5em]
+%     \st &  ~x \in C.
+%   \end{align*}
 
-  How would you solve this ?
+%   How would you solve this ?
   
-  \vfill
+%   \vfill
 
-  \uncover<2->{
-  \textbf{Theorem:} The function $f(x) = \sum^k_{i=1} x_{[i]}$ is a convex function of $x$.\\[1em]
-  \textbf{Proof:}   Indeed, we have \( f(x) = \textstyle\max_{S\in\mc S} \sum_{i\in S} x_i\)
-  where $\mc S$ is the set of all subsets of $[1,\dots, n]$ with $k$ distinct elements.
-  }
+%   \uncover<2->{
+%   \textbf{Theorem:} The function $f(x) = \sum^k_{i=1} x_{[i]}$ is a convex function of $x$.\\[1em]
+%   \textbf{Proof:}   Indeed, we have \( f(x) = \textstyle\max_{S\in\mc S} \sum_{i\in S} x_i\)
+%   where $\mc S$ is the set of all subsets of $[1,\dots, n]$ with $k$ distinct elements.
+%   }
 
   
     
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Top-$k$ Minimization : Primal Formulation}
+% \begin{frame}{Top-$k$ Minimization : Primal Formulation}
 
-  Naive \emph{primal formulation}:
-  \begin{align*}
-    \min & ~t \\[0.5em]
-    \st  & ~t \geq \textstyle\sum_{i\in S} x_i \quad \forall S\in \mc S\,\\[0.4em]
-         & ~x \in C.
-  \end{align*}
-  \uncover<2->{%
-  Even for a small problem with $n=1000$, $k=50$, we have that the number of required constraints $\binom{n}{k}\gg 1\e{80}$ exceeds the estimated number of atoms in the observable universe.}
+%   Naive \emph{primal formulation}:
+%   \begin{align*}
+%     \min & ~t \\[0.5em]
+%     \st  & ~t \geq \textstyle\sum_{i\in S} x_i \quad \forall S\in \mc S\,\\[0.4em]
+%          & ~x \in C.
+%   \end{align*}
+%   \uncover<2->{%
+%   Even for a small problem with $n=1000$, $k=50$, we have that the number of required constraints $\binom{n}{k}\gg 1\e{80}$ exceeds the estimated number of atoms in the observable universe.}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Lagrangian Dual}
+% \begin{frame}{Lagrangian Dual}
 
   
-  \textbf{Fact:} we can represent objective function as a linear optimization problem
-  \begin{align*}
-    f(x)  = \max & ~\textstyle\sum_{i=1}^n s_i x_i \\[0.5em]
-    \st & ~ \textstyle\sum_{i=1}^n s_i =k,
-          ~ s \preceq_{\Re^n_+} \mb 1_n,
-          ~ s\in\Re_+^n\\[0.5em]
-  \end{align*}
+%   \textbf{Fact:} we can represent objective function as a linear optimization problem
+%   \begin{align*}
+%     f(x)  = \max & ~\textstyle\sum_{i=1}^n s_i x_i \\[0.5em]
+%     \st & ~ \textstyle\sum_{i=1}^n s_i =k,
+%           ~ s \preceq_{\Re^n_+} \mb 1_n,
+%           ~ s\in\Re_+^n\\[0.5em]
+%   \end{align*}
   
-  \uncover<2->{
-    \textbf{Dual function:} We have
-    \begin{align*}
-      d(u, q_+, q_{-})\defn & \max_{s\in \Re_+^n}~ \overbrace{\textstyle \iprod{s}{x} + \iprod{u}{\mb 1_n-s}+\iprod{q_+}{k-\textstyle\mb 1_n\tpose s}+\iprod{q_-}{\textstyle\mb 1_n\tpose s-k}}^{=L(s, u, q_+, q_-)}. \\
-      \uncover<3->{= & \max_{s\in \Re_+^n} ~\iprod{\mb 1_n}{u} +k(q_+-q_{-}) + \iprod{x-(q_+-q_{-})\mb 1_n-u}{s}}\\
-      \uncover<4->{= &
-                       \begin{cases}
-                         \iprod{\mb 1_n}{u} +k(q_+-q_{-}) & {\rm{if~}} u \succeq_{\Re^n_+} x-(q_+-q_{-})\mb 1_n,\\
-                         \infty & {\rm{otherwise}}.
-                       \end{cases}}
-    \end{align*}
-  }
-\end{frame}
+%   \uncover<2->{
+%     \textbf{Dual function:} We have
+%     \begin{align*}
+%       d(u, q_+, q_{-})\defn & \max_{s\in \Re_+^n}~ \overbrace{\textstyle \iprod{s}{x} + \iprod{u}{\mb 1_n-s}+\iprod{q_+}{k-\textstyle\mb 1_n\tpose s}+\iprod{q_-}{\textstyle\mb 1_n\tpose s-k}}^{=L(s, u, q_+, q_-)}. \\
+%       \uncover<3->{= & \max_{s\in \Re_+^n} ~\iprod{\mb 1_n}{u} +k(q_+-q_{-}) + \iprod{x-(q_+-q_{-})\mb 1_n-u}{s}}\\
+%       \uncover<4->{= &
+%                        \begin{cases}
+%                          \iprod{\mb 1_n}{u} +k(q_+-q_{-}) & {\rm{if~}} u \succeq_{\Re^n_+} x-(q_+-q_{-})\mb 1_n,\\
+%                          \infty & {\rm{otherwise}}.
+%                        \end{cases}}
+%     \end{align*}
+%   }
+% \end{frame}
 
-\begin{frame}{Lagrangian Dual}
+% \begin{frame}{Lagrangian Dual}
 
 
-  \textbf{Theorem:} We can represent our objective function as
-  \[
-    \begin{array}{rl}
-      f(x)  =  \min_{}& \iprod{\mb 1_n}{u} +kq\\[0.5em]
-      \st & u \succeq_{\Re^n_+} x-q\mb 1_n, \\[0.5em]
-                      & u\in\Re_+^{n}, ~q \in \Re
-    \end{array}
-  \]
-  \textbf{Proof:}
-  We have strong duality unconditionally for linear optimization problems which are feasible and bounded (a consequence of Farkas' lemma).
+%   \textbf{Theorem:} We can represent our objective function as
+%   \[
+%     \begin{array}{rl}
+%       f(x)  =  \min_{}& \iprod{\mb 1_n}{u} +kq\\[0.5em]
+%       \st & u \succeq_{\Re^n_+} x-q\mb 1_n, \\[0.5em]
+%                       & u\in\Re_+^{n}, ~q \in \Re
+%     \end{array}
+%   \]
+%   \textbf{Proof:}
+%   We have strong duality unconditionally for linear optimization problems which are feasible and bounded (a consequence of Farkas' lemma).
  
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Dual Formulation}
+% \begin{frame}{Dual Formulation}
 
-  Top-k problem \emph{dual formulation}:
-  \begin{align*}
-    \min & ~\iprod{\mb 1_n}{u} +kq \\[0.5em]
-    \st  & ~u \succeq_{\Re^n_+} x-q\mb 1_n,\\[0.4em]
-         & ~x \in C, ~u\in \Re^n_+, ~q \in \Re.
-  \end{align*}
-  counts only $n$ additional constraints and $n+1$ additional variables!
+%   Top-k problem \emph{dual formulation}:
+%   \begin{align*}
+%     \min & ~\iprod{\mb 1_n}{u} +kq \\[0.5em]
+%     \st  & ~u \succeq_{\Re^n_+} x-q\mb 1_n,\\[0.4em]
+%          & ~x \in C, ~u\in \Re^n_+, ~q \in \Re.
+%   \end{align*}
+%   counts only $n$ additional constraints and $n+1$ additional variables!
 
-  \vfill
+%   \vfill
   
-  \textbf{Moral:} Duality can be practical. \textbf{We can do even better!}
+%   \textbf{Moral:} Duality can be practical. \textbf{We can do even better!}
 
 
-\end{frame}
+% \end{frame}
 
-\subsection{Support Vector Machine (SVM)}
+\section{Support Vector Machine (SVM)}
 
 \begin{frame}{SVM : Primal Formulation}
 
@@ -753,8 +1142,19 @@
 \begin{frame}{Proof}
 
   \textbf{Proof [$\star$]:}
-  (I) $x^\star\in \arg\min_{x\in X} ~L(x, F^\star)$. We have that $f(x^\star)\leq L(x, F^\star)$ as $F^\star$ is dual feasible. We also have $f(x^\star) = F^\star(b) = F^\star(g(x^\star))$ from the previous theorem.  Hence, $f(x^\star) = L(x^\star, F^\star)$. (II)
-  $F^\star \in \arg \max_{F\in \mc F} ~L(x^\star, F)$. We have that $f(x^\star)\geq L(x^\star, F)$ for any $F\in \mc F$ as $x^\star$ is primal feasible. Again from the previous theorem, $F^\star(b) = L(x^\star, F^\star)$.
+  (I) $x^\star\in \arg\min_{x\in X} ~L(x, F^\star)$. As $F^\star$ is dual feasible, $F^\star(g(x))\leq f(x)$ and hence
+  \[
+    L(x, F^\star) = f(x) - F^\star(g(x)) + F^\star(b) \geq F^\star(b) = f(x^\star) \quad \forall x\in X.
+  \]
+  From the previous theorem $F^\star(g(x^\star)) = F^\star(b)$ and thus $L(x^\star, F^\star) = f(x^\star)$. Hence, $x^\star$ attains the lower bound.
+
+  \vfill
+
+  (II) $F^\star \in \arg \max_{F\in \mc F} ~L(x^\star, F)$. As $x^\star$ is primal feasible, $F(g(x^\star))\geq F(b)$ and hence
+  \[
+    L(x^\star, F) = f(x^\star) + F(b) - F(g(x^\star)) \leq f(x^\star) \quad \forall F\in \mc F.
+  \]
+  By (I), $L(x^\star, F^\star) = f(x^\star)$. Hence, $F^\star$ attains the upper bound.
 
 
 \end{frame}
