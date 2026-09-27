@@ -1,13 +1,18 @@
 #
-# Build this lecture and remove all generated files.
+# Build this lecture (figures first) and remove all generated files.
 #
 
-all:
+SUBDIRS := figures
+
+all: $(SUBDIRS)
 	pdflatex --shell-escape L4-Lagrangian-duality.tex
 	pdflatex --shell-escape L4-Lagrangian-duality.tex
 
-clean:
+clean: $(SUBDIRS)
 	rm -rf auto svg-inkscape
 	rm -f *.aux *.log *.nav *.out *.snm *.toc *.vrb *.rip *.fls *.fdb_latexmk *.synctex.gz *.gnuplot *.table *.bbl *.blg *.pdf _region_.* *~
 
-.PHONY: all clean
+$(SUBDIRS):
+	$(MAKE) -C $@ $(MAKECMDGOALS)
+
+.PHONY: all clean $(SUBDIRS)
