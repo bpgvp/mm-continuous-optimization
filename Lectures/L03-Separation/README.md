@@ -18,3 +18,4 @@
 
 - [Lecture slides (PDF)](https://bpgvp.github.io/mm-continuous-optimization/L3-Separation.pdf)
 - Related reading: sections 2.5&ndash;2.6 of [*Convex Optimization*](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) by Boyd &amp; Vandenberghe
+- Practice problems: Exercises 2.20, 2.21 and 2.34 of [*Convex Optimization*](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) by Boyd &amp; Vandenberghe

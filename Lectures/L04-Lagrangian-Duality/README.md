@@ -19,3 +19,4 @@
 - [Lecture slides (PDF)](https://bpgvp.github.io/mm-continuous-optimization/L4-Lagrangian-duality.pdf)
 - The generalized duality part follows the survey [*An elementary survey of general duality theory in mathematical programming*](https://doi.org/10.1007/BF01584248) by J. Tind and L. A. Wolsey, *Mathematical Programming* 21:241&ndash;261, 1981
 - Related reading: sections 5.1, 5.2 and 5.6 of [*Convex Optimization*](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) by Boyd &amp; Vandenberghe
+- Practice problems: Exercises 5.17, 5.19 and 5.24 of [*Convex Optimization*](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) by Boyd &amp; Vandenberghe
