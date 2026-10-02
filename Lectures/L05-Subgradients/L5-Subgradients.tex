@@ -96,6 +96,7 @@
   \hfill
   \begin{minipage}{0.4\textwidth}
     (Continuously) differentiable.\\
+    Not smooth
   \end{minipage}
 
 
@@ -138,7 +139,7 @@
     \For{$k\geq 0$}{
       $x_{k+1} \defn x_k - h_k f'(x_k)$
     }
-    \caption{Gradient Descent}
+    \caption{Gradient Descent (GD)}
   \end{algorithm}
 
   \vfill
@@ -174,7 +175,7 @@
   \item Stationary points  are
     $s_1 = (0, 0)$, $s_2=(0, -1)$ and $s_3=(0, 1)$
   \item<2-> Only $s_2$ and $s_3$ are minima.
-  \item<3-> If $x_0=(1, 0)$ then gradient descent with $f'(x_1, x_2) = (x_1, -x_2+x_2^3)$ converges to $s_1$!
+  \item<3-> If $x_0=(1, 0)$ then GD with $f'(x_1, x_2) = (x_1, -x_2+x_2^3)$ can only converge to $s_1$!
   \end{itemize}
   
 \end{frame}
@@ -433,7 +434,7 @@
   \uncover<2->{
   \textbf{Proof [$\star$]:} We have using Cauchy-Schwarz and  $L$ smoothness that
   \(
-    \iprod{f'(x_{k+1})-f'(x_k)}{-f'(x_k)} \leq \norm{f'(x_{k+1})-f'(x_k)}_2\norm{f'(x_k)}
+    \iprod{f'(x_{k+1})-f'(x_k)}{-f'(x_k)} \leq \norm{f'(x_{k+1})-f'(x_k)}\norm{f'(x_k)}
     \leq L \norm{x_{k+1}-x_k}\norm{f'(x_k)} \leq L h_k \norm{f'(x_k)}^2
     \). From the second Wolfe condition we have that \(\iprod{f'(x_{k+1})-f'(x_k)}{-f'(x_k)} \geq (1-\beta)\norm{f'(x_k)}^2\) and hence $h_k \geq (1-\beta)/L$. The first Wolfe condition guarantees hence
     \[
