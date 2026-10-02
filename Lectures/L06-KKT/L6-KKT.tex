@@ -97,9 +97,9 @@
 
   \vfill
 
-  \textbf{Example:} Consider indeed
+  \textbf{Example:} Consider indeed $f(x) = x$ and
   \[
-    \min \set{x}{x\geq 1}
+    \min_{x\in\Re} \set{f(x)}{x\geq 1}
   \]
   with $x^\star=1$ despite $f'(x^\star)=1$.
   }
@@ -107,7 +107,7 @@
 
 \section{Subdifferentials of Maxima and Aggregates}
 
-\begin{frame}{Subdifferential of a sum}
+\begin{frame}{Subdifferential of a Sum}
 
   Let $f_1, f_2:\Re^n\to\nRe$ be lsc convex such that $D \defn \cap_{i} \relint(\dom(f_i))\neq \emptyset$ and $s\defn f_1+f_2$.
 
@@ -119,7 +119,7 @@
 
   The proof of the previous result is due to Rockafellar and is too complicated to discuss here. The direction $\supseteq$ is trivial. If $g_i\in \partial f_i(x)$, i.e.,
   \[
-    f_i(y) \geq f_i(x) + \iprod{g_i}{y-x} ~~\forall x, ~\forall i,
+    f_i(y) \geq f_i(x) + \iprod{g_i}{y-x} ~~\forall y, ~\forall i,
   \]
   then evidently, $g_1+g_2\in\partial s(x)$.
 
@@ -141,7 +141,7 @@
   \begin{minipage}{0.5\textwidth}
     \textbf{Danskin's Theorem : } Let $I(x) \defn \set{i}{f_i(x)=f(x)}$ for $x \in D$. Then,
     \[
-      \partial f(x) = C \defn \conv \set{\partial f_i(x)}{ i \in I(x)}.
+      \partial f(x) = C \defn \conv\big(\textstyle\cup_{i \in I(x)} \partial f_i(x)\big).
     \]
   \end{minipage}%
   \hfill
@@ -184,11 +184,11 @@
 
   \textbf{Proof sketch [$\star$]:}
   \begin{itemize}
-  \item As $\partial f(x)$ and $C$ are convex and closed we need that the support functions $\sigma_C = \sigma_{\partial f}$.
-  \item Let $d \in \Re^n$. Then $\lim_{t\downarrow 0} I(x + td) \subseteq I(x)$.
+  \item As $\partial f(x)$ and $C$ are convex and closed, it suffices to show that their support functions agree, $\sigma_C = \sigma_{\partial f(x)}$ (closed convex sets are determined by their support function, see PSet).
+  \item Let $d \in \Re^n$. Then $I(x + td) \subseteq I(x)$ for all small $t>0$, by continuity of the $f_i$ on $\interior(\dom(f_i))$ (L2).
   \item $\sigma_{\partial f(x)}(d) = \nabla f(x)[d] = \max_{i \in I(x)} \nabla f_i(x)[d]$.
   \item $\nabla f_i(x)[d] = \sigma_{\partial f_i(x)}(d) = \max \set{\iprod{g_i}{d}}{g_i \in \partial f_i(x)}$.
-  \item $\sigma_C(d) = \sigma_{\partial f(x)}(d) = {\displaystyle\max_{i\in I(x)}} \set{\iprod{g_i}{d}\!\!}{\!\!g_i\in \partial f_i(x)} = {\displaystyle\max_{i\in I(x)}} \set{\iprod{g}{d}\!\!}{\!\!g\in \conv({\displaystyle \cup_{i\in I(x)}}\partial f_i(x))}$
+  \item $\sigma_{\partial f(x)}(d) = {\displaystyle\max_{i\in I(x)}} \max\set{\iprod{g_i}{d}\!\!}{\!\!g_i\in \partial f_i(x)} = \max\set{\iprod{g}{d}\!\!}{\!\!g\in \conv({\displaystyle \cup_{i\in I(x)}}\partial f_i(x))} = \sigma_C(d)$
   \end{itemize}
 
 \end{frame}
@@ -226,7 +226,7 @@
 
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item Proven in 1939 in the master thesis of Karush. Rediscovered in 1951 by Kuhn and Tucker.
+  \item Proven in 1939 in the master's thesis of Karush. Rediscovered in 1951 by Kuhn and Tucker.
   \item Very important cornerstone in optimization
   \end{itemize}
   
@@ -236,7 +236,7 @@
 \begin{frame}{Karush-Kuhn-Tucker Theorem for Differentiable Functions}
 
   \uncover<2->{
-  Let $f:\Re^n\to\Re$ and $g_1, \dots, g_m:\Re^n\to\Re$ be differentiable functions. A point $\bar x$ satisfies the linear independence constraint qualifications (LICQ) if 
+  Let $f:\Re^n\to\Re$ and $g_1, \dots, g_m:\Re^n\to\Re$ be differentiable functions. A point $\bar x$ satisfies the linear independence constraint qualification (LICQ) if 
   \[
     \set{g_i'(\bar x)}{i\in I(\bar x)}
   \]
@@ -250,11 +250,15 @@
   \[
   \begin{array}{rl}
     g(x^\star) \succeq b, & {\rm{Feasibility}}\\[0.5em]
-    \lambda_i^\star\succeq 0 {\rm{~for~}} i \in [1, \dots, m]: &{\rm{Multipliers}} \\[1em]
+    \exists\, \lambda_i^\star\geq 0 {\rm{~for~}} i \in [1, \dots, m]: & {\rm{Multipliers}} \\[1em]
     f'(x^\star) - \sum_{i \in I(x^\star)} \lambda_i^\star g'_i(x^\star) = 0 &
   \end{array}
   \]
   with $I( x^\star) \defn \set{i}{g_i(x^\star)=b_i}$.
+
+  \vfill
+
+  (Proof omitted; we will prove the convex case below.)
 \end{frame}
 
 \begin{frame}{Mechanical Interpretation}
@@ -294,7 +298,7 @@
   \textbf{Example:}
   \[
     \begin{array}{rl}
-     (-\sqrt{2}, 0) = \arg \min & x_1+x_2 \\[0.5em]
+     (-\sqrt{2}, 0) \in \arg \min & x_1+x_2 \\[0.5em]
       \st  & 2- x_1^2-x_2^2\geq 0,\\[0.5em]
            & x_2\geq 0
     \end{array}
@@ -313,7 +317,7 @@
   \textbf{Example:}
   \[
     \begin{array}{rl}
-     (0, \sqrt{2}) = \arg \min & x_1+x_2 \\[0.5em]
+     (0, \sqrt{2}) \in \arg \min & x_1+x_2 \\[0.5em]
       \st  & 2- x_1^2-x_2^2\geq 0,\\[0.5em]
            & x_2\geq \sqrt{2}
     \end{array}
@@ -336,9 +340,9 @@
   A point $x^\star$ is an optimal point of $\min \{f(x)~ \st~ g(x)\succeq b\}$ \emph{if and only if}
   \[
   \begin{array}{rl}
-    g(x^\star) \geq b, & {\rm{Feasibility}}\\[0.5em]
-    \lambda_i^\star\succeq 0 {\rm{~for~}} i \in [1, \dots, m]:  & {\rm{Multipliers}} \\[1em]
-    \exists h_0 \in \partial f(x^\star), ~h_i\in\partial(- g_i(x^\star)) : h_0 + \sum_{i \in I(x^\star)} \lambda_i^\star h_i = 0 &
+    g(x^\star) \succeq b, & {\rm{Feasibility}}\\[0.5em]
+    \exists\, \lambda_i^\star\geq 0 {\rm{~for~}} i \in [1, \dots, m]: & {\rm{Multipliers}} \\[1em]
+    \exists h_0 \in \partial f(x^\star), ~h_i\in\partial(-g_i)(x^\star) : h_0 + \sum_{i \in I(x^\star)} \lambda_i^\star h_i = 0 &
   \end{array}
   \]
   where $I(x^\star) \defn \set{i}{g_i(x^\star)=b_i}$.
@@ -348,7 +352,7 @@
 \begin{frame}{Proof using Subdifferentials}
 
   \[
-    f^\star  = \min\set{f(x)}{x\in \Re^n, ~g(x)\succeq b}
+    p^\star  = \min\set{f(x)}{x\in \Re^n, ~g(x)\succeq b}
   \]
 
   \vfill
@@ -356,15 +360,16 @@
   \textbf{Proof : }
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item Let $\phi(x)\defn \max \{f(x) - f^\star, b_1 - g_1(x), \dots, b_m-g_m(x)\}$ a convex function.
-  \item<2-> $x^\star$ is a minimizer $\iff$ $x^\star \in \arg \min_x \phi(x)$ $\iff$ $0\in \partial \phi(x^\star)$ $\iff$ $0 \in \conv(\set{\partial f(x^\star), \partial (- g_i(x^\star)) }{i \in I(x^\star)})$ (indeed $f(x^\star)=f^\star$) $\iff$ $\exists h_0 \in \partial f(x^\star)$ and $h_i \in \partial (-g_i(x^\star))$, $\alpha_i\geq 0$ such that $\alpha_0+\sum_{i=1}^m \alpha_i=1$ and $0 = \alpha_0 h_0 + \sum_{i\in I(x^\star)} \alpha_i h_i$.
+  \item Let $\phi(x)\defn \max \{f(x) - p^\star, b_1 - g_1(x), \dots, b_m-g_m(x)\}$ a convex function.
+  \item<2-> ($\Rightarrow$) Let $x^\star$ be a minimizer. Then $x^\star \in \arg \min_x \phi(x)$ $\iff$ $0\in \partial \phi(x^\star)$ $\iff$ $0 \in \conv\big(\partial f(x^\star) \cup \textstyle\bigcup_{i \in I(x^\star)} \partial(-g_i)(x^\star)\big)$ (indeed $f(x^\star)=p^\star$) $\iff$ $\exists h_0 \in \partial f(x^\star)$ and $h_i \in \partial(-g_i)(x^\star)$, $\alpha_i\geq 0$ such that $\alpha_0+\sum_{i\in I(x^\star)} \alpha_i=1$ and $0 = \alpha_0 h_0 + \sum_{i\in I(x^\star)} \alpha_i h_i$.
   \item<3-> $\alpha_0\neq 0$. First $\iprod{h_i}{y-x^\star} \leq g_i(x^\star) -g_i(y) = b_i - g_i(y)$ for all $y$ and $i \in I(x^\star)$. If $\alpha_0=0$ then contradiction $0 = \sum_{i\in I(x^\star)} \alpha_i \iprod{h_i}{\bar x - x^\star} \leq \sum_{i\in I(x^\star)} \alpha_i (b_i - g_i(\bar x))<0$ as $\sum_{i\in I(x^\star)} \alpha_i=1$ and $g_i(\bar x)>b_i$ satisfied by the Slater point $\bar x$.
   \item<4-> Simply take $\lambda_i^\star \defn \frac{\alpha_i}{\alpha_0}$.
+  \item<5-> ($\Leftarrow$) Follows from the KKT and Duality slide below: a KKT point is primal optimal by weak duality.
   \end{itemize}
   
 \end{frame}
 
-\begin{frame}{Example (no Slater as well)}
+\begin{frame}{Example (No Slater Either)}
 
   \begin{center}
     \includegraphics[height=5cm]{no-licq/no-licq.pdf}
@@ -375,7 +380,7 @@
   \textbf{Example:}
   \[
     \begin{array}{rl}
-     (0, \sqrt{2}) = \arg \min & x_1+x_2 \\[0.5em]
+     (0, \sqrt{2}) \in \arg \min & x_1+x_2 \\[0.5em]
       \st  & 2- x_1^2-x_2^2\geq 0,\\[0.5em]
            & x_2\geq \sqrt{2}
     \end{array}
@@ -386,7 +391,7 @@
 
 \begin{frame}{The Karush-Kuhn-Tucker Theorem}
 
-  Let $f:\Re^n\to\nRe$ be a convex function, $g_1, \dots, g_m$ be concave functions, $b\in \Re^m$ such that \emph{Slater's condition} holds:
+  Let $f:\Re^n\to\Re$ be a convex function, $g_1, \dots, g_m$ be concave functions, $b\in \Re^m$ such that \emph{Slater's condition} holds:
   \[
     \exists \bar x : g_i(\bar x) > b_i
   \]
@@ -397,9 +402,9 @@
   \textbf{Theorem :} A point $x^\star$ is an optimal point of $\min \{f(x)~ \st~ g(x)\succeq b\}$ \emph{if and only if}
   \[
   \begin{array}{rl}
-    g(x^\star) \geq b, & {\rm{Feasibility}}\\[0.5em]
-    \lambda_i^\star\geq 0 {\rm{~for~}} i \in [1, \dots, m]:  & {\rm{Multipliers}} \\[1em]
-    \exists h_0 \in \partial f(x^\star), ~h_i\in\partial(- g_i(x^\star)) : h_0 + \sum_{i\in[1,\dots,m]} \lambda_i^\star h_i = 0 &
+    g(x^\star) \succeq b, & {\rm{Feasibility}}\\[0.5em]
+    \exists\, \lambda_i^\star\geq 0 {\rm{~for~}} i \in [1, \dots, m]: & {\rm{Multipliers}} \\[1em]
+    \exists h_0 \in \partial f(x^\star), ~h_i\in\partial(-g_i)(x^\star) : h_0 + \sum_{i\in[1,\dots,m]} \lambda_i^\star h_i = 0 &
   \end{array}
   \]
   where $\lambda_i^\star (b_i-g_i(x^\star)) =0$ for all $i$ (\emph{Complementarity}).
@@ -440,7 +445,7 @@
   \vfill
 
   
-  Suppose that $(x^\star, \lambda^\star)$ satisfy KKT system.
+  Suppose that $(x^\star, \lambda^\star)$ satisfy the KKT system for convex functions.
   We take as primal candidate $x^\star$ and as dual candidate $F^\star: c \mapsto \iprod{\lambda^\star}{c} + u_0$ with $u_0 = f(x^\star) - \iprod{\lambda^\star}{b}$.
 
   \vfill
@@ -499,7 +504,7 @@
            & -x_2 - \frac{w}{2} \geq -l.
     \end{array}
   \]
-  Nature optimizes for energy.
+  Nature minimizes energy.
   
 \end{frame}
 
