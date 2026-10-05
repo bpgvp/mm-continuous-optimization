@@ -132,29 +132,55 @@
 
 \begin{frame}{Gradient Descent}
 
+  \includegraphics[height=2.5cm]{cauchy.jpg}\\[0.4em]
+  {\small Augustin-Louis Cauchy: \emph{``Méthode générale pour la résolution des systèmes d'équations simultanées (1847)''}}
+  
+  \vfill
+  
   
   \begin{algorithm}[H]
     \SetKwInput{Initialization}{Initialisation}
-    \Initialization{$x_0$ feasible}
-    \For{$k\geq 0$}{
+    \Initialization{Initial point $x_0$}
+    \For{$k\geq 0$}{     
       $x_{k+1} \defn x_k - h_k f'(x_k)$
     }
     \caption{Gradient Descent (GD)}
   \end{algorithm}
 
   \vfill
-  
-  \emph{Gradient method} proceeds in the steepest descent direction.
+
+  \emph{Gradient method} proceeds in the steepest descent direction (with respect to $\|\cdot\|_2$).
   \begin{itemize}
   \item How to choose step sizes $(h_k)_{k\geq 0}>0$?
   \end{itemize}
-
-  \vfill
-
+  
   \uncover<2->{
     In machine learning $(h_k)_{k\geq 0}>0$ are called \emph{learning rates}.
   }
 \end{frame}
+
+
+% \begin{frame}{Gradient Descent}
+
+  
+%   \begin{algorithm}[H]
+%     \SetKwInput{Initialization}{Initialisation}
+%     \Initialization{$x_0$ feasible}
+%     \For{$k\geq 0$}{
+%       $x_{k+1} \defn x_k - h_k f'(x_k)$
+%     }
+%     \caption{Gradient Descent (GD)}
+%   \end{algorithm}
+
+%   \vfill
+  
+%   \emph{Gradient method} proceeds in the steepest descent direction.
+%   \begin{itemize}
+%   \item How to choose step sizes $(h_k)_{k\geq 0}>0$?
+%   \end{itemize}
+
+  
+% \end{frame}
 
 \begin{frame}{Stationary Points}
 
