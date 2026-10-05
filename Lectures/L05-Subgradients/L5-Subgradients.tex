@@ -339,7 +339,7 @@
   \vfill
 
   \uncover<2->{
-    \textbf{Crucial point:} we do not need to know $L$ in the \emph{algorithm}!
+    \textbf{Adaptivity:} we do not need to know $L$ in the \emph{algorithm}!
   }
   
 \end{frame}
@@ -403,9 +403,9 @@
   \[
     d(t')-d(0) =  t' d'(\bar t) <0.
   \]
-  Hence, $d(t')<d(0)$ for all $t'\in(0,T)$. Note that $g(t)$ is bounded from below for all $t> 0$ while $g(0)+\alpha t g'(0)$ with $\alpha>0$ is not. Hence, $d(t)\to+\infty$ and by continuity of $d$ the first zero
+  Hence, $d(t')<d(0)=0$ for all $t'\in(0,T]$. Note that $g(t)$ is bounded from below for all $t> 0$ while $g(0)+\alpha t g'(0)$ with $\alpha>0$ is not. Hence, $d(t)\to+\infty$ and $d$ has a zero after $T$ (intermediate value theorem). As $d$ is continuous, the set $\set{t\geq T}{d(t)=0}$ is closed and nonempty, so the first zero
   \[
-    t_a \defn \min \set{t>0}{d(t)=d(0)=0} \geq T
+    t_a \defn \min \set{t\geq T}{d(t)=0}
   \]
   exists.
   All step sizes $\bar t \in (0, t_a)$ evidently satisfy the sufficient decrease condition. The \emph{MVT} guarantees $d(t_a)-d(0)=t_a d'(t_b) = 0$ for some $t_b \in (0, t_a)$. Hence, $d'(t_b) = g'(t_b)-\alpha g'(0)=0$ and thus $g'(t_b)>\beta g'(0)$ as $\alpha < \beta$ and $g'(0)<0$. By continuity of $g'$, there is an $\epsilon>0$ such that all step sizes $\bar t \in (t_b-\epsilon, t_b+\epsilon)\subseteq(0, t_a)$ satisfy both Wolfe conditions.
@@ -734,10 +734,10 @@
   \item Let hyperplane $H\defn \set{y\in \Re^n\times \Re}{h(y)=c\defn h(x, f(x))}$ separate $C$ and $D$
   \item As $C\subseteq \set{y\in \Re^n\times \Re}{h(y)<c}$, we have
   \[
-    \epi(f) = \cl(C)\subseteq \set{y\in \Re^n\times \Re}{h(y)\leq c}
+   \cl(C)\subseteq \set{y\in \Re^n\times \Re}{h(y)\leq c}
   \]
-  and $H$ is hence a supporting hyperplane of $\epi(f)$ at $(x, f(x))$
-  \item<2-> $H$ is also not vertical, because $x\in \interior(\dom(f))$.
+  \item<2-> $\epi(f)\subseteq\cl(\epi(f))=\cl (\interior( \epi(f)))=\cl(C)$ as $\epi(f)$ is convex with nonempty interior. Hence, $H$ is a supporting hyperplane of $\epi(f)$ at $(x, f(x))$
+  \item<3-> $H$ is also not vertical, because $x\in \interior(\dom(f))$.
   \end{itemize}
 
 \end{frame}
