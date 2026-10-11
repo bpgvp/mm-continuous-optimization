@@ -236,7 +236,7 @@
 \begin{frame}{Karush-Kuhn-Tucker Theorem for Differentiable Functions}
 
   \uncover<2->{
-  Let $f:\Re^n\to\Re$ and $g_1, \dots, g_m:\Re^n\to\Re$ be differentiable functions. A point $\bar x$ satisfies the linear independence constraint qualification (LICQ) if 
+  Let $f:\Re^n\to\Re$ and $g_1, \dots, g_m:\Re^n\to\Re$ be differentiable functions and $b\in\Re^m$. A point $\bar x$ satisfies the linear independence constraint qualification (LICQ) if 
   \[
     \set{g_i'(\bar x)}{i\in I(\bar x)}
   \]
@@ -328,7 +328,7 @@
 \begin{frame}{The Karush-Kuhn-Tucker Theorem for Convex Functions}
 
   \uncover<2->{
-    Let $f:\Re^n\to\Re$ be a convex function, $g_1, \dots, g_m$ be concave functions, $b\in \Re^m$ such that \emph{Slater's condition} holds:
+    Let $f:\Re^n\to\Re$ be a convex function, $g_1, \dots, g_m:\Re^n\to\Re$ be concave functions, $b\in \Re^m$ such that \emph{Slater's condition} holds:
     \[
       \exists \bar x : g_i(\bar x) > b_i
     \]
@@ -361,10 +361,10 @@
   \begin{itemize}
     \setlength\itemsep{1em}
   \item Let $\phi(x)\defn \max \{f(x) - p^\star, b_1 - g_1(x), \dots, b_m-g_m(x)\}$ a convex function.
-  \item<2-> ($\Rightarrow$) Let $x^\star$ be a minimizer. Then $x^\star \in \arg \min_x \phi(x)$ $\iff$ $0\in \partial \phi(x^\star)$ $\iff$ $0 \in \conv\big(\partial f(x^\star) \cup \textstyle\bigcup_{i \in I(x^\star)} \partial(-g_i)(x^\star)\big)$ (indeed $f(x^\star)=p^\star$) $\iff$ $\exists h_0 \in \partial f(x^\star)$ and $h_i \in \partial(-g_i)(x^\star)$, $\alpha_i\geq 0$ such that $\alpha_0+\sum_{i\in I(x^\star)} \alpha_i=1$ and $0 = \alpha_0 h_0 + \sum_{i\in I(x^\star)} \alpha_i h_i$.
+  \item<2-> ($\Rightarrow$) Let $x^\star$ be a minimizer. Then $x^\star \in \arg \min_x \phi(x)$, so $0\in \partial \phi(x^\star)$, i.e., $0 \in \conv\big(\partial f(x^\star) \cup \textstyle\bigcup_{i \in I(x^\star)} \partial(-g_i)(x^\star)\big)$ (as $f(x^\star)=p^\star$, the $f$-term is active). Hence $\exists h_0 \in \partial f(x^\star)$ and $h_i \in \partial(-g_i)(x^\star)$, $\alpha_i\geq 0$ such that $\alpha_0+\sum_{i\in I(x^\star)} \alpha_i=1$ and $0 = \alpha_0 h_0 + \sum_{i\in I(x^\star)} \alpha_i h_i$.
   \item<3-> $\alpha_0\neq 0$. First $\iprod{h_i}{y-x^\star} \leq g_i(x^\star) -g_i(y) = b_i - g_i(y)$ for all $y$ and $i \in I(x^\star)$. If $\alpha_0=0$ then contradiction $0 = \sum_{i\in I(x^\star)} \alpha_i \iprod{h_i}{\bar x - x^\star} \leq \sum_{i\in I(x^\star)} \alpha_i (b_i - g_i(\bar x))<0$ as $\sum_{i\in I(x^\star)} \alpha_i=1$ and $g_i(\bar x)>b_i$ satisfied by the Slater point $\bar x$.
   \item<4-> Simply take $\lambda_i^\star \defn \frac{\alpha_i}{\alpha_0}$.
-  \item<5-> ($\Leftarrow$) Follows from the KKT and Duality slide below: a KKT point is primal optimal by weak duality.
+  \item<5-> ($\Leftarrow$) Follows from the KKT and Duality slide below (Slater's condition not needed).
   \end{itemize}
   
 \end{frame}
@@ -391,7 +391,7 @@
 
 \begin{frame}{The Karush-Kuhn-Tucker Theorem}
 
-  Let $f:\Re^n\to\Re$ be a convex function, $g_1, \dots, g_m$ be concave functions, $b\in \Re^m$ such that \emph{Slater's condition} holds:
+  Let $f:\Re^n\to\Re$ be a convex function, $g_1, \dots, g_m:\Re^n\to\Re$ be concave functions, $b\in \Re^m$ such that \emph{Slater's condition} holds:
   \[
     \exists \bar x : g_i(\bar x) > b_i
   \]
@@ -407,7 +407,7 @@
     \exists h_0 \in \partial f(x^\star), ~h_i\in\partial(-g_i)(x^\star) : h_0 + \sum_{i\in[1,\dots,m]} \lambda_i^\star h_i = 0 &
   \end{array}
   \]
-  where $\lambda_i^\star (b_i-g_i(x^\star)) =0$ for all $i$ (\emph{Complementarity}).
+  together with $\lambda_i^\star (b_i-g_i(x^\star)) =0$ for all $i$ (\emph{Complementarity}).
   
 \end{frame}
 
@@ -431,28 +431,57 @@
 
 \end{frame}
 
+\begin{frame}{Slater's Condition Implies Strong Duality [$\star$]}
+
+  \[
+    \begin{array}{rlcrl}
+      p^\star= \inf_x & f(x)  & \geq & \sup_F & F(b) = d^\star \\[0.5em]
+      \st & g(x) \succeq b   & &                       \st & F \in \mc F(\Re^m_+) \\[0.5em]
+             & &&    & F(g(x)) \leq f(x), ~~\forall x \in \Re^n.
+    \end{array}
+  \]
+
+  If $p^\star=-\infty$, weak duality gives $d^\star=-\infty$; so assume $p^\star>-\infty$.  
+
+  \vfill
+
+  \begin{itemize}
+    \setlength\itemsep{1em}
+  \item<2-> $\phi: c \mapsto \inf\set{f(x)}{g(x)\succeq c}$ is convex and non-decreasing (Lecture 4).
+  \item<3-> We have $b\in\interior(\dom\phi)$ and $\phi$ is finite near $b$.
+    Indeed,
+    $\phi(c)\leq f(\bar x)<\infty$ for all $c\preceq g(\bar x)$, which is a neighbourhood of $b$ as $g(\bar x)\succ b$. If $\phi(c)=-\infty$ for some $c$, then $c_\epsilon\defn b+\epsilon(b-c)$ is close to $b$ for small $\epsilon>0$ and $p^\star=\phi(b)\leq\frac{\epsilon}{1+\epsilon}\phi(c)+\frac{1}{1+\epsilon}\phi(c_\epsilon)=-\infty$; contradiction. Thus $\phi:\Re^m\to\nRe$.
+  \item<4-> Hence there is $s\in\partial\phi(b)$ (Lecture 5), i.e., $\phi(c)\geq\phi(b)+\iprod{s}{c-b}$ for all $c$. For any $d\succeq 0$, as $\phi$ is non-decreasing, $p^\star\geq\phi(b-d)\geq p^\star-\iprod{s}{d}$, so $\iprod{s}{d}\geq 0$, i.e., $s\succeq 0$.
+  \item<5-> For all $x$: $f(x)\geq\phi(g(x))\geq p^\star+\iprod{s}{g(x)-b}$. So $F^\star: c\mapsto\iprod{s}{c}+p^\star-\iprod{s}{b}$ is a dual feasible price function with $F^\star(b)=p^\star$.
+  \end{itemize}
+
+  \vfill
+
+  \uncover<5->{Hence $d^\star=p^\star$, and the dual optimum is attained by an affine $F^\star$.}
+\end{frame}
+
 \begin{frame}{KKT and Duality}
 
 
   \[
     \begin{array}{rlcrl}
       \inf_x & f(x)  & \geq & \sup_F & F(b) \\[0.5em]
-      \st & x\in X   & &                       \st & F \in \mc F(\Re^m_+) \\[0.5em]
-             & g(x) \succeq b &&    & F(g(x)) \leq f(x), ~~\forall x \in X.
+      \st & g(x) \succeq b   & &                       \st & F \in \mc F(\Re^m_+) \\[0.5em]
+             & &&    & F(g(x)) \leq f(x), ~~\forall x \in \Re^n.
     \end{array}
   \]
 
   \vfill
 
   
-  Suppose that $(x^\star, \lambda^\star)$ satisfy the KKT system for convex functions.
+  Suppose that $(x^\star, \lambda^\star)$ satisfy the KKT system for convex functions (with $\lambda_i^\star=0$ for $i\notin I(x^\star)$, i.e., complementarity).
   We take as primal candidate $x^\star$ and as dual candidate $F^\star: c \mapsto \iprod{\lambda^\star}{c} + u_0$ with $u_0 = f(x^\star) - \iprod{\lambda^\star}{b}$.
 
   \vfill
 
   \begin{itemize}
   \item<2-> By direct substitution, we have $F^\star(b) = f(x^\star)$.
-  \item<3-> $F^\star$ is feasible, i.e., $F^\star(g(x)) \leq f(x)$ for all $x$. Fix $x\in \Re^n$. First, $f(x^\star) \leq f(x) - \iprod{h_0}{x-x^\star} = f(x) + \sum_{i\in I(x^\star)} \lambda_i^\star \iprod{h_i^\star}{x-x^\star} \leq f(x) + \sum_{i\in I(x^\star)} \lambda_i^\star (g_i(x^\star)-g_i(x)) = f(x) + \sum_{i\in I(x^\star)} \lambda_i^\star (b_i - g_i(x))$, which is equivalent to $F^\star(g(x))\leq f(x)$ for all $x$.
+  \item<3-> $F^\star$ is feasible, i.e., $F^\star(g(x)) \leq f(x)$ for all $x$. Fix $x\in \Re^n$. First, $f(x^\star) \leq f(x) - \iprod{h_0}{x-x^\star} = f(x) + \sum_{i\in I(x^\star)} \lambda_i^\star \iprod{h_i}{x-x^\star} \leq f(x) + \sum_{i\in I(x^\star)} \lambda_i^\star (g_i(x^\star)-g_i(x)) = f(x) + \sum_{i\in I(x^\star)} \lambda_i^\star (b_i - g_i(x))$, which is equivalent to $F^\star(g(x))\leq f(x)$ for all $x$.
   \end{itemize}
 
   \vfill
