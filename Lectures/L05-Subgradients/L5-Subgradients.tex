@@ -742,12 +742,30 @@
     \centering
     \includegraphics[height=3.5cm]{separating-hyperplane/separating-open-set-from-point.pdf}
   \end{minipage}
-  
+
+\end{frame}
+
+\begin{frame}{Closure of the Interior of a Convex Set}
+
+  \textbf{Lemma :} Let $C \subseteq \Re^n$ be a convex set with $\interior(C)\neq\emptyset$. Then,
+  \[
+    \cl(C) = \cl(\interior(C)).
+  \]
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Proof [$\star$] :} The inclusion $\supseteq$ is trivial as $\interior(C)\subseteq C$. As $\cl(\interior(C))$ is closed, it suffices to show $C\subseteq\cl(\interior(C))$. Let $x\in C$ and $B(x_0, r)\subseteq C$. For $t\in(0,1]$, by convexity of $C$,
+  \[
+    B(x_t, tr) = (1-t)\{x\} + t B(x_0, r) \subseteq C, \qquad x_t\defn (1-t)x + t x_0.
+  \]
+  Hence $x_t\in\interior(C)$ and $x_t\to x$ as $t\downarrow 0$, so $x\in\cl(\interior(C))$.
+  }
 \end{frame}
 
 \begin{frame}{The Subdifferential is Nonempty}
 
-  Let $f : \Re^n\to\nRe$ be a \acl{lsc} convex function. 
+  Let $f : \Re^n\to\nRe$ be a convex function.
 
   \textbf{Theorem : } $$x \in \relint(\dom(f)) \implies \partial f(x)\neq \emptyset$$
 
@@ -762,7 +780,7 @@
   \[
    \cl(C)\subseteq \set{y\in \Re^n\times \Re}{h(y)\leq c}
   \]
-  \item<2-> $\epi(f)\subseteq\cl(\epi(f))=\cl (\interior( \epi(f)))=\cl(C)$ as $\epi(f)$ is convex with nonempty interior. Hence, $H$ is a supporting hyperplane of $\epi(f)$ at $(x, f(x))$
+  \item<2-> $\epi(f)\subseteq\cl(\epi(f))=\cl (\interior( \epi(f)))=\cl(C)$ as $\epi(f)$ is convex with nonempty interior (previous slide). Hence, $H$ is a supporting hyperplane of $\epi(f)$ at $(x, f(x))$
   \item<3-> $H$ is also not vertical, because $x\in \interior(\dom(f))$.
   \end{itemize}
 
@@ -886,7 +904,7 @@
 
 \begin{frame}{Support Function of Subdifferential}
 
-  Let $f:\Re^n\to\nRe$ be a \ac{lsc} convex function. Let $x\in\interior(\dom(f))$.
+  Let $f:\Re^n\to\nRe$ be a convex function. Let $x\in\interior(\dom(f))$.
 
   \vfill
 
@@ -917,13 +935,24 @@
 
 \begin{frame}{Subdifferential and Differential}
 
-  \textbf{Theorem :} A \ac{lsc} convex function $f$ is differentiable at $x\in\interior(\dom(f))$ if and only if $\partial f(x) = \{g\}$. In that case, $g = f'(x)$.
+  \textbf{Theorem :} A convex function $f$ is differentiable at $x\in\interior(\dom(f))$ if and only if $\partial f(x) = \{g\}$. In that case, $g = f'(x)$.
 
   \vfill
   
   \textbf{Proof [$\star$]:}
 
-  Assume that $\partial f(x)=\{g\}$. The support function of $\partial f(x)$ is $\iprod{g}{d} = \nabla f(x)[d]$. As the directional derivative is a linear function, $f$ is differentiable in $x$. Moreover, $g = f'(x)$. Conversely, if $f$ is differentiable, $\nabla f(x)[d]$ is linear, i.e.\ the support function of a single point. Thus, $\partial f(x)$ is a singleton.
+  Assume that $\partial f(x)=\{g\}$. The support function of $\partial f(x)$ is $\iprod{g}{d} = \nabla f(x)[d]$. As the directional derivative is a linear function, $f$ is differentiable in $x$. Moreover, $g = f'(x)$.
+
+  Conversely, assume $f$ is differentiable at $x$.
+  \begin{itemize}
+  \item The directional derivative is then $\nabla f(x)[d]=\iprod{f'(x)}{d}$ for all $d\in\Re^n$.
+  \item By the previous theorem, $\nabla f(x)[d]= \sigma_{\partial f(x)}(d)=\sup\set{\iprod{g}{d}}{g\in\partial f(x)}$.
+  \item Hence, every $g\in\partial f(x)$ satisfies
+    \[
+      \iprod{g-f'(x)}{d}\leq 0\quad\forall d\in\Re^n.
+    \]
+  \item Taking $d=g-f'(x)$ gives $\norm{g-f'(x)}_2^2\leq 0$, i.e., $g=f'(x)$. As $f'(x)\in\partial f(x)$ by the gradient inequality (Lecture 2), $\partial f(x)=\{f'(x)\}$.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Conjugates and Subdifferentials}
