@@ -26,7 +26,7 @@ Following Boyd & Vandenberghe (*Convex Optimization*), the course assumes a good
 
 **Lectures:** Monday, 10.00am-12.45pm at Utrecht (room TBD)
 
-**Mastermath:** <a href="https://elo.mastermath.nl">Course Webpage</a>
+<a href="https://elo.mastermath.nl">**Mastermath**</a>
 
 **Credits:** 6 EC
 
