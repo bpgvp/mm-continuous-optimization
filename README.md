@@ -26,6 +26,8 @@ Following Boyd & Vandenberghe (*Convex Optimization*), the course assumes a good
 
 **Lectures:** Monday, 10.00am-12.45pm at Utrecht (room TBD)
 
+**Mastermath:** <a href="https://elo.mastermath.nl">Course Webpage</a>
+
 **Credits:** 6 EC
 
 ## Grading
@@ -64,9 +66,6 @@ A student passes only if the score on the (final or retake) examination is at le
 | 13. [Stochastic Gradient Descent](https://bpgvp.github.io/mm-continuous-optimization/L13-Stochastic-Gradient-Descent.pdf)     | Mon 30 Nov (wk 49) |
 | 14. [Neural Networks & Automatic Differentiation](https://bpgvp.github.io/mm-continuous-optimization/L14-Neural-Networks.pdf) | Mon 7 Dec (wk 50)  |
 | 15. [Performance Estimation Programming](https://bpgvp.github.io/mm-continuous-optimization/L15-Performance-Estimation.pdf)   | Mon 14 Dec (wk 51) |
-
-
-
 	
 ## Reference Books
 
