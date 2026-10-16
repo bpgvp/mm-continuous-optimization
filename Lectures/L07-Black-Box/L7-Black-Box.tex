@@ -71,7 +71,7 @@
   \begin{itemize}
   \item \emph{Class} $\Sigma$: Collection of instances
   \item \emph{Oracle} $\mc O$: Oracle information about instance of interest
-  \item \emph{Accuracy} $\mc T_\epsilon$ : Stopping criteria
+  \item \emph{Accuracy} $\mc T_\epsilon$ : Required accuracy of the output $\hat x$
   \end{itemize}
 
   \vfill
@@ -95,16 +95,34 @@
 
 \begin{frame}{General Iterative Method}
 
+  \begin{center}
+\begin{tikzpicture}[
+box/.style={draw, thick, minimum width=1.7cm, minimum height=1.1cm,
+  align=center, font=\small},
+>=stealth, thick,
+]
+\node[box] (alg) at (0,0) {Algorithm};
+\node[box] (ora) at (3.3,0) {Oracle};
+% query: Algorithm -> Oracle (above)
+\draw[->] ([yshift=4pt]alg.east) -- ([yshift=4pt]ora.west)
+node[midway, above, font=\small] {$x_k$};
+% answer: Oracle -> Algorithm (below)
+\draw[->] ([yshift=-4pt]ora.west) -- ([yshift=-4pt]alg.east)
+node[midway, below, font=\small] {$\mc O(x_k)$};
+\end{tikzpicture}
+  \end{center}
+
+  \vfill
+  
   \begin{algorithm}[H]
     \SetKwInput{Initialization}{Initialization}
-    \Initialization{Starting point $x_0$; Criterion $\mc T_\epsilon$.\\ Counter $k=0$; Information $I_{-1}=\emptyset$.}
-    \While{stopping criterion $\mc T_\epsilon$ is not satisfied at $x_k$}{
+    \Initialization{Starting point $x_0$; Number of oracle calls $N$; Information $I_{-1}=\emptyset$.}
+    \For{$k=0,\dots,N-1$}{
       Call oracle $\mc O$ at $x_k$.\\
       Update the information set: $I_k = I_{k-1}\cup \{(x_k, \mc O(x_k))\}$.\\
-      Apply rules of method $M$ to $I_k$ and form $x_{k+1}$.\\
-      $k\defn k+1$.
+      Apply rules of method $M$ to $I_k$ and form $x_{k+1}$.
     }
-    \Return $x_k$
+    \Return $\hat x \defn x_N$
     \caption{General Iterative Scheme}
   \end{algorithm}
 
@@ -257,11 +275,31 @@
 
 \begin{frame}{Best Universal Method}
 
-  \textbf{Theorem : } Any optimization algorithm with $\epsilon < L/4$ for the class of Lipschitz continuous functions on $[0, 1]^n$ requires \emph{at least} $(\floor{\frac{L}{2\epsilon}}-1)^n$ evaluations of $f$.
+  \textbf{Theorem : } Any optimization algorithm with $\epsilon < L/4$ for the class of Lipschitz continuous functions on $[0, 1]^n$ requires \emph{at least} $(\floor{\frac{L}{2\epsilon}}-1)^n-1$ evaluations of $f$.
 
   \vfill
   
-  The proof is based on the concept of a ``resisting oracle'' or worst-case function. Interpretation as a game against an adversary.
+  The proof is based on the concept of a ``resisting oracle'' or worst-case function.
+
+  \vfill
+
+  
+    \begin{center}
+\begin{tikzpicture}[
+box/.style={draw, thick, minimum width=1.7cm, minimum height=1.1cm,
+  align=center, font=\small},
+>=stealth, thick,
+]
+\node[box] (alg) at (0,0) {Algorithm};
+\node[box] (ora) at (3.3,0) {\includegraphics[height=1cm]{devil_4422090.png}};
+% query: Algorithm -> Oracle (above)
+\draw[->] ([yshift=4pt]alg.east) -- ([yshift=4pt]ora.west)
+node[midway, above, font=\small] {$x_k$};
+% answer: Oracle -> Algorithm (below)
+\draw[->] ([yshift=-4pt]ora.west) -- ([yshift=-4pt]alg.east)
+node[midway, below, font=\small] {$f(x_k)$};
+\end{tikzpicture}
+  \end{center}
   
 \end{frame}
 
@@ -321,9 +359,14 @@
 
       \foreach \p in {1, ...,  15}
       {        
-        \node[circle,inner sep=1,fill=red] at (4*rnd, 4*rnd) {};        
+        \node[circle,inner sep=1,fill=red] at (4*rnd, 4*rnd) {};
       }
-      
+
+      \uncover<2->{
+      \node[circle,inner sep=1,fill=blue] (xhat) at (3.3, 2.6) {};
+      \node[above, blue] at (xhat) {\small $\hat x$};
+      }
+
       \uncover<4->{
       \node[circle,inner sep=1,fill=green] (xbar) at (1.5, 1.5) {};
       \node[above] at (xbar) {\small $\bar x$};
@@ -338,21 +381,21 @@
 
   \begin{itemize}
   \item Notice that $p \defn \floor{\frac{L}{2\epsilon}}-1$ and $\epsilon<L/4$ implies $1\leq p<\frac{L}{2\epsilon}$ and $\epsilon<\frac{L}{2p}$. 
-  \item<2-> Suppose method evaluates $f$ on merely $p^n-1$ points for which resisting oracle always returns $0$. Hence, $\min_{k} f(x_k)=0$.
-  \item<3-> Consider a grid with spacing $1/p$. There must be a grid cell without a point $x_k$ in the interior. Let $\bar x$ be its center.
-  \item<4-> Recall that $\norm{\bar x -x_k}_\infty\geq \frac{1}{2 p}$ for any $x_k$. The function
+  \item<2-> Suppose the method evaluates $f$ at merely $p^n-2$ points $x_k$, for which the resisting oracle always returns $0$, and outputs $\hat x$. Together these are at most $p^n-1$ points.
+  \item<3-> Consider a grid with spacing $1/p$. There must be a grid cell with none of the points $x_k$ nor $\hat x$ in its interior. Let $\bar x$ be its center.
+  \item<4-> Recall that $\norm{\bar x -x_k}_\infty\geq \frac{1}{2 p}$ for any $x_k$ and for $\hat x$. The function
     \[
-      f^{\rm{oracle}} = x\mapsto \min(0, L (\norm{x-\bar x}_\infty-\tfrac{1}{2 p}))
+      f^{\rm{oracle}} = x\mapsto L \min(0, \norm{x-\bar x}_\infty-\tfrac{1}{2 p})
     \]
     is $L$-Lipschitz and consistent with the function evaluations, i.e., $f^{\rm{oracle}}(x_k)=0$.
-  \item<5-> However, $f^{\rm{oracle}}(\bar x) = -\tfrac{L}{2p}< -\epsilon$; a contradiction. 
+  \item<5-> However, $f^{\rm{oracle}}(\hat x)=0$ while $\min f^{\rm{oracle}} = f^{\rm{oracle}}(\bar x) = -\tfrac{L}{2p}< -\epsilon$, so $f^{\rm{oracle}}(\hat x)-\min f^{\rm{oracle}}>\epsilon$; a contradiction. 
   \end{itemize}
   
 \end{frame}
 
 \begin{frame}{The Gridding Method in Perspective}
 
-  Lipschitz optimization has \textbf{complexity} at least $$\left(\floor{\frac{L}{2\epsilon}}-1\right)^n$$ function evaluations.
+  Lipschitz optimization has \textbf{complexity} at least $$\left(\floor{\frac{L}{2\epsilon}}-1\right)^n-1$$ function evaluations.
   
   \vfill
   
@@ -427,7 +470,7 @@
   
 \end{frame}
 
-\section{Convex Optimization}
+\section{Convex Optimization in Fixed Dimensions}
 
 \begin{frame}{Black-Box Convex Model}
 
@@ -535,9 +578,9 @@
   
   \begin{algorithm}[H]
     \SetKwInput{Initialization}{Initialisation}
-    \Initialization{$\ell_0\defn a$, $u_0\defn b$, $d_0\defn 1$, $k\defn 0$}
-    \While{$d_k>\epsilon/V$}{
-      $x_k \defn (u_k+\ell_k)/2$, $d_{k+1}\defn d_k/2$\;
+    \Initialization{$\ell_0\defn a$, $u_0\defn b$, $N\defn \ceil{\log_2(V/\epsilon)}$}
+    \For{$k=0,\dots,N-1$}{
+      $x_k \defn (u_k+\ell_k)/2$ and call oracle at $x_k$\;
       \lIf{$g(x_k)>0$}{
         $\ell_{k+1}\defn \ell_k, u_{k+1}\defn x_k$
       }
@@ -545,17 +588,16 @@
         $\ell_{k+1}\defn x_k, u_{k+1}\defn u_k$
       }
       \lIf{$g(x_k)=0$}{
-        $d_{k+1}\defn 0$
+        $\ell_{k+1}\defn x_k, u_{k+1}\defn x_k$
       }
-      $k\defn k+1$\;
     }
-    \Return best $x_k$ seen
+    \Return $\hat x \defn x_N \in \arg\min_{k\in[0,\dots,N-1]} f(x_k)$
     \caption{Bisection}
   \end{algorithm}
 
   \vfill
 
-  \textbf{Complexity : } at most $\ceil{ \log_2(V/\epsilon)}$ calls to oracle.
+  \textbf{Complexity : } $N=\ceil{ \log_2(V/\epsilon)}$ calls to oracle.
 
 \end{frame}
 
@@ -563,13 +605,13 @@
 
   \begin{itemize}
 
-  \item Let $x^\star \in [\ell_N, u_N]$ after $N\geq \log_2(V/\epsilon)$ iterations
+  \item Let $x^\star \in [\ell_N, u_N]$ be a minimizer after $N\geq \log_2(V/\epsilon)$ iterations
   \item By construction we have that
     \[
       f(y) \geq f(\hat x) = \min_{k\in [0, \dots, N-1]} f(x_k) \quad \forall y \not\in [\ell_N, u_N]
     \]
   \item Define $Q^\alpha \defn \set{(1-\alpha) x^\star+\alpha y}{y\in Q=[a,b]}\subseteq Q$ for some $\alpha\in (2^{-N}, 1]$.
-  \item Evidently, $Q^\alpha$ has length $\alpha (b-a)$, while $[\ell_N, u_N]$ has length $2^{-N} (b-a)$. There must exist a point $$z=(1-\alpha) x^\star+\alpha y$$ with
+  \item Evidently, $Q^\alpha$ has length $\alpha (b-a)$, while $[\ell_N, u_N]$ has length at most $2^{-N} (b-a)$. There must exist a point $$z=(1-\alpha) x^\star+\alpha y$$ with
     $y\in [a, b]$ and $z\in Q^\alpha$ but $z\not\in [\ell_N, u_N]$.
   \item From convexity we have
     \[
@@ -583,14 +625,33 @@
 
 \begin{frame}{The Bisection Method}
 
-  \textbf{Theorem :} Finding an $\epsilon$-solution to $\min_{x\in [-1, 1]}\, f(x)$, where $\max \set{f(x)-f(y) }{x, y\in [-1, 1]} \leq 1$ takes
-  \[
-    \ceil {\frac 13 \log_2(\tfrac 1\epsilon)} \leq N \leq \ceil{\log_2(\tfrac 1\epsilon)} ~~\rm{queries}
-  \]
+  \begin{center}
+\begin{tikzpicture}[
+box/.style={draw, thick, minimum width=1.7cm, minimum height=1.1cm,
+  align=center, font=\small},
+>=stealth, thick,
+]
+\node[box] (alg) at (0,0) {Algorithm};
+\node[box] (ora) at (4,0) {\includegraphics[height=1cm]{devil_4422090.png}};
+% query: Algorithm -> Oracle (above)
+\draw[->] ([yshift=4pt]alg.east) -- ([yshift=4pt]ora.west)
+node[midway, above, font=\small] {$x_k$};
+% answer: Oracle -> Algorithm (below)
+\draw[->] ([yshift=-4pt]ora.west) -- ([yshift=-4pt]alg.east)
+node[midway, below, font=\small] {$(f(x_k), g(x_k))$};
+\end{tikzpicture}
+  \end{center}
   
+  \vfill
+  
+  \textbf{Theorem :} Finding an $\epsilon$-solution to $\min_{x\in [-1, 1]}\, f(x)$, where $\max \set{f(x)-f(y) }{x, y\in [-1, 1]} \leq 1$ takes at least
+  \[
+    \ceil {\frac 13 \log_2(\tfrac 1\epsilon)}-1 \leq N ~~\rm{queries}
+  \]  
+    
 \end{frame}
 
-\begin{frame}{The Bisection Method}
+\begin{frame}{Resisting Oracle}
 
   \begin{center}
     \begin{tikzpicture}
@@ -612,7 +673,7 @@
 
       \uncover<2->{
       \node (x0) at (1.5, 0.5) {};
-      \node[below, red] at (x0) {$x_1$} {};
+      \node[below, red] at (x0) {$x_0$} {};
       \draw[densely dotted] (1.5, 2.25)  -- (x0) ;
       }
       
@@ -642,16 +703,16 @@
   \textbf{Resisting Oracle:}
   \begin{itemize}
   \item Initialize $f_0=\abs{x}$ with $\Delta_0=[-1,1]$ and $V_0=1$.
-  \item<2-> Suppose algorithm evaluates oracle at $x_1\geq 0$. (Other case is symmetric.)
-  \item<3-> Construct a new function $f_1$ which outside of $\Delta_0$ equals $f_0$. Return $f_1(x_1)$.
+  \item<2-> Suppose algorithm evaluates oracle at $x_0\geq 0$. (Other case is symmetric.)
+  \item<3-> Construct a new function $f_1$ which outside of $\Delta_0$ equals $f_0$. Return $f_1(x_0)$.
   \item<4-> Function $f_1$ has minimum in $\Delta_1=[-1/2, 0]$ where the oracle has never been called.
-  \item<5-> If $x_2\not\in \Delta_1$; Set $f_2(x)=f_1(x)$ and return $f_2(x_2)$.
-  \item<6-> If $x_2\in \Delta_1$; Apply previous procedure locally to $\Delta_1$.
+  \item<5-> If $x_1\not\in \Delta_1$; Set $f_2(x)=f_1(x)$ and return $f_2(x_1)$.
+  \item<6-> If $x_1\in \Delta_1$; Apply previous procedure locally to $\Delta_1$.
   \end{itemize}
   
 \end{frame}
 
-\begin{frame}{The Bisection Method}
+\begin{frame}{Resisting Oracle}
 
   \begin{center}
     \begin{tikzpicture}
@@ -673,7 +734,7 @@
 
       \uncover<2->{
       \node (x0) at (-1.5, 0.5) {};
-      \node[below, red] at (x0) {$x_2$} {};
+      \node[below, red] at (x0) {$x_1$} {};
       \draw[densely dotted] (-1.5, 2.25)  -- (x0) ;
       }
       
@@ -703,62 +764,63 @@
   \textbf{Resisting Oracle:}
   \begin{itemize}
   \item Initialize $f_0=\abs{x}$ with $\Delta_0=[-1,1]$ and $V_0=1$.
-  \item Suppose algorithm evaluates oracle at $x_1\geq 0$. (Other case is symmetric.)
-  \item Construct a new function $f_1$ which outside of $\Delta_0$ equals $f_0$. Return $f_1(x_1)$.
+  \item Suppose algorithm evaluates oracle at $x_0\geq 0$. (Other case is symmetric.)
+  \item Construct a new function $f_1$ which outside of $\Delta_0$ equals $f_0$. Return $f_1(x_0)$.
   \item Function $f_1$ has minimum in $\Delta_1=[-1/2, 0]$ where the oracle has never been called.
-  \item If $x_2\not\in \Delta_1$; Set $f_2(x)=f_1(x)$ and return $f_2(x_2)$.
-  \item If $x_2\in \Delta_1$; Apply previous procedure locally to $\Delta_1$.
+  \item If $x_1\not\in \Delta_1$; Set $f_2(x)=f_1(x)$ and return $f_2(x_1)$.
+  \item If $x_1\in \Delta_1$; Apply previous procedure locally to $\Delta_1$.
+  \item<5-> Repeating this argument gives $f_{N+1}(x_N)-\min f_{N+1} > \tfrac{1}{8^{N+1}}$.
   \end{itemize}
   
 \end{frame}
 
 
-\begin{frame}{The Bisection Method}
+% \begin{frame}{The Bisection Method}
 
-  \begin{minipage}{0.4\textwidth}
-    \begin{equation*}
-      \begin{array}{rl}
-        \minimize & f(x) \\[1em]
-        \st & x \in [a, b]
-      \end{array}
-    \end{equation*}
-  \end{minipage}%
-  \hfill
-  \begin{minipage}{0.55\textwidth}
-    \begin{itemize}
-    \item $f:\Re\to\Re$ is a convex function
-    \item $\max \set{f(x)-f(y)}{x, y\in [a, b]} \leq V$
-    \item oracle : $x\mapsto (f(x), g(x))$ with $g(x) \in \partial f(x)$
-    \item $\epsilon$ is desired absolute accuracy
-    \end{itemize}
-  \end{minipage}
+%   \begin{minipage}{0.4\textwidth}
+%     \begin{equation*}
+%       \begin{array}{rl}
+%         \minimize & f(x) \\[1em]
+%         \st & x \in [a, b]
+%       \end{array}
+%     \end{equation*}
+%   \end{minipage}%
+%   \hfill
+%   \begin{minipage}{0.55\textwidth}
+%     \begin{itemize}
+%     \item $f:\Re\to\Re$ is a convex function
+%     \item $\max \set{f(x)-f(y)}{x, y\in [a, b]} \leq V$
+%     \item oracle : $x\mapsto (f(x), g(x))$ with $g(x) \in \partial f(x)$
+%     \item $\epsilon$ is desired absolute accuracy
+%     \end{itemize}
+%   \end{minipage}
 
-  \vfill
+%   \vfill
   
-  \textbf{A revoltingly hard function} (Nemirovski)
+%   \textbf{A revoltingly hard function} (Nemirovski)
 
-  \vfill
+%   \vfill
 
-  Assume wlog that $a=-1$, $b=1$ and $V=1$.
-  \begin{minipage}{0.6\textwidth}
-    \emph{Recursive construction:} 
-    Let $f_0(x) = \abs{x}$ and $\Delta_0 =[-1, 1]$.
-    \begin{itemize}
-    \item No point of $\{x_1, \dots, x_i\}$ is in $\interior(\Delta_i)$.
-    \item $\rm{length}(\Delta_i) \geq \tfrac{2}{4^i}$
-    \item Outside $\Delta_i$ we ensure $f_i=f_{i+1}=\dots$\\
-      Convexity $f_i$ is thus ensured.
-    \item $\arg\min f_{i+1}(x) \subseteq \Delta_{i+1}$
-    \item The slope of $f_i(x)$ on $\Delta_i$ is $\tfrac{1}{2^i}$.
-    \item $f_i(x_i) - f_i^\star > \tfrac{1}{8^i}$.
-    \end{itemize}
-  \end{minipage}%
-  \begin{minipage}{0.4\textwidth}
-    \centering
-    \includegraphics[height=3cm]{resisting-function/resisting-function.pdf}
-  \end{minipage}
+%   Assume wlog that $a=-1$, $b=1$ and $V=1$.
+%   \begin{minipage}{0.6\textwidth}
+%     \emph{Recursive construction:} 
+%     Let $f_0(x) = \abs{x}$ and $\Delta_0 =[-1, 1]$.
+%     \begin{itemize}
+%     \item No point of $\{x_0, \dots, x_{i-1}\}$ is in $\interior(\Delta_i)$.
+%     \item $\rm{length}(\Delta_i) \geq \tfrac{2}{4^i}$
+%     \item Outside $\Delta_i$ we ensure $f_i=f_{i+1}=\dots$\\
+%       Convexity $f_i$ is thus ensured.
+%     \item $\arg\min f_{i+1}(x) \subseteq \Delta_{i+1}$
+%     \item The slope of $f_i(x)$ on $\Delta_i$ is $\tfrac{1}{2^i}$.
+%     \item $f_i(x_{i-1}) - f_i^\star > \tfrac{1}{8^i}$.
+%     \end{itemize}
+%   \end{minipage}%
+%   \begin{minipage}{0.4\textwidth}
+%     \centering
+%     \includegraphics[height=3cm]{resisting-function/resisting-function.pdf}
+%   \end{minipage}
 
-\end{frame}
+% \end{frame}
 
 
 \begin{frame}{Cutting-Plane Method}
@@ -798,7 +860,7 @@
         S_k = S_{k-1} \cap \set{y}{\iprod{g(x_k)}{y-x_k}\leq 0}.
       \]
     }
-    \caption{Cutting-Plane}
+    \caption{Cutting-Plane Method}
   \end{algorithm}
 
 \end{frame}
@@ -831,9 +893,9 @@
 
   \vfill
 
-  \textbf{Theorem:} (Nesterov) For any method there exists a resisting oracle $\tilde f$ such that after $N$ oracle calls we have
+  \textbf{Theorem:} (Nesterov) For any method there exists a resisting oracle such that after $N$ oracle calls we have
   \[
-    \min_{k\in[1,\dots,N]}\tilde f(x_k) - \tilde f^\star \geq L D (1/8)^{\tfrac N n}.
+    \tilde f(\hat x) - \tilde f^\star \geq L D (1/8)^{\tfrac {(N+1)} n}.
   \]
   
 
