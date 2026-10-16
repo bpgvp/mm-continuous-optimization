@@ -61,7 +61,7 @@
   \vfill
 
   \uncover<3->{
-  It does not make sense to discuss algorithmic performance based on a single problem instance.
+  Discussing algorithmic performance based on a single problem instance is nonsensical.
   }
 \end{frame}
 
@@ -97,7 +97,7 @@
 
   \begin{algorithm}[H]
     \SetKwInput{Initialization}{Initialization}
-    \Initialization{Starting point $x_0$; Accuracy $\epsilon>0$.\\ Counter $k=0$; Information $I_{-1}=\emptyset$.}
+    \Initialization{Starting point $x_0$; Criterion $\mc T_\epsilon$.\\ Counter $k=0$; Information $I_{-1}=\emptyset$.}
     \While{stopping criterion $\mc T_\epsilon$ is not satisfied at $x_k$}{
       Call oracle $\mc O$ at $x_k$.\\
       Update the information set: $I_k = I_{k-1}\cup \{(x_k, \mc O(x_k))\}$.\\
