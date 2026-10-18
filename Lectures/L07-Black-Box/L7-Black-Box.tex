@@ -831,7 +831,7 @@ node[midway, below, font=\small] {$(f(x_k), g(x_k))$};
       \node[draw=blue, inner sep=1, fill=blue, circle] (zstar) at (-1, -1) {};
       \node[above] at (zstar) {{\color{blue}$x^\star$}};
       \draw[black, rotate around={0:(z0)}] (z0) ellipse ({2.5} and {1.5});
-      \node[above right=3em, black] at (z0) {$S_{k-1}$};
+      \node[above right=3em, black] at (z0) {$S_k$};
 
       \uncover<2->{
         \node[black, inner sep=1, fill, circle] at (z0) {};
@@ -842,7 +842,7 @@ node[midway, below, font=\small] {$(f(x_k), g(x_k))$};
         \draw[->] (-1.5, 2) -- +($0.2*(2, 1.5)$) ;
         \node[right] at ($(-1.5, 2)+0.2*(2, 1.5)$) {$g(x_k)$};
         
-        \node[above right=3em, black] at (-3, -1) {$S_k$};
+        \node[above right=3em, black] at (-3, -1) {$S_{k+1}$};
       }
 
     \end{tikzpicture}
@@ -852,14 +852,15 @@ node[midway, below, font=\small] {$(f(x_k), g(x_k))$};
   \begin{algorithm}[H]
     \SetKwInput{Initialization}{Initialisation}
     \Initialization{$S_0\defn Q$}
-    \For{$k \in [1, 2, \dots]$}{
-      Choose $x_k \in \interior(S_{k-1})$\\
+    \For{$k=0,\dots,N-1$}{
+      Choose $x_k \in \interior(S_k)$\\
       Call subgradient oracle $g(x_k)\in \partial f(x_k)$\\
       Add cut
       \[
-        S_k = S_{k-1} \cap \set{y}{\iprod{g(x_k)}{y-x_k}\leq 0}.
+        S_{k+1} = S_k \cap \set{y}{\iprod{g(x_k)}{y-x_k}\leq 0}.
       \]
     }
+    \Return $\hat x \defn x_N \in \arg\min_{k\in[0,\dots,N-1]} f(x_k)$
     \caption{Cutting-Plane Method}
   \end{algorithm}
 
@@ -874,7 +875,7 @@ node[midway, below, font=\small] {$(f(x_k), g(x_k))$};
 
   \vfill
 
-  \textbf{Fact:} (Gr\"unbaum's Pie Cutting Theorem). Let $S$ be a compact convex set with nonempty interior and $g\neq 0$. Define the set
+  \textbf{Fact:} (Pie Cutting Theorem). Let $S$ be a compact convex set with nonempty interior and $g\neq 0$. Define the set
   \[
     S_+ = S \cap \set{y}{\iprod{g}{y-\rm{cg}(S)}\leq 0}.
   \]
@@ -884,11 +885,62 @@ node[midway, below, font=\small] {$(f(x_k), g(x_k))$};
   \]
 \end{frame}
 
+\begin{frame}{Volume in High Dimensions}
+
+  \begin{minipage}{0.42\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.0]
+      % unit ball
+      \draw[thick] (0,0) circle (1.8);
+      \node[above right] at (1.27,1.27) {$B(0,1)$};
+
+      % half ball
+      \uncover<2->{
+        \draw[thick, dashed, blue] (0,0) circle (0.9);
+        \node[blue] at (0,-0.55) {\small $B(0,\tfrac 12)$};
+      }
+
+      % slab between center and hyperplane, and the cap beyond it
+      \uncover<3->{
+        \begin{scope}
+          \clip (0,0) circle (1.8);
+          \fill[green, opacity=0.25] (-1.8,0) rectangle (1.8,0.35);
+          \node[green!50!black] at (1.15,0.17) {\tiny most volume};
+          \fill[red, opacity=0.15] (-1.8,0.35) rectangle (1.8,1.8);
+        \end{scope}
+        \draw[thick, red] (-2.2,0.35) -- (2.2,0.35);
+        \node[circle, inner sep=1, fill=red] (eps) at (0,0.35) {};
+        \node[above left, red] at (-0.9,0.35) {\small $(0,\epsilon)$};
+      }
+
+      \node[circle, inner sep=1, fill=black] (c) at (0,0) {};
+    \end{tikzpicture}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.55\textwidth}
+    \begin{itemize}
+      \setlength\itemsep{1em}
+    \item Consider $f(x)=V \norm{x}$.
+    \item $Q = B(0, 1)$ and $Q_{++} = B(0, 1/2)$
+    \item<2-> Halving the radius reduces the volume by a factor $(\tfrac 12)^n$:
+      \[
+        \mathrm{vol}(B(0,\tfrac 12)) = (\tfrac 12)^n \mathrm{vol}(B(0,1))!
+      \]
+      
+    \item<3-> Most of the volume of $B\defn B(0,1)$ lies in a thin slab around any hyperplane through the center:
+      \[
+        \frac{\mathrm{vol}\set{x\in B}{x_n\geq \epsilon}}{\mathrm{vol}(B)} \leq e^{-n\epsilon^2/2}.
+      \]
+    \end{itemize}
+  \end{minipage}
+
+\end{frame}
+
 \begin{frame}{Cutting-Plane Method}
 
-  \textbf{Theorem:} (Nesterov) Let $Q$ be compact and convex with nonempty interior and diameter $D$, and let $f$ be $L$-Lipschitz on $Q$. The cutting plane method with $x_k\defn \rm{cg}(S_{k-1})$ satisfies
+  \textbf{Theorem:} (Nesterov) Let $Q$ be compact and convex with nonempty interior and diameter $D$, and let $f$ be $L$-Lipschitz on $Q$. The cutting plane method with $x_k\defn \rm{cg}(S_k)$ satisfies
   \[
-    \min_{k\in[1,\dots,N]} f(x_k) - f^\star \leq L D (1-\tfrac 1e)^{\tfrac N n}.
+    f(\hat x) - f^\star \leq L D (1-\tfrac 1e)^{\tfrac N n}.
   \]
 
   \vfill
