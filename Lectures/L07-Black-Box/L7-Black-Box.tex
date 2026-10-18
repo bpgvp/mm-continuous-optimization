@@ -385,10 +385,10 @@ node[midway, below, font=\small] {$f(x_k)$};
   \item<3-> Consider a grid with spacing $1/p$. There must be a grid cell with none of the points $x_k$ nor $\hat x$ in its interior. Let $\bar x$ be its center.
   \item<4-> Recall that $\norm{\bar x -x_k}_\infty\geq \frac{1}{2 p}$ for any $x_k$ and for $\hat x$. The function
     \[
-      f^{\rm{oracle}} = x\mapsto L \min(0, \norm{x-\bar x}_\infty-\tfrac{1}{2 p})
+      f^{\rm{oracle}} = x\mapsto L \min(0, \norm{x-\bar x}_\infty-\tfrac{1}{(2 p)})
     \]
     is $L$-Lipschitz and consistent with the function evaluations, i.e., $f^{\rm{oracle}}(x_k)=0$.
-  \item<5-> However, $f^{\rm{oracle}}(\hat x)=0$ while $\min f^{\rm{oracle}} = f^{\rm{oracle}}(\bar x) = -\tfrac{L}{2p}< -\epsilon$, so $f^{\rm{oracle}}(\hat x)-\min f^{\rm{oracle}}>\epsilon$; a contradiction. 
+  \item<5-> However, $f^{\rm{oracle}}(\hat x)=0$ while $\min f^{\rm{oracle}} = f^{\rm{oracle}}(\bar x) = -\tfrac{L}{(2p)}< -\epsilon$, so $f^{\rm{oracle}}(\hat x)-\min f^{\rm{oracle}}>\epsilon$; a contradiction. 
   \end{itemize}
   
 \end{frame}
