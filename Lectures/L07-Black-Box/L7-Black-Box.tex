@@ -606,9 +606,9 @@ node[midway, below, font=\small] {$f(x_k)$};
   \begin{itemize}
 
   \item Let $x^\star \in [\ell_N, u_N]$ be a minimizer after $N\geq \log_2(V/\epsilon)$ iterations
-  \item By construction we have that
+  \item By construction, any $y\in[a,b]\setminus[\ell_N,u_N]$ was discarded at some step $k$, and the subgradient inequality $f(y)\geq f(x_k)+g(x_k)(y-x_k)$ with $g(x_k)(y-x_k)\geq 0$ gives
     \[
-      f(y) \geq f(\hat x) = \min_{k\in [0, \dots, N-1]} f(x_k) \quad \forall y \not\in [\ell_N, u_N]
+      f(y) \geq f(x_k) \geq f(\hat x) = \min_{k\in [0, \dots, N-1]} f(x_k) \quad \forall y \in [a,b]\setminus [\ell_N, u_N]
     \]
   \item Define $Q^\alpha \defn \set{(1-\alpha) x^\star+\alpha y}{y\in Q=[a,b]}\subseteq Q$ for some $\alpha\in (2^{-N}, 1]$.
   \item Evidently, $Q^\alpha$ has length $\alpha (b-a)$, while $[\ell_N, u_N]$ has length at most $2^{-N} (b-a)$. There must exist a point $$z=(1-\alpha) x^\star+\alpha y$$ with
@@ -617,7 +617,7 @@ node[midway, below, font=\small] {$f(x_k)$};
     \[
       f(z) \leq (1-\alpha) f(x^\star) + \alpha f(y) \implies f(z) - f(x^\star) \leq \alpha (f(y)-f(x^\star)) \leq \alpha V.
     \]
-  \item We have $z\not\in [\ell_N, u_N] \implies f(\hat x) \leq f(z)$ and hence $f(\hat x)-f(x^\star)\leq \alpha V$ for any $\alpha \in (2^{-N}, 1]$. We conclude that
+  \item We have $z\in[a,b]\setminus[\ell_N, u_N] \implies f(\hat x) \leq f(z)$ and hence $f(\hat x)-f(x^\star)\leq \alpha V$ for any $\alpha \in (2^{-N}, 1]$. We conclude that
     $f(\hat x)-f(x^\star)\leq \inf_{\alpha\in (2^{-N}, 1]}\alpha V = 2^{-N}V \leq \epsilon$.
   \end{itemize}
   
