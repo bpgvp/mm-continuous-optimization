@@ -37,9 +37,8 @@ Following Boyd & Vandenberghe (*Convex Optimization*), the course assumes a good
    | Problem Set                                                              | 
    |:-------------------------------------------------------------------------|
    | 1. Convex sets and functions. Generalized inequalities and convex cones. | 
-   | 2. Nonlinear optimization; applications and modeling.                    |
-   | 3. Nonlinear duality, conjugate functions.                               |
-   | 4. Gradient methods and interior point methods.                          |
+   | 2. Nonlinear duality, conjugate functions.                               |
+   | 3. Gradient methods and interior point methods.                          |
 
    All problem sets are graded and returned with feedback; at most one hand-in every two weeks.
 

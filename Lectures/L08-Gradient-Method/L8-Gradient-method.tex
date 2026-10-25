@@ -165,14 +165,31 @@
 
   \begin{itemize}
 
-  \item Fix $N$ and find step lengths $h_k$ that minimize the rhs. This is a convex optimization problem! 
+  \item Fix $N$ and find step lengths $h_k$ that minimize the RHS. This is a convex optimization problem! 
     \[
       h_k^\star \defn \frac{D}{L \sqrt{N}}
     \]
     for all $k$. Then, $f(\hat x) - f(x^\star)\leq L D /\sqrt{N}$.
-  \item<2-> More sophisticated analysis is required for other step sizes used in practice.
+  \item<2-> In practice, other stepsize schedules may be preferred.
   \end{itemize}
   
+\end{frame}
+
+\begin{frame}{Anytime Valid Stepsizes}
+
+  \begin{itemize}
+  \item The step size $h_k^\star$ requires knowing the number of oracle calls $N$ in advance.
+  \item<2-> Instead take $h_k \defn \tfrac{D}{(L\sqrt{k+1})}$, which does not depend on $N$. Then
+    \[
+      \sum_{k=0}^{N-1} h_k \geq \frac{D}{L}\sqrt N, \qquad \sum_{k=0}^{N-1} h_k^2 = \frac{D^2}{L^2}\sum_{k=0}^{N-1}\frac{1}{k+1} \leq \frac{D^2}{L^2}(1+\ln N).
+    \]
+  \item<3-> Hence, for \emph{every} $N\geq 1$,
+    \[
+      f(\hat x) - f(x^\star)\leq \frac{D^2 + D^2(1+\ln N)}{2 D\sqrt N/L} = \frac{L D\,(2+\ln N)}{2\sqrt N}.
+    \]
+  \item<4-> Only a logarithmic factor is lost compared to $h_k^\star$.
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}{Nondifferentiable Convex Optimization}
@@ -327,7 +344,7 @@
 
   \vfill
 
-  For $n$ large, we \emph{cannot hope} to beat the subgradient method for general convex problems with oracle model $x \mapsto (f(x), f'(x))$.
+  For $n$ ``large'', we \emph{cannot hope} to beat the subgradient method for general convex problems with oracle model $x \mapsto (f(x), f'(x))$.
   
 \end{frame}
 
@@ -548,6 +565,78 @@
 \end{frame}
 
 
+
+\begin{frame}{Strongly Convex and Smooth Functions}
+
+  \textbf{Theorem :} Let $f$ be differentiable. Then $f$ is $\mu$-strongly convex and $L$-smooth if and only if
+  \[
+    \tilde f:x\mapsto f(x)-\tfrac{\mu}{2}\|x\|_2^2
+  \]
+  is convex and $(L-\mu)$-smooth. 
+  \vfill
+
+  \textbf{Proof :}
+  \begin{itemize}
+  \item<2-> Strong convexity and the quadratic upper bound of $f$ give
+    \[
+      f(x)+\langle f'(x), y-x\rangle+\blue{\tfrac{\mu}{2}\|y-x\|_2^2} \leq f(y) \leq f(x)+\langle f'(x), y-x\rangle+\tfrac{L}{2}\|y-x\|_2^2.
+    \]
+  \item<3-> Subtract the identity $\blue{\tfrac{\mu}{2}\|y\|_2^2=\tfrac{\mu}{2}\|x\|_2^2+\langle \mu x, y-x\rangle +\tfrac{\mu}{2}\|y-x\|_2^2}$ everywhere:
+    \[
+      \begin{array}{r@{}l}
+        f(y)-\blue{\tfrac{\mu}{2}\|y\|_2^2} &{}\geq f(x)-\blue{\tfrac{\mu}{2}\|x\|_2^2}+\langle f'(x)-\blue{\mu x}, y-x\rangle+\tfrac{(\mu-\blue{\mu})}{2}\|y-x\|_2^2,\\[0.5em]
+        f(y)-\blue{\tfrac{\mu}{2}\|y\|_2^2} &{}\leq f(x)-\blue{\tfrac{\mu}{2}\|x\|_2^2}+\langle f'(x)-\blue{\mu x}, y-x\rangle+\tfrac{(L-\blue{\mu})}{2}\|y-x\|_2^2.
+      \end{array}
+    \]
+  \item<4-> With $\tilde f'(x)=f'(x)-\mu x$, these are the gradient inequality and the quadratic upper bound with constant $L-\mu$ for $\tilde f$. Each step can be reversed.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Strongly Convex and Smooth Functions [$\star$]}
+
+  \textbf{Lemma :} If $f$ is $\mu$-strongly convex, differentiable and $L$-smooth, then
+  \[
+    \langle f'(x)-f'(y), x-y\rangle \geq \tfrac{\mu L}{(\mu+L)}\|x-y\|_2^2 + \tfrac{1}{(\mu+L)}\|f'(x)-f'(y)\|_2^2 \quad \forall x, y.
+  \]
+
+  \vfill
+
+  \textbf{Proof :}
+  \begin{itemize}
+  \item The function $\tilde f:x\mapsto f(x)-\tfrac{\mu}{2}\|x\|_2^2$ is convex and $(L-\mu)$-smooth with $\tilde f'(x)=f'(x)-\mu x$.
+  \item We showed $\langle \tilde f'(x)-\tilde f'(y), x-y\rangle \geq \tfrac{\|\tilde f'(x)-\tilde f'(y)\|_2^2}{(L-\mu)}$ for convex $(L-\mu)$-smooth $\tilde f$. With $d\defn x-y$ and $w\defn f'(x)-f'(y)$ this reads
+    \[
+      (L-\mu)(\langle w, d\rangle -\mu\|d\|_2^2)\geq \|w-\mu d\|_2^2 = \|w\|_2^2-2\mu\langle w, d\rangle +\mu^2\|d\|_2^2.
+    \]
+  \item Rearranging gives $(L+\mu)\langle w, d\rangle \geq \|w\|_2^2+\mu L\|d\|_2^2$.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Gradient Descent for Strongly Convex Problems}
+
+  \begin{center}
+    \begin{tcolorbox}[width=0.4\textwidth]%
+      $x_{k+1} = x_k - \frac{2}{\mu+L} f'(x_k)$
+    \end{tcolorbox}
+  \end{center}
+
+  \begin{itemize}
+  \item With $h\defn\tfrac{2}{(\mu+L)}$, $f'(x^\star)=0$ and the lemma, the potential decreases geometrically:
+    \[
+      \begin{array}{r@{}l}
+        \norm{x_{k+1}-x^\star}_2^2 &= \norm{x_k-x^\star}_2^2 - 2h\iprod{f'(x_k)-f'(x^\star)}{x_k-x^\star} + h^2\norm{f'(x_k)}_2^2\\
+                                   &\leq \left(1-\tfrac{2h\mu L}{(\mu+L)}\right)\norm{x_k-x^\star}_2^2 + h\left(h-\tfrac{2}{(\mu+L)}\right)\norm{f'(x_k)}_2^2\\
+                                   &= \left(\tfrac{(L-\mu)}{(L+\mu)}\right)^2\norm{x_k-x^\star}_2^2.
+      \end{array}
+    \]
+  \item<2-> By the quadratic upper bound, $f(x_N)-f(x^\star)\leq \tfrac{L}{2}\norm{x_N-x^\star}_2^2\leq \tfrac{LD^2}{2}\left(\tfrac{(L-\mu)}{(L+\mu)}\right)^{2N}$.
+  \item<3-> Hence, the \emph{complexity} is $\mc O(\tfrac{L}{\mu}\log(\tfrac{LD^2}{\epsilon}))$.
+  \end{itemize}
+
+\end{frame}
+
 \begin{frame}{Smooth Strongly Convex Optimization}
 
   \begin{center}
@@ -569,8 +658,9 @@
   \textbf{Theorem:} (Nesterov) For $\mu>0$ and $L>\mu$ we have that any first-order method needs at least
   $$N \geq \frac{1}{2} \log(D^2\mu/(2\epsilon))/\log(\tfrac{(\sqrt{L}+\sqrt{\mu})}{(\sqrt{L}-\sqrt{\mu})})$$
   queries.
-  
+
 \end{frame}
+
 
 \begin{frame}{Nesterov Acceleration $\mu>0$}
 
@@ -608,8 +698,35 @@
 
   \textbf{Theorem} (Nesterov) : Accelerated gradient descent achieves
   $$f(x_N)-f(x^\star)\leq L D^2 \left(1-\sqrt{\tfrac{\mu}{L}}\right)^N.$$
-     
+
  \end{frame}
+
+\begin{frame}{Interpreting the Two Sequences}
+
+  \begin{center}
+    \includegraphics[height=3.6cm]{momentum/momentum.pdf}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}{Accelerated versus Ordinary Gradient Descent}
+
+  \textbf{Example :} $f(x)=\tfrac{1}{2}(L x_1^2+\mu x_2^2)$ with $L=1$, $\mu=10^{-3}$ (i.e., $L/\mu=10^3$), and $x_0=(1,1)$.
+
+  \vfill
+
+  \begin{center}
+    \includegraphics[height=5cm]{accelerated-convergence/accelerated-convergence.pdf}
+  \end{center}
+
+  \vfill
+
+  \begin{itemize}
+  \item AGM converges with rate $1-\sqrt{\mu/L}\approx 0.968$,
+  \item GM converges with rate $\left(\tfrac{(L-\mu)}{(L+\mu)}\right)^2\approx 0.996$.
+  \end{itemize}
+  
+\end{frame}
 
  \begin{frame}{Nesterov's General Method $\mu\geq 0$ [$\star$]}
 
@@ -703,7 +820,7 @@
 
   \vfill
 
-  {\small (Lower bounds hold for $n$ large enough.)}
+  {\small (Lower bounds hold for $n$ ``large''.)}
 
 \end{frame}
 
