@@ -56,7 +56,7 @@
   
   Recall the reformulation of the gradient method
   \[
-    x_{k+1 } \in \arg \min_{x} ~f(x_k) + \iprod{f'(x_k)}{x-x_k} + \frac{1}{2 h_k} \norm{x - x_k}^2_2. 
+    x_{k+1 } \in \arg \min_{x\in\Re^n} ~f(x_k) + \iprod{f'(x_k)}{x-x_k} + \frac{1}{2 h_k} \norm{x - x_k}^2_2. 
   \]
 
 \end{frame}
@@ -93,7 +93,7 @@
         }
 
         \only<3->{
-          \node[circle, inner sep=0.75, fill=red] (xp) at (axis cs:0.15287, 0.826996) {};
+          \node[circle, inner sep=0.75, fill=red] (xp) at (axis cs:0.13866, 0.826996) {};
           \node[below=0.2em] at (xp) {\tiny $\bold x_{k+1}$};
         }
 
@@ -105,7 +105,7 @@
 
 \end{frame}
 
-\begin{frame}{Using the Best Quadratic Approximation : Newton Method}
+\begin{frame}{Using the Best Quadratic Approximation : Newton's Method}
 
 
   Consider
@@ -168,7 +168,7 @@
 
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item Oracle : $x\mapsto (f'(x) , f''(x))$
+  \item Oracle : $x\mapsto (f(x), f'(x), f''(x))$
   \item The Hessian should be invertible
   \item As such not applicable to constrained problems
   \item Expensive if $f''(x)$ is a dense matrix
@@ -176,7 +176,7 @@
 
   \vfill
 
-  What about the \emph{convergence} ?
+  What about the \emph{convergence}?
   
 \end{frame}
 
@@ -212,7 +212,7 @@
   
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item Convex function $f(x)=7x-\log x$ with minimizer $x^*=\frac{1}{7}=0.142857143$.
+  \item Convex function $f(x)=7x-\log x$ with minimizer $x^\star=\frac{1}{7}=0.142857143$.
   \item Gradient $f'(x)=7-\frac{1}{x}$.
   \item Hessian $f''(x)=\frac{1}{x^2}$.
   \end{itemize}
@@ -240,8 +240,8 @@
  
  \textbf{Remarks:}
  \begin{itemize}
- \item When $\bold x_0\approx \bold x^\star$, then Newton's method converges.
- \item Failure I : If $\bold x_0 \not\approx \bold x^\star$, then Newton's method can fail to be defined.
+ \item When $x_0\approx x^\star$, then Newton's method converges.
+ \item Failure I : If $x_0 \not\approx x^\star$, then Newton's method can fail to be defined.
  \end{itemize}
 \end{frame}
 
@@ -276,7 +276,7 @@
   
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item Convex function $f(x)=\log(\exp(2 x) + \exp(-2 x))$ with minimizer $x^*=0$.
+  \item Convex function $f(x)=\log(\exp(2 x) + \exp(-2 x))$ with minimizer $x^\star=0$.
   \item Gradient $f'(x)=\tfrac{2 (\exp(4 x) - 1)}{(\exp(4 x) + 1)}$.
   \item Hessian $f''(x)=\tfrac{16 \exp(4 x)}{(\exp(4 x) + 1)^2}$.
   \end{itemize}
@@ -301,8 +301,8 @@
  
  \textbf{Remarks:}
  \begin{itemize}
- \item When $\bold x_0\approx \bold x^\star$, then Newton's method converges.
- \item Failure II : If $\bold x_0 \not\approx \bold x^\star$, then Newton's method can diverge.
+ \item When $x_0\approx x^\star$, then Newton's method converges.
+ \item Failure II : If $x_0 \not\approx x^\star$, then Newton's method can diverge.
  \end{itemize}
 \end{frame}
 
@@ -313,7 +313,7 @@
     \begin{itemize}
       \setlength\itemsep{1em}
     \item $f$ is twice differentiable
-    \item $f''(x^\star) \succeq_{S^n_+} \ell \cdot \mb I_n \succ 0$
+    \item $f''(x^\star) \succeq \ell \cdot \mb I_n \succ 0$
     \item The Hessian $f''$ is Lipschitz continuous w.r.t.\ $\norm{\cdot}_2$, i.e.,
       \[
         \norm{f''(x) -f''(y)} \leq M \norm{x-y}_2
@@ -329,11 +329,10 @@
 
   \vfill
   
-  \textbf{Theorem :} If $\norm{x_0-x^\star}_2 \leq \frac{2\ell}{3 M}$, then the iterates $x_k$ of Newton's method are \emph{well-defined}, satisfy
-  \begin{align*}
-    \norm{x_{k+1}-x^\star}_2 \leq \frac{M \norm{x_k-x^\star}_2^2}{2 \left( \ell - M \norm{x_k-x^\star}_2\right)}& \leq \norm{x_{k}-x^\star}_2 \\[0.5em]
-    & \leq \frac{3M}{2 \ell} \norm{x_k-x^\star}_2^\emph{2}.
-  \end{align*}
+  \textbf{Theorem :} If $\norm{x_0-x^\star}_2 \leq \frac{2\ell}{3 M}$, then the iterates $x_k$ of Newton's method are \emph{well-defined}, satisfy $\norm{x_{k+1}-x^\star}_2 \leq \norm{x_{k}-x^\star}_2$ and
+  \[
+    \norm{x_{k+1}-x^\star}_2 \leq \frac{M \norm{x_k-x^\star}_2^2}{2 \left( \ell - M \norm{x_k-x^\star}_2\right)} \leq \frac{3M}{2 \ell} \norm{x_k-x^\star}_2^\emph{2}.
+  \]
 \end{frame}
 
 \begin{frame}{Drawing}
@@ -373,12 +372,12 @@
   \textbf{Proof : (induction)}
 
   \begin{itemize}
-  \item (trivial) Let $r_k \defn \norm{x_k-x^\star}_2$ for every $k$. Now $f''(x_k) -f''(x^\star) \succeq -M \norm{x_k-x^\star}_2 \mb I_n$ and hence $f''(x_k) \succeq (\ell - M r_k) \mb I_n$.  Iterates are well defined when $r_k < \tfrac{\ell}{M}$. First iterate $x_0$ with $r_0 <  \tfrac{2\ell}{(3M)}<\tfrac{\ell}{M}$  has well defined Newton step.\\[1em]
-  \item (induction) we have that when $r_k < \tfrac \ell M$:
+  \item (Trivial) Let $r_k \defn \norm{x_k-x^\star}_2$ for every $k$. Now $f''(x_k) -f''(x^\star) \succeq -M \norm{x_k-x^\star}_2 \mb I_n$ and hence $f''(x_k) \succeq (\ell - M r_k) \mb I_n$.  Iterates are well defined when $r_k < \tfrac{\ell}{M}$. First iterate $x_0$ with $r_0 <  \tfrac{2\ell}{(3M)}<\tfrac{\ell}{M}$  has well defined Newton step.\\[1em]
+  \item (Induction) We have that when $r_k < \tfrac \ell M$:
     \begin{align*}
       x_{k+1} - x^\star & = x_k - x^\star - f''(x_k)^{-1} f'(x_k)\\
                         & = f''(x_k)^{-1} \left( f''(x_k) (x_k - x^\star) - (f'(x_k)-f'(x^\star))  \right)\\
-                        & = f''(x_k)^{-1} \left( \int_0^1 \left[ f''(x_k) - f''(x^\star + t (x_k - x^\star)) \right] (x_k - x^\star) dt \right)
+                        & = f''(x_k)^{-1} \left( \int_0^1 \left[ f''(x_k) - f''(x^\star + t (x_k - x^\star)) \right] (x_k - x^\star) \d t \right)
     \end{align*}
     which implies
     \begin{align*}
@@ -390,11 +389,11 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Newton's method has disadvantages}
+\begin{frame}{Newton's Method Has Disadvantages}
 
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item Oracle : $x\mapsto (f(x), f'(x) , f''(x))$
+  \item Oracle : $x\mapsto (f(x), f'(x), f''(x))$
   \item The Hessian should be invertible
   \item As such not applicable to constrained problems
   \item Expensive if $f''(x)$ is a dense matrix
@@ -402,7 +401,7 @@
 
   \vfill
 
-  What about the \emph{convergence} ?
+  What about the \emph{convergence}?
   \begin{itemize}
     \setlength\itemsep{1em}
   \item Convergence is much faster $N = \mc O(\log\log(\frac 1\epsilon))$, \textbf{but only local}!!
@@ -497,7 +496,7 @@
 \end{frame}
 
 
-\begin{frame}{Kantorovich's Convergence Result is Not Affine Invariant !?}
+\begin{frame}{Kantorovich's Convergence Result is Not Affine Invariant!?}
 
   \begin{minipage}{0.7\textwidth}
     Let $f:\Re^n\to\nRe$ satisfy
@@ -526,7 +525,7 @@
   
 \end{frame}
 
-\begin{frame}{How to Correct Kantorovich's Result ?}
+\begin{frame}{How to Correct Kantorovich's Result?}
 
   Let $f:\Re^n\to\nRe$ satisfy
   \begin{itemize}
@@ -535,11 +534,11 @@
   \item $f''(x^\star) \succeq \ell \cdot \mb I_n \succ 0$
   \item \red{The Hessian $f''$ is Lipschitz continuous w.r.t.\ $\norm{\cdot}_2$, i.e.,
       \[
-        \norm{f''(x) -f''(y)}_2\leq M \norm{x-y}_2
+        \norm{f''(x) -f''(y)}\leq M \norm{x-y}_2
       \]
       where $\norm{A} = \sup_{\norm{x}_2\leq 1} \norm{A x}_2 = \max_i \abs{\lambda_i(A)}$.}
   \end{itemize}
-  The last condition is not affine-invariant because of the \red{norm}.
+  The last condition is not affine invariant because of the \red{norm}.
 
   \vfill
 
@@ -547,7 +546,7 @@
 
   Remark :
   \begin{itemize}
-  \item $\norm{h}_x = \sqrt{\iprod{\phi''(y) A^{-1} h}{A^{-1} h}}$ where $\phi(y) = f(Ay)$
+  \item $\norm{h}_x = \sqrt{\iprod{\phi''(y) A^{-1} h}{A^{-1} h}}$ where $\phi(y) = f(Ay)$ and $x=Ay$
   \item $\norm{h}_{x, \star} = \sqrt{\iprod{f''(x)^{-1} h}{h}}$
   \end{itemize}
   
@@ -569,13 +568,13 @@
   \]
   
   \begin{itemize}
-  \item Equality constraints for convex problems must be linear.
+  \item Equality constraints for convex problems must be affine.
   \item Without loss of generality : $A\in\Re^{m\times n}$ has full row rank.
   \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Constraint Newton Method}
+\begin{frame}{Constrained Newton Method}
 
   \begin{center}
     \begin{tikzpicture}
@@ -617,7 +616,7 @@
   Newton iteration:
   \[
     \begin{array}{rl}
-       x_{k+1} \in \arg \min & f( x_k) + f'( x_k)'( x- x_k) + \frac{1}{2} ( x -  x_k)' f''( x_k)( x -  x_k)\\[0.5em]
+       x_{k+1} \in \arg \min & f(x_k) + \iprod{f'(x_k)}{x-x_k} + \frac{1}{2} \iprod{f''(x_k)(x-x_k)}{x-x_k}\\[0.5em]
       \st &  A  x= b
     \end{array}
   \]
@@ -638,12 +637,12 @@
   \textbf{Theorem:} Newton's method iterate $ x_{k+1}$ solves
   \[
     \begin{pmatrix}
-      f''( x_k) &  A ' \\
+      f''( x_k) &  A\tpose \\
        A &  0%_{m\times n}
     \end{pmatrix}
     \begin{pmatrix}
        x_{k+1}\\
-       p_{k+1}
+       \lambda_{k+1}
     \end{pmatrix}
     =
     \begin{pmatrix}
@@ -651,7 +650,7 @@
        b
     \end{pmatrix}.
   \]
-  Furthermore, if $f''( x_k) \succ 0$, then the Newton system is \emph{uniquely} defined.
+  Furthermore, if $f''( x_k) \succ 0$ and $A$ has full row rank, then the Newton system has a \emph{unique} solution.
 
   \vfill
 
@@ -661,26 +660,26 @@
   \item<2-> We show that 
     \[
       \begin{pmatrix}
-        f''( x_k) &  A ' \\
+        f''( x_k) &  A\tpose \\
          A &  0%_{m\times n}
       \end{pmatrix}
       \begin{pmatrix}
          x\\
-         p
+         \lambda
       \end{pmatrix}
       =
       \begin{pmatrix}
          0\\
          0
-      \end{pmatrix}.
+      \end{pmatrix}
     \]
     admits only the trivial solution.
   \item<3-> Taking the scalar product of the first equation with $ x$ gives
     \[
-       x' f''( x_k) x +   x'  A'  p =  x' f''( x_k) x = 0,
+       \iprod{f''(x_k) x}{x} + \iprod{Ax}{\lambda} = \iprod{f''(x_k) x}{x} = 0,
     \]
     and hence $ x= 0$.
-  \item<4-> Now $ A'  p =  0 \iff  p =  0$ as $ A$ has full row rank.
+  \item<4-> Now $A\tpose \lambda = 0 \iff \lambda = 0$ as $ A$ has full row rank.
     % Null space of the considered system is $\{ 0\}$.
   \end{itemize}
   
@@ -690,7 +689,7 @@
 
 
   \uncover<2->{
-  \textbf{Nullspace representation:} we have
+  \textbf{Null space representation:} we have
   \[
     \set{x\in\Re^n}{Ax=b} = \set{Bp +\tilde x}{p\in \Re^{n-m}}
   \]
@@ -714,8 +713,8 @@
     Newton Iterates
     \[
       \begin{array}{rl}
-        x_0 & = \bar x \\[0.5em]
-        x_{k+1} & =\rm{constraint~Newton}
+        x_0 & = \bar x \text{ with } A\bar x = b \\[0.5em]
+        x_{k+1} & =\rm{constrained~Newton}
       \end{array}
     \]
 
@@ -759,14 +758,14 @@
 \begin{frame}{Proof [$\star$]}
 
   \begin{itemize}
-  \item (Trivial case) We have that $x_0 = B p_0 + \tilde x$
+  \item (Base case) We have that $x_0 = B p_0 + \tilde x$
   \item<2-> (Induction) The induction hypothesis is $x_k=B p_k+\tilde x$. Newton updates 
     \begin{align*}
       \{x_{k+1}\} = & \arg\min_{Ax=b} f(x_k)+ \iprod{f'(x_k)}{x-x_k} + \frac 12 \iprod{f''(x_k)(x-x_k)}{(x-x_k)},\\[0.5em]
       \{p_{k+1}\} = & \arg\min_{p} ~ \phi(p_k)+ \iprod{\phi'(p_k)}{p-p_k} + \iprod{\phi''(p_k)(p-p_k)}{(p-p_k)}/2 \\[0.5em]
                  =   & \arg\min_{p} ~ f(Bp_k+\tilde x)+ \iprod{f'(Bp_k+\tilde x)}{B(p-p_k)}\\[-0.35em]
                     &\hspace{8.4em} + \iprod{f''(Bp_k+\tilde x)B (p-p_k)}{B (p-p_k)}/2 \\[0.5em]
-      = & \arg\min_{p} ~ f(x_k)+ \iprod{f'(x_k)}{Bp+\tilde x-x_k)} \\[-0.35em]
+      = & \arg\min_{p} ~ f(x_k)+ \iprod{f'(x_k)}{Bp+\tilde x-x_k} \\[-0.35em]
                     & \hspace{8.4em} + \iprod{f''(x_k)(Bp+\tilde x-x_k)}{Bp+\tilde x-x_k}/2 
     \end{align*}
   \item<3-> As we have that $\set{x\in\Re^n}{Ax=b} = \set{Bp +\tilde x}{p\in \Re^{n-m}}$ it follows that $x_{k+1} = Bp_{k+1}+\tilde x$.
@@ -785,7 +784,7 @@
 
   Remarks:
   \begin{itemize}
-  \item Null space method produces the same iterates as the constrained Newton's method.
+  \item The null space method produces the same iterates as the constrained Newton method.
   \item Indirectly proves its convergence.
   \end{itemize}
   
@@ -794,28 +793,127 @@
 \section{Sequential Quadratic Optimization}
 
 
-\begin{frame}{Sequential Quadratic Optimization}
+\begin{frame}{Alternative Interpretation of Newton's Method}
+
+  \textbf{Fact :} Let $f$ be twice continuously differentiable with $f''(x)\succ 0$ for all $x$. Then
+  \[
+    x^\star \in \arg\min_{x\in\Re^n} f(x) \iff f'(x^\star)=0.
+  \]
+
+  \vfill
+
+  \begin{minipage}{0.5\textwidth}
+    \uncover<2->{
+    \emph{Newton's method:} replace $f'$ by its linear approximation at $x_k$ and solve
+    \[
+      f'(x_k)+f''(x_k)(x_{k+1}-x_k)=0.
+    \]   
+    }
+   
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        ticks=none,
+        axis lines=middle,
+        y=0.9cm,
+        x=3.2cm,
+        clip=true,
+        xmin=-0.6, xmax=0.7,
+        ymin=-2, ymax=2.2,
+        xlabel={$x$},
+        ylabel={$f'$},
+        ]
+        \addplot[mark=none, black, samples=100, domain=-0.6:0.7] {2*tanh(2*x) + 0.6*x};
+
+        \node[circle, inner sep=0.75, fill=red] (x0) at (axis cs:0.4, 1.56807) {};
+        \node[right=0.2em] at (x0) {\tiny $x_k$};
+        \only<3->{
+          \addplot[mark=none, red, samples=2, domain=-0.35:0.9] {1.56807 + 2.83622*(x - 0.4)};
+          \node[circle, inner sep=0.75, fill=red] (x1) at (axis cs:-0.15287, 0) {};
+          \node[above left] at (x1) {\tiny $x_{k+1}$};
+        }
+        \only<4->{
+          \draw[red, densely dotted] (axis cs:-0.15287, 0) -- (axis cs:-0.15287, -0.68485);
+          \node[circle, inner sep=0.75, fill=red] (x1f) at (axis cs:-0.15287, -0.68485) {};
+          \addplot[mark=none, red, samples=2, domain=-0.5:0.2] {-0.68485 + 4.2482*(x + 0.15287)};
+          \node[circle, inner sep=0.75, fill=red] (x2) at (axis cs:0.00834, 0) {};
+          \node[below right] at (x2) {\tiny $x_{k+2}$};
+        }
+      \end{axis}
+    \end{tikzpicture}
+
+    {\small $f(x)=\log(e^{2x}+e^{-2x})+0.3x^2$}
+  \end{minipage}
+
+\end{frame}
+
+\begin{frame}{Optimality Conditions with Equality Constraints}
 
   General optimization problem:
-  \[
+  \begin{equation}
+    \label{eq:equality-constrained-problem}
+    \tag{$\star$}
     \begin{array}{rl}
       \min_{x} & f(x) \\[0.5em]
-      \st & g_i(x) = 0 \quad \forall i\in [1, \dots, m] \\ 
+      \st & g_i(x) = 0 \quad \forall i\in [1, \dots, m]
     \end{array}
+  \end{equation}
+  
+  \vfill
+
+  \textbf{Theorem (KKT) :} Let $f:\Re^n\to\Re$ and $g:\Re^n\to\Re^m$ be continuously differentiable and let $x^\star$ be a local minimizer of \eqref{eq:equality-constrained-problem} satisfying the LICQ condition. Then there exist $\lambda^\star\in\Re^m$ such that
+  \[
+    \nabla L(x^\star,\lambda^\star) = 0
+  \]
+  for the Lagrangian $$L(x,\lambda)\defn f(x)+\iprod{\lambda}{g(x)}.$$
+  
+
+\end{frame}
+
+\begin{frame}{Sequential Quadratic Optimization}
+
+  Taking the gradient with respect to both $x$ and $\lambda$, this \emph{KKT system} reads
+  \[
+    \nabla L(x,\lambda) =
+    \begin{pmatrix}
+      f'(x)+\sum_i \lambda_i g_i'(x)\\
+      g(x)
+    \end{pmatrix}
+    = 0.
   \]
 
   \vfill
-  
-  Exploiting the idea of equality constrained Newton method:
+
+  \uncover<2->{
+  \emph{Newton's root finding on the KKT conditions:} linearizing $\nabla L$ at $(x_k,\lambda_k)$ gives
+  \[
+    \begin{array}{r@{}l}
+      f'(x_k) + L''_k(x_{k+1}-x_k) + \sum_i \lambda_{k+1,i}\, g_i'(x_k) &{}= 0,\\[0.5em]
+      g_i(x_k) + \iprod{g_i'(x_k)}{x_{k+1}-x_k} &{}= 0 \quad \forall i\in [1, \dots, m],
+    \end{array}
+  \]
+  with $L''_k$ the Hessian of the Lagrangian $x\mapsto L(x,\lambda_k)=f(x)+\iprod{\lambda_k}{g(x)}$ at $x_k$.}
+
+\end{frame}
+
+\begin{frame}{Sequential Quadratic Optimization}
+
+  These are the KKT conditions of a \emph{quadratic} problem. Hence, $x_{k+1}$ solves
   \[
     \begin{array}{rl}
-      x_{k+1} =\arg \min_{x} & f(x_k) + \iprod{f'(x_k)}{x-x_k}+\frac 12 \iprod{f''(x_k)(x-x_k)}{x-x_k} \ \\[0.5em]
-      \st & g_i(x_k) + \iprod{g_i'(x_k)}{x-x_k} = 0 \quad \forall i\in [1, \dots, m] \\
+      \min_{x} & f(x_k) + \iprod{f'(x_k)}{x-x_k}+\frac 12 \iprod{L''_k(x-x_k)}{x-x_k} \\[0.5em]
+      \st & g_i(x_k) + \iprod{g_i'(x_k)}{x-x_k} = 0 \quad \forall i\in [1, \dots, m],
     \end{array}
   \]
+  and $\lambda_{k+1}$ are its multipliers.
+  
 
   \vfill
 
+  \uncover<2->{
   \textbf{Remarks:}
   \begin{itemize}
   \item Works very well in practice
@@ -823,7 +921,8 @@
   \item Convergence is technical to prove and not global
   \item We will study barrier methods instead
   \end{itemize}
-  
+  }
+
 \end{frame}
 
 
