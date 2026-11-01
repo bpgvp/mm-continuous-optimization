@@ -1,6 +1,6 @@
 # 12. Variable Metric & Quasi-Newton Methods
 
-*Mon 23 Nov (wk 48)*
+*Mon 30 Nov (wk 49)*
 
 [&larr; Back to course homepage](https://bpgvp.github.io/mm-continuous-optimization/)
 

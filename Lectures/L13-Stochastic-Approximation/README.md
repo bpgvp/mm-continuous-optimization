@@ -1,6 +1,6 @@
 # 13. Stochastic Gradient Descent
 
-*Mon 30 Nov (wk 49)*
+*Mon 7 Dec (wk 50)*
 
 [&larr; Back to course homepage](https://bpgvp.github.io/mm-continuous-optimization/)
 

@@ -1,6 +1,6 @@
 # 11. Interior-Point Methods
 
-*Mon 16 Nov (wk 47)*
+*Mon 23 Nov (wk 48)*
 
 [&larr; Back to course homepage](https://bpgvp.github.io/mm-continuous-optimization/)
 

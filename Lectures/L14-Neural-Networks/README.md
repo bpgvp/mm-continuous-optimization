@@ -1,6 +1,6 @@
 # 14. Neural Networks & Automatic Differentiation
 
-*Mon 7 Dec (wk 50)*
+*Mon 14 Dec (wk 51)*
 
 [&larr; Back to course homepage](https://bpgvp.github.io/mm-continuous-optimization/)
 
