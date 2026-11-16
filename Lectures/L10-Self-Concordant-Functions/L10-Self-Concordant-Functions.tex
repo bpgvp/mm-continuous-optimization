@@ -121,7 +121,7 @@
 \end{frame}
 
 
-\begin{frame}{Kantorovich's Convergence Result is Not Affine Invariant !?}
+\begin{frame}{Kantorovich's Convergence Result is Not Affine Invariant!?}
 
   \begin{minipage}{0.7\textwidth}
     Let $f:\Re^n\to\nRe$ satisfy
@@ -152,14 +152,14 @@
   
 \end{frame}
 
-\begin{frame}{The solution of Nesterov and Nemirovski:}
+\begin{frame}{The Solution of Nesterov and Nemirovski}
 
   Use the local norm $\norm{h}_x\defn \sqrt{\iprod{f''(x) h}{h}}$.\\[1em]
 
   Remark :
   \begin{itemize}
   \item $\norm{h}_{x, \star} = \sqrt{\iprod{f''(x)^{-1} h}{h}}$ \hfill \gray{Conjugacy}
-  \item $\norm{h}_x = \sqrt{\iprod{\phi''(y) A^{-1} h}{A^{-1} h}}$ where $\phi(y) = f(Ay)$ \hfill \gray{Affine invariance}
+  \item $\norm{h}_x = \sqrt{\iprod{\phi''(y) A^{-1} h}{A^{-1} h}}$ where $\phi(y) = f(Ay)$ and $x=Ay$ \hfill \gray{Affine invariance}
   \end{itemize}
   
 \end{frame}
@@ -183,12 +183,43 @@
 
 \section{Self-Concordant Functions}
 
+\begin{frame}{Directional Derivatives of Higher Order}
+
+  \textbf{Recall (Lecture 5) :} The directional derivative of $f$ at $x$ in the direction $h$ is
+  \[
+    f'(x)[h] \defn \lim_{t\to 0}\frac{f(x+th)-f(x)}{t} = \frac{\d}{\d t} f(x+th)\Big|_{t=0} = \iprod{f'(x)}{h}.
+  \]
+
+  \vfill
+
+  \uncover<2->{
+  \textbf{Higher order :} Taking the directional derivative of the previous one, again in the direction $h$, gives
+  \[
+    \begin{array}{r@{}l}
+      f''(x)[h, h] &{}\defn \displaystyle\lim_{t\to 0}\frac{f'(x+th)[h]-f'(x)[h]}{t} = \dfrac{\d^2}{\d t^2} f(x+th)\Big|_{t=0} = \iprod{f''(x)h}{h},\\[1.5em]
+      f'''(x)[h, h, h] &{}\defn \displaystyle\lim_{t\to 0}\frac{f''(x+th)[h, h]-f''(x)[h, h]}{t} = \dfrac{\d^3}{\d t^3} f(x+th)\Big|_{t=0}.
+    \end{array}
+  \]
+  }
+
+  \vfill
+
+  \uncover<3->{
+  \textbf{Remarks :}
+  \begin{itemize}
+  \item For $n=1$ we simply have $f'''(x)[h, h, h] = f'''(x)\,h^3$.
+  \end{itemize}
+  }
+
+\end{frame}
+
 \begin{frame}{Self-Concordant Functions}
 
-  \textbf{Definition :} A \emph{LSC} function $f : \Re^n\to\nRe$ with \emph{open domain} $\dom(f)$ is \emph{self-concordant} if
+  \textbf{Definition :} A \emph{LSC} function $f : \Re^n\to\nRe$ with \emph{open domain} $\dom(f)$ and $f''(x)\succ 0$ for all $x\in\dom(f)$ is \emph{self-concordant} if
   \[
-    \exists M : ~ \forall x\in\dom(f),\, h\in \Re^n: \quad \abs{f'''(x)[h, h, h]}\leq M \norm{h}_x^3 = M\iprod{f''(x) h}{h}^{3/2}.
+    \exists M : ~ \forall x\in\dom(f),\, h\in \Re^n: \quad \abs{f'''(x)[h, h, h]}\leq M \norm{h}_x^3.
   \]
+  Here $\norm{h}_x^3 = \left(f''(x)[h, h]\right)^{3/2} = \iprod{f''(x) h}{h}^{3/2}$.
 
   \vfill
 
@@ -199,20 +230,20 @@
   \item $f''(t) = \frac{1}{t^2}$,
   \item $f'''(t) = -\frac{2}{t^3}$.
   \end{itemize}
-  We have $\norm{h}_t^2 = h^2/t^2$ and $\abs{f'''(t) [h, h, h]} = 2 h^3/t^3$. Thus $M=2$ would do.
+  We have $\norm{h}_t^2 = h^2/t^2$ and $\abs{f'''(t) [h, h, h]} = 2 \abs{h}^3/t^3 = 2\norm{h}_t^3$. Thus $M=2$ would do.
 }
 
   \vfill
 
   \textbf{Remark :}
   \begin{itemize}
-  \item $f \in \mc{SC}(M) \implies f''(x) \succeq 0$, hence $f$ needs to be convex.
-  \item<2-> The class of self-concordant functions will be those for which Newton's method ($\star$) works \emph{really} well.
+  \item $f \in \mc{SC}(M) \implies f''(x) \succ 0$, hence $f$ is strictly convex.
+  \item<2-> Self-concordant functions are precisely those for which Newton's method works \emph{really} well.
   \end{itemize}
   
 \end{frame}
 
-\begin{frame}{Elementary Self-Concordant functions}
+\begin{frame}{Elementary Self-Concordant Functions}
 
   The following functions are all self-concordant
   \begin{itemize}
@@ -220,7 +251,7 @@
   \item Convex quadratic functions are in $\mc{SC}(0)$.
   \item $t>0 \mapsto -\log(t) \in \mc{SC}(2)$.
   \item $X\succ 0\mapsto -\log(\det(X)) \in \mc{SC}(2)$.
-  \item<2-> $(t, x)\in L^n_{++}\defn\set{(x, t)}{t>\norm{x}_2} \mapsto -\log(t^2-\norm{x}^2_2) \in \mc{SC}(2)$
+  \item<2-> $(x, t)\in L^n_{++}\defn\set{(x, t)}{t>\norm{x}_2} \mapsto -\log(t^2-\norm{x}^2_2) \in \mc{SC}(2)$
   \item<2-> $t\in(-\pi/2, \pi/2)\mapsto -\log(\cos(t)) \in \mc{SC}(2)$
   \end{itemize}
   
@@ -263,7 +294,7 @@
   \vfill
 
   \uncover<2->{
-  \textbf{Theorem:} Let $f\in \mc{SC}(M)$ be a self-concordant function. Then for any sequence $x_k$ with limit $\bar x\in \cl(\dom(f))\setminus \dom(f)$ we have
+  \textbf{Theorem:} Let $f\in \mc{SC}(M)$ be a self-concordant function. Then for any sequence $(x_k)\subseteq\dom(f)$ with limit $\bar x\in \cl(\dom(f))\setminus \dom(f)$ we have
   \[
     \lim_{k\to\infty} f(x_k) = +\infty.
   \]
@@ -276,9 +307,7 @@
   \[
     f(x_k)\geq f(x_0) + \iprod{f'(x_0)}{x_k-x_0}\implies \liminf_{k\to\infty } f(x_k) \geq f(x_0) + \iprod{f'(x_0)}{\bar x-x_0}=a.
   \]
-  Assume that we have $f(x_k)\leq b<\infty$ is bounded from above for all $k$. There must exists an accumulation point $(\bar x, \bar f)$ with $\bar f\in [a, b]$ in the sequence $\{x_k, f(x_k)\}$. That is,
-  $(x_{n_k}, f(x_{n_k})) \to (\bar x, \bar f)$
-  for some sub-sequence $(x_{n_k}, f(x_{n_k}))$. However, $\bar x\not\in \dom(f)$ which is a contradiction with the fact that $f$ is LSC.
+  Suppose for contradiction that $f(x_k)\not\to+\infty$. Then there is a subsequence with $f(x_{n_k})\leq b<\infty$ for all $k$. As $\{f(x_{n_k})\}$ is bounded, we may pass to a further subsequence such that $(x_{n_k}, f(x_{n_k})) \to (\bar x, \bar f)$ with $\bar f\in [a, b]$. These points lie in $\epi(f)$, which is closed as $f$ is LSC. Hence $(\bar x,\bar f)\in\epi(f)$, i.e., $f(\bar x)\leq \bar f<\infty$ and $\bar x\in\dom(f)$, a contradiction.
   
 \end{frame}
 
@@ -291,7 +320,7 @@
   \textbf{Self-Concordance is invariant under :}
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item \emph{(Scaling)} $f \in \mc{SC}(M), ~\gamma\geq 0 \implies \gamma f\in \mc{SC}(M/\sqrt{\gamma})$. \\
+  \item \emph{(Scaling)} $f \in \mc{SC}(M), ~\gamma> 0 \implies \gamma f\in \mc{SC}(M/\sqrt{\gamma})$. \\
     Therefore, we may consider \emph{$M\defn 2$} without much loss of generality.\\[1em]
 
   \item<2-> \emph{(Addition)} If $f \in \mc{SC}(M_f)$ and $g \in \mc{SC}(M_g)$, then $f+g \in \mc{SC}(\max(M_f, M_g))$. \\[1em]
@@ -307,7 +336,7 @@
 \end{frame}
 
 
-\section{Why are self-concordant functions nice ?}
+\section{Why Are Self-Concordant Functions Nice?}
 
 \begin{frame}{Example I}
 
@@ -341,7 +370,7 @@
   
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item Convex function $f(x)=7x-\log x$ with minimizer $x^*=\frac{1}{7}=0.142857143$.
+  \item Convex function $f(x)=7x-\log x$ with minimizer $x^\star=\frac{1}{7}=0.142857143$.
   \item Gradient $f'(x)=7-\frac{1}{x}$.
   \item Hessian $f''(x)=\frac{1}{x^2}$.
   \end{itemize}
@@ -369,8 +398,8 @@
  
  \textbf{Remarks:}
  \begin{itemize}
- \item When $\bold x_0\approx \bold x^\star$, then Newton's method converges.
- \item Failure I : If $\bold x_0 \not\approx \bold x^\star$, then Newton's method can fail to be defined.
+ \item When $x_0\approx x^\star$, then Newton's method converges.
+ \item Failure I : If $x_0 \not\approx x^\star$, then Newton's method can fail to be defined.
  \end{itemize}
 \end{frame}
 
@@ -455,26 +484,11 @@
   \vspace{1em}
 
   \textbf{Lemma}:
-  We have \((-\phi(0), \phi(0)) \in \dom(\phi)\).
+  We have \((-\phi(0), \phi(0)) \subseteq \dom(\phi)\).
 
   \vspace{1em}
   
-  \textbf{Proof}:
-  We have  that $\phi(t)>0$ when $t\in \dom(\phi)$ as $f$ is convex.
-  Since $f(x+ht)\to\infty$ as $x+ht$ approaches the boundary of $\dom(f)$ (See slide on boundary behavior), the function $\iprod{f''(x+th)h}{h}$ cannot remain bounded.
-  Hence, $\dom(\phi) = \set{t}{\phi(t)>0}$. Note that $\abs{\phi'(t)}\leq 1$ implies that
-  \[
-    \phi(t) \geq \phi(0)-\abs{t}.
-  \]
-  
-  % 
-
-  % Take now $h=y-x$ with $y\in B_x(x, 1)$. Then $\phi(0)>1$, and we have that
-  % \(
-  % \phi(0)-1 \leq \phi(1) \leq \phi(0)+1.
-  % \)
-  % It remains to simplify.
-  
+  \textbf{Proof}: As $f''\succ 0$ on $\dom(f)$, we have $\phi(t)\in(0,\infty)$. As $\dom(f)$ is open and convex, $\dom(\phi)=(a, b)$ is an open interval containing $0$. We show $b\geq \phi(0)$ (similarly $a\leq -\phi(0)$). Suppose for contradiction that $b<\phi(0)$. As $\abs{\phi'}\leq 1$, we have $\phi(t)\geq \phi(0)-t\geq\phi(0)-b>0$ on $[0, b)$. Hence $g(t)\defn f(x+th)$ has $0\leq g''(t) = \phi(t)^{-2}\leq (\phi(0)-b)^{-2}$ on $[0, b)$. Integrating twice, $g'$ and $g$ are bounded on $[0, b)$. This contradicts that we must have $g(t)\to\infty$ as $t\uparrow b$.
 \end{frame}
 
 
@@ -542,7 +556,7 @@
 
   \vfill
 
-  \textbf{Theorem:} Let $f \in \mc{SC}(2)$ and $r\defn \norm{y-x}_x\defn \sqrt{(y-x) f''(x) (y-x)}<1$, then
+  \textbf{Theorem:} Let $f \in \mc{SC}(2)$ and $r\defn \norm{y-x}_x = \sqrt{\iprod{f''(x)(y-x)}{y-x}}<1$, then
   $$f(y) \leq f(x) + \iprod{f'(x)}{y-x} \red{- r - \log(1-r)}.$$
 
   \vfill
@@ -560,7 +574,7 @@
   \[
     \begin{array}{rl}
       \iprod{f'(y)-f'(x)}{ y-x} & = \int_0^1 \iprod{f''(x+(y-x)t)(y-x)}{y-x}\d t\\[0.5em]
-                                & = \int_0^1 \frac{1}{t^2} \norm{x(t)-x}_{x(t)}^2\d t\leq \int_0^1 \frac{r^2}{(1-tr)^2} \d t = r^2/(1-r).
+                                & = \int_0^1 \frac{1}{t^2} \norm{x(t)-x}_{x(t)}^2\d t\leq \int_0^1 \frac{r^2}{(1-tr)^2} \d t = r^2/(1-r),
     \end{array}
   \]
   using the inequality $\norm{x(t)-x}_{x(t)}\leq \frac{\norm{x(t)-x}_{x}}{1-\norm{x(t)-x}_{x}}$.
@@ -615,7 +629,7 @@
 
   \vfill
 
-  \textbf{Theorem:} Let $f \in \mc{SC}(2)$ and $r\defn \norm{y-x}_x\defn \sqrt{(y-x) f''(x) (y-x)}$, then
+  \textbf{Theorem:} Let $f \in \mc{SC}(2)$ and $r\defn \norm{y-x}_x = \sqrt{\iprod{f''(x)(y-x)}{y-x}}$, then
   $$f(y) \geq f(x) + \iprod{f'(x)}{y-x} \blue{+ r - \log(1+r)}.$$
 
   \vfill
@@ -633,7 +647,7 @@
   \[
     \begin{array}{rl}
       \iprod{f'(y)-f'(x)}{ y-x} & = \int_0^1 \iprod{f''(x+(y-x)t)(y-x)}{y-x}\d t\\[0.5em]
-                                & = \int_0^1 \frac{1}{t^2} \norm{x(t)-x}_{x(t)}^2\d t\geq \int_0^1 \frac{r^2}{(1+tr)^2} \d t = r^2/(1+r).
+                                & = \int_0^1 \frac{1}{t^2} \norm{x(t)-x}_{x(t)}^2\d t\geq \int_0^1 \frac{r^2}{(1+tr)^2} \d t = r^2/(1+r),
     \end{array}
   \]
   using the inequality $\norm{x(t)-x}_{x(t)}\geq \frac{\norm{x(t)-x}_{x}}{1+\norm{x(t)-x}_{x}}$.
@@ -656,7 +670,7 @@
   \[
     \norm{f''(y) -f''(x)} \leq M \norm{y-x}_2.
   \]
-  We have the something similar for self-concordant functions, but the bounds are far better!
+  We have something similar for self-concordant functions, but the bounds are far better!
 
   \vfill
 
@@ -737,8 +751,8 @@
     \begin{align*}
       & f(x_{k+1})\\[0.5em]
        \leq & f(x_k) + \iprod{f'(x_k)}{x_{k+1}-x_k} - \lambda(x_k)/(1+\lambda(x_k)) - \log(1- \lambda(x_k)/(1+\lambda(x_k)))\\[0.5em]
-      \leq & f(x_k) -\lambda(x_k)^2/(1+\lambda(x_k)) - \lambda(x_k)/(1+\lambda(x_k)) + \log(1+\lambda(x_k))\\[0.5em]
-      \leq & f(x_k) - \lambda(x_k) + \log(1+\lambda(x_k)) \leq f(x_k)
+      = & f(x_k) -\lambda(x_k)^2/(1+\lambda(x_k)) - \lambda(x_k)/(1+\lambda(x_k)) + \log(1+\lambda(x_k))\\[0.5em]
+      = & f(x_k) - \lambda(x_k) + \log(1+\lambda(x_k)) \leq f(x_k)
     \end{align*}
   \end{itemize}
 \end{frame}
@@ -767,7 +781,7 @@
   \[
     f(y) \leq f(x) + \iprod{f'(x)}{y-x} + \omega_\star(\norm{f'(y)-f'(x)}_{y, \star})
   \]
-  with $\omega_\star: r\mapsto -r-\log(1-r)$. The claim then follows by taking $x=x^\star$ and $y=x_k$ and noting that $f'(x^\star)=0$.
+  with $\omega_\star: r\mapsto -r-\log(1-r)$. The claim then follows by taking $x=x^\star$ and $y=x$ and noting that $f'(x^\star)=0$.
 %
   Consider a self-concordant function
   \(
@@ -777,7 +791,7 @@
   \begin{align*}
     f(x) -\iprod{f'(x)}{x} & = \phi(x) = \min_z \phi(z) \\[0.5em]
                            & \geq \min_z \phi(y) +\iprod{\phi'(y)}{z-y}+\omega(\norm{z-y}_y) \\[0.5em]
-                           & = \phi(y) - \max_\lambda  \iprod{-\phi'(y)}{\lambda}-\omega(\norm{\lambda}_y) \\[0.5em]
+                           & = \phi(y) - \max_d  \iprod{-\phi'(y)}{d}-\omega(\norm{d}_y) \\[0.5em]
                            & =  \phi(y) -\omega_\star(\norm{-\phi'(y)}_{y, \star}) = \phi(y) -\omega_\star(\norm{\phi'(y)}_{y, \star}) \\[0.5em]
                            & = f(y) - \iprod{f'(x)}{y} - \omega_\star(\norm{f'(y)-f'(x)}_{y, \star})
   \end{align*}
@@ -787,11 +801,11 @@
 \begin{frame}{Proof [$\star$]}
 
   \textbf{Proof:}
-  For any two points $x$ and $y$ with $\norm{y-x}_x$ we have shown in the proof of the lower bound that
+  For any two points $x, y\in\dom(f)$ we have shown in the proof of the lower bound that
   \(
     \iprod{f'(y)-f'(x)}{y-x} \geq \norm{y-x}_x^2/(1+\norm{y-x}_x).
   \)
-  Applying this inequality at $y=x$ and $x=x^\star$ gives us
+  Applying this inequality at $y=x^\star$ and writing $r\defn\norm{x-x^\star}_x$ gives us
   \(
     \iprod{f'(x)}{x-x^\star} \geq r^2/(1+r)
     \)
@@ -868,11 +882,11 @@
   \]
   where
   \[
-    f''(x_k) \left(\frac{r_k^2}{3}-r_k\right) \preceq G = \int_0^1 \left[f''(x_k + t (x_{k+1}-x_k))-f''(x_k)\right] dt \preceq f''(x_k)\frac{r_k}{1-r_k}
+    f''(x_k) \left(\frac{r_k^2}{3}-r_k\right) \preceq G = \int_0^1 \left[f''(x_k + t (x_{k+1}-x_k))-f''(x_k)\right] \d t \preceq f''(x_k)\frac{r_k}{1-r_k}
   \]
-  as a consequence of the smoothness of the Hessian. Since $r_k^2/3-r_k \leq \tfrac{r_k}{(1-r_k)}$, we get
+  as a consequence of the smoothness of the Hessian. Since $r_k-r_k^2/3 \leq \tfrac{r_k}{(1-r_k)}$, we have $\norm{f'(x_{k+1})}_{x_k,\star}=\norm{G(x_{k+1}-x_k)}_{x_k,\star}\leq \tfrac{r_k}{(1-r_k)}\norm{x_{k+1}-x_k}_{x_k}$ and hence
   \[
-    \lambda(x_{k+1})^2 = \norm{f'(x_{k+1})}^2_{x_k, \star} \leq \frac{r_k^2}{(1-r_k)^4} \iprod{f''(x_k)^{-1} f'(x_k)}{f'(x_k)}=\frac{r_k^2\lambda(x_k)^2}{(1-r_k)^4}.
+    \lambda(x_{k+1})^2 \leq \frac{1}{(1-r_k)^2}\norm{f'(x_{k+1})}^2_{x_k, \star} \leq \frac{r_k^2}{(1-r_k)^4} \iprod{f''(x_k)^{-1} f'(x_k)}{f'(x_k)}=\frac{r_k^2\lambda(x_k)^2}{(1-r_k)^4}.
   \]
 \end{frame}
 
@@ -885,7 +899,7 @@
     \Initialization{$x_0\in \dom(f)$, $\beta<(3-\sqrt{5})/2$}
     \For{$k\geq 0$}{
       $\lambda(x_k)=\norm{f'(x_k)}_{x_k, \star}$\\
-      \If{$\lambda_k\geq \beta$}{
+      \If{$\lambda(x_k)\geq \beta$}{
         $x_{k+1} \defn x_k - \frac{1}{\lambda(x_k)+1} f''(x_k)^{-1} f'(x_k)$
       }
       \Else{
@@ -919,7 +933,7 @@
 
   \begin{itemize}
     \setlength\itemsep{1em}
-  \item How do we deal with constraints ? \emph{Barrier methods}.
+  \item How do we deal with constraints? \emph{Barrier methods}.
   \item Using self-concordant functions in barrier method:\\
     Self-concordant barriers and interior-point methods.
   \end{itemize}
